@@ -21,6 +21,7 @@ const Contact = lazy(() => import("../pages/Contact/Contact"));
 const Terms = lazy(() => import("../pages/Terms/Terms"));
 const Privacy = lazy(() => import("../pages/Privacy/Privacy"));
 const Dashboard = lazy(() => import("../pages/Admin/Dashboard"));
+const Profile = lazy(() => import("../pages/Admin/Profile"));
 const NotFound = lazy(() => import("../pages/Errors/NotFound"));
 const Login = lazy(() => import("../pages/Auth/Login"));
 
@@ -56,6 +57,7 @@ export default function AppRouter() {
             }
           >
             <Route index element={<Dashboard />} />
+            <Route path="profile" element={<Profile />} />
           </Route>
 
           {/* 404 Not Found - Catch all unmatched routes */}

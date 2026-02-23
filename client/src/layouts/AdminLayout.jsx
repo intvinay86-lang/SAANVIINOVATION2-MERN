@@ -1,8 +1,15 @@
 import { useState, useEffect } from "react";
-import { Outlet, useNavigate, NavLink } from "react-router-dom";
+import { Outlet, useNavigate, NavLink, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
-import { FiMenu, FiX, FiHome, FiLogOut, FiUser } from "react-icons/fi";
+import {
+  FiMenu,
+  FiX,
+  FiHome,
+  FiLogOut,
+  FiUser,
+  FiExternalLink,
+} from "react-icons/fi";
 import {
   logout,
   selectUser,
@@ -35,7 +42,10 @@ function AdminLayout() {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const menuItems = [{ name: "Dashboard", path: "/admin", icon: <FiHome /> }];
+  const menuItems = [
+    { name: "Dashboard", path: "/admin", icon: <FiHome /> },
+    { name: "Profile", path: "/admin/profile", icon: <FiUser /> },
+  ];
 
   if (!user) return null;
 
@@ -60,6 +70,16 @@ function AdminLayout() {
 
             {/* Right: User Profile + Logout */}
             <div className="flex items-center space-x-4">
+              {/* Site View Button */}
+              <Link
+                to="/"
+                target="_blank"
+                className="flex items-center space-x-2 bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded-lg transition-colors duration-300"
+              >
+                <FiExternalLink size={16} />
+                <span className="hidden sm:inline">Site View</span>
+              </Link>
+
               <div className="hidden md:flex items-center space-x-3 bg-slate-800 px-4 py-2 rounded-lg">
                 <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
                   <FiUser size={16} />

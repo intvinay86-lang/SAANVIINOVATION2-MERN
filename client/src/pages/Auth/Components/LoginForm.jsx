@@ -5,9 +5,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { FiMail, FiLock, FiLogIn, FiEye, FiEyeOff } from "react-icons/fi";
 import {
-  loginStart,
-  loginSuccess,
-  loginFailure,
+  loginUser,
   clearError,
   selectAuthLoading,
   selectAuthError,
@@ -29,6 +27,7 @@ function LoginForm() {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
     watch,
   } = useForm({
     mode: "onChange",
@@ -38,12 +37,6 @@ function LoginForm() {
       rememberMe: false,
     },
   });
-
-  // Mock credentials
-  const mockCredentials = {
-    email: "admin@saanviinnovation.com",
-    password: "admin123",
-  };
 
   // Clear Redux error when user types
   useEffect(() => {
@@ -57,28 +50,35 @@ function LoginForm() {
   };
 
   const onSubmit = async (data) => {
-    dispatch(loginStart());
-
-    // Simulate API call delay
-    setTimeout(() => {
-      if (
-        data.email === mockCredentials.email &&
-        data.password === mockCredentials.password
-      ) {
-        const user = {
+    try {
+      await dispatch(
+        loginUser({
           email: data.email,
-          name: "Admin User",
-          role: "Administrator",
-        };
+          password: data.password,
+          rememberMe: data.rememberMe,
+        }),
+      ).unwrap();
 
-        dispatch(loginSuccess({ user, rememberMe: data.rememberMe }));
-        toast.success("Login successful! Welcome back.");
-        navigate("/admin");
+      toast.success("Login successful! Welcome back.");
+      navigate("/admin");
+    } catch (error) {
+      // Handle different error types
+      if (typeof error === "string") {
+        toast.error(error);
+      } else if (error?.errors) {
+        // Handle validation errors from backend (422)
+        Object.keys(error.errors).forEach((field) => {
+          const messages = error.errors[field];
+          setError(field, {
+            type: "server",
+            message: Array.isArray(messages) ? messages[0] : messages,
+          });
+        });
+        toast.error("Please check the form for errors");
       } else {
-        dispatch(loginFailure("Invalid email or password"));
-        toast.error("Invalid email or password. Please try again.");
+        toast.error("Login failed. Please try again.");
       }
-    }, 500);
+    }
   };
 
   return (
@@ -88,6 +88,13 @@ function LoginForm() {
       </h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+        {/* Backend Error Message */}
+        {loginError && typeof loginError === "string" && (
+          <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-sm text-red-600 text-center">{loginError}</p>
+          </div>
+        )}
+
         {/* Email Field */}
         <div>
           <label className="block text-gray-900 font-medium mb-2">
@@ -194,9 +201,8 @@ function LoginForm() {
           Demo Credentials:
         </p>
         <p className="text-xs text-gray-700 text-center">
-          Email: admin@saanviinnovation.com
+          Use the admin account created via seed script
         </p>
-        <p className="text-xs text-gray-700 text-center">Password: admin123</p>
       </div>
     </div>
   );
