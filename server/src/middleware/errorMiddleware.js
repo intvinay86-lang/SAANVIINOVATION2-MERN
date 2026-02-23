@@ -36,8 +36,8 @@ export const errorHandler = (err, req, res, next) => {
     }
   }
 
-  // Add stack trace only in development
-  if (isDevelopment) {
+  // Add stack trace only in development and 500+ error codes
+  if (isDevelopment && statusCode >= 500) {
     response.stack = err.stack;
   }
 
