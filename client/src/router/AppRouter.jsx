@@ -10,8 +10,9 @@ import PortfolioDetails from "../pages/Portfolio/PortfolioDetails";
 import Pricing from "../pages/Pricing/Pricing";
 import Contact from "../pages/Contact/Contact";
 import Terms from "../pages/Terms/Terms";
+import Privacy from "../pages/Privacy/Privacy";
 import Dashboard from "../pages/Admin/Dashboard";
-import NotFound from "../pages/NotFound/NotFound";
+import NotFound from "../pages/Errors/NotFound";
 import Login from "../pages/Auth/Login";
 import ScrollToTop from "../components/ScrollToTop";
 
@@ -30,6 +31,7 @@ export default function AppRouter() {
           <Route path="pricing" element={<Pricing />} />
           <Route path="contact" element={<Contact />} />
           <Route path="terms" element={<Terms />} />
+          <Route path="privacy" element={<Privacy />} />
         </Route>
 
         {/* Login Route */}

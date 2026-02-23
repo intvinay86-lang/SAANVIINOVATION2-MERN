@@ -1,10 +1,8 @@
 import { useEffect, useRef } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import LocomotiveScroll from "locomotive-scroll";
-// import Header from "../components/layout/Header";
-import TechHeader from "../components/layout/TechHeader";
-// import Footer from "../components/layout/Footer";
-import TechFooter from "../components/layout/TechFooter";
+import Header from "../components/layout/Header";
+import Footer from "../components/layout/Footer";
 
 function MainLayout() {
   const scrollRef = useRef(null);
@@ -33,11 +31,11 @@ function MainLayout() {
       data-scroll-container
       ref={scrollRef}
     >
-      <TechHeader />
+      <Header />
       <main data-scroll-section className="pt-20">
         <Outlet />
       </main>
-      <TechFooter />
+      <Footer />
     </div>
   );
 }

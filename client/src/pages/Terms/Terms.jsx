@@ -20,22 +20,32 @@ function Terms() {
       />
       <link rel="canonical" href="https://saanviinnovation.com/terms" />
 
-      <div className="py-20">
-        <div className="container mx-auto px-4 md:px-8">
-          <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-              Terms & Conditions
-            </h1>
-            <div className="w-24 h-1 bg-orange-500 mx-auto mb-6"></div>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Please read these terms and conditions carefully before using our
-              services.
-            </p>
+      <div className="bg-white">
+        {/* Page Header */}
+        <div className="bg-gradient-to-br from-orange-50 to-white border-b border-orange-100">
+          <div className="container mx-auto px-4 md:px-8 py-16 md:py-20">
+            <div className="text-center max-w-3xl mx-auto">
+              <h1
+                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 tracking-wide"
+                style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
+              >
+                TERMS & <span className="text-orange-500">CONDITIONS</span>
+              </h1>
+              <p
+                className="text-gray-600 text-sm md:text-base tracking-wide"
+                style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
+              >
+                PLEASE READ THESE TERMS CAREFULLY BEFORE USING OUR SERVICES
+              </p>
+            </div>
           </div>
+        </div>
 
+        {/* Content */}
+        <div className="container mx-auto px-4 md:px-8 py-16">
           <div className="max-w-4xl mx-auto space-y-8">
             <section>
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">
                 1. Introduction
               </h2>
               <p className="text-gray-600 leading-relaxed">
@@ -47,7 +57,7 @@ function Terms() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">
                 2. Services
               </h2>
               <p className="text-gray-600 leading-relaxed mb-3">
@@ -75,7 +85,7 @@ function Terms() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">
                 3. Intellectual Property
               </h2>
               <p className="text-gray-600 leading-relaxed">
@@ -89,7 +99,7 @@ function Terms() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">
                 4. User Responsibilities
               </h2>
               <p className="text-gray-600 leading-relaxed">
@@ -101,7 +111,7 @@ function Terms() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">
                 5. Payment Terms
               </h2>
               <p className="text-gray-600 leading-relaxed">
@@ -113,7 +123,7 @@ function Terms() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">
                 6. Limitation of Liability
               </h2>
               <p className="text-gray-600 leading-relaxed">
@@ -124,7 +134,7 @@ function Terms() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">
                 7. Changes to Terms
               </h2>
               <p className="text-gray-600 leading-relaxed">
@@ -136,14 +146,14 @@ function Terms() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">
                 8. Contact Information
               </h2>
               <p className="text-gray-600 leading-relaxed mb-3">
                 If you have any questions about these Terms & Conditions, please
                 contact us:
               </p>
-              <div className="bg-gray-50 p-6 rounded-lg">
+              <div className="bg-gradient-to-br from-orange-50 to-white border border-orange-100 p-6 rounded-lg">
                 <p className="text-gray-600 mb-2">
                   <strong>Email:</strong> ceo@saanviinnovation.com
                 </p>

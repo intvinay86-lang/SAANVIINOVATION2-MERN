@@ -82,20 +82,20 @@ function LoginForm() {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-2xl p-8">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+    <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
+      <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
         Welcome Back
       </h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         {/* Email Field */}
         <div>
-          <label className="block text-gray-700 font-medium mb-2">
+          <label className="block text-gray-900 font-medium mb-2">
             Email Address
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <FiMail className="text-gray-400" />
+              <FiMail className="text-gray-500" />
             </div>
             <input
               type="email"
@@ -106,7 +106,7 @@ function LoginForm() {
                   message: "Invalid email address",
                 },
               })}
-              className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300 outline-none ${
+              className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300 outline-none text-gray-900 placeholder-gray-400 ${
                 errors.email ? "border-red-500" : "border-gray-300"
               }`}
               placeholder="example@gmail.com"
@@ -119,12 +119,12 @@ function LoginForm() {
 
         {/* Password Field */}
         <div>
-          <label className="block text-gray-700 font-medium mb-2">
+          <label className="block text-gray-900 font-medium mb-2">
             Password
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <FiLock className="text-gray-400" />
+              <FiLock className="text-gray-500" />
             </div>
             <input
               type={showPassword ? "text" : "password"}
@@ -135,7 +135,7 @@ function LoginForm() {
                   message: "Password must be at least 6 characters",
                 },
               })}
-              className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300 outline-none ${
+              className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300 outline-none text-gray-900 placeholder-gray-400 ${
                 errors.password ? "border-red-500" : "border-gray-300"
               }`}
               placeholder="Enter your password"
@@ -143,7 +143,7 @@ function LoginForm() {
             <button
               type="button"
               onClick={togglePasswordVisibility}
-              className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors duration-200"
+              className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700 transition-colors duration-200"
             >
               {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
             </button>
@@ -163,7 +163,7 @@ function LoginForm() {
             {...register("rememberMe")}
             className="w-4 h-4 text-orange-500 border-gray-300 rounded focus:ring-orange-500"
           />
-          <label htmlFor="rememberMe" className="ml-2 text-sm text-gray-600">
+          <label htmlFor="rememberMe" className="ml-2 text-sm text-gray-700">
             Remember me
           </label>
         </div>
@@ -189,14 +189,14 @@ function LoginForm() {
       </form>
 
       {/* Demo Credentials */}
-      <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-        <p className="text-xs text-gray-600 text-center mb-2 font-semibold">
+      <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+        <p className="text-xs text-gray-800 text-center mb-2 font-semibold">
           Demo Credentials:
         </p>
-        <p className="text-xs text-gray-600 text-center">
+        <p className="text-xs text-gray-700 text-center">
           Email: admin@saanviinnovation.com
         </p>
-        <p className="text-xs text-gray-600 text-center">Password: admin123</p>
+        <p className="text-xs text-gray-700 text-center">Password: admin123</p>
       </div>
     </div>
   );

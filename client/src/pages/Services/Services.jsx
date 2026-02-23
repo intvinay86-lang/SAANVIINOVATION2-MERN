@@ -89,9 +89,6 @@ function Services() {
         {/* Services Grid Section */}
         <ServicesGrid services={services} />
 
-        {/* Team Section */}
-        <TeamSection />
-
         {/* CTA Section */}
         <CTASection />
       </div>
