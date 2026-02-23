@@ -10,12 +10,36 @@ export const notFound = (req, res, next) => {
 // Global Error Handler
 export const errorHandler = (err, req, res, next) => {
   const statusCode = err.statusCode || 500;
-  const message = err.message || "Internal Server Error";
 
-  res.status(statusCode).json({
+  // Determine if error is operational (expected) or system error (unexpected)
+  const isOperational =
+    err.isOperational !== undefined ? err.isOperational : false;
+
+  // For non-operational errors (system errors), hide details in production
+  // Also hide details for 500+ status codes in production
+  let message = err.message || "Internal Server Error";
+  if ((!isOperational || statusCode >= 500) && !isDevelopment) {
+    message = "Internal Server Error";
+  }
+
+  // Laravel-style error response
+  const response = {
     success: false,
     message: message,
-    errors: err.errors || [],
-    stack: isDevelopment ? err.stack : undefined,
-  });
+  };
+
+  // Add validation errors in Laravel format (field: [messages])
+  // Only show errors for operational errors or in development
+  if (isOperational || isDevelopment) {
+    if (err.errors && Object.keys(err.errors).length > 0) {
+      response.errors = err.errors;
+    }
+  }
+
+  // Add stack trace only in development
+  if (isDevelopment) {
+    response.stack = err.stack;
+  }
+
+  res.status(statusCode).json(response);
 };
