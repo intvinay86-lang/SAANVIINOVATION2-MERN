@@ -4,10 +4,10 @@ import { FiMenu, FiX } from "react-icons/fi";
 
 const navItems = [
   { name: "HOME", path: "/" },
+  { name: "ABOUT", path: "/about" },
   { name: "SERVICES", path: "/services" },
   { name: "PORTFOLIO", path: "/portfolio" },
   { name: "PRICING", path: "/pricing" },
-  { name: "ABOUT", path: "/about" },
   { name: "CONTACT", path: "/contact" },
 ];
 
