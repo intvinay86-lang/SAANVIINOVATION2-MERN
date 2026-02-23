@@ -1,7 +1,9 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
-import Globe3D from "../../../components/Globe3D";
+import GlobeLoader from "@/components/GlobeLoader";
+
+const Globe3D = lazy(() => import("@/components/Globe3D"));
 
 function TechHero() {
   const heroRef = useRef(null);
@@ -117,7 +119,9 @@ function TechHero() {
 
                   {/* 3D Globe */}
                   <div className="relative z-10 w-full h-full">
-                    <Globe3D />
+                    <Suspense fallback={<GlobeLoader />}>
+                      <Globe3D />
+                    </Suspense>
                   </div>
 
                   {/* Animated rings */}
@@ -351,7 +355,9 @@ function TechHero() {
 
                   {/* 3D Globe */}
                   <div className="relative z-10 w-full h-full">
-                    <Globe3D />
+                    <Suspense fallback={<GlobeLoader />}>
+                      <Globe3D />
+                    </Suspense>
                   </div>
 
                   {/* Animated rings */}
