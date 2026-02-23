@@ -1,4 +1,5 @@
 import api from "./api";
+import Cookies from "js-cookie";
 
 export const authService = {
   // Login
@@ -7,37 +8,33 @@ export const authService = {
     return response.data;
   },
 
-  // Store auth data
+  // Store auth data in cookies
   storeAuthData: (token, user, rememberMe = false) => {
-    const storage = rememberMe ? localStorage : sessionStorage;
-    storage.setItem("authToken", token);
-    storage.setItem("authUser", JSON.stringify(user));
+    const cookieOptions = {
+      expires: rememberMe ? 7 : 1, // 7 days if remember me, 1 day otherwise
+      secure: window.location.protocol === "https:", // Only send over HTTPS in production
+      sameSite: "strict", // CSRF protection
+    };
+
+    Cookies.set("authToken", token, cookieOptions);
+    Cookies.set("authUser", JSON.stringify(user), cookieOptions);
   },
 
-  // Get stored token
+  // Get stored token from cookies
   getToken: () => {
-    return (
-      localStorage.getItem("authToken") || sessionStorage.getItem("authToken")
-    );
+    return Cookies.get("authToken");
   },
 
-  // Get stored user
+  // Get stored user from cookies
   getUser: () => {
-    const userFromLocal = localStorage.getItem("authUser");
-    const userFromSession = sessionStorage.getItem("authUser");
-
-    if (userFromLocal) return JSON.parse(userFromLocal);
-    if (userFromSession) return JSON.parse(userFromSession);
-
-    return null;
+    const userCookie = Cookies.get("authUser");
+    return userCookie ? JSON.parse(userCookie) : null;
   },
 
-  // Clear auth data
+  // Clear auth data from cookies
   clearAuthData: () => {
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("authUser");
-    sessionStorage.removeItem("authToken");
-    sessionStorage.removeItem("authUser");
+    Cookies.remove("authToken");
+    Cookies.remove("authUser");
   },
 
   // Check if authenticated
