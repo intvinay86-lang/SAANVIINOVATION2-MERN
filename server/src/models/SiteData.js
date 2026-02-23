@@ -7,7 +7,6 @@ const siteDataSchema = new mongoose.Schema(
       required: true,
       unique: true,
       trim: true,
-      index: true,
       default: "main",
     },
     data: {
@@ -21,9 +20,6 @@ const siteDataSchema = new mongoose.Schema(
     versionKey: false,
   },
 );
-
-// Index for faster queries
-siteDataSchema.index({ dataKey: 1 });
 
 const SiteData = mongoose.model("SiteData", siteDataSchema);
 
