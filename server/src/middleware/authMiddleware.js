@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { ENV } from "../config/env.js";
 import ApiError from "../utils/ApiError.js";
-import { asyncHandler } from "../utils/asyncHandler.js";
+import asyncHandler from "../utils/asyncHandler.js";
 import User from "../models/User.js";
 
 // Verify JWT token and attach user to request
