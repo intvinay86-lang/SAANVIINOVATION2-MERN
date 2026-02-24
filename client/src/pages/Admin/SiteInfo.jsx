@@ -22,6 +22,7 @@ import {
   selectSiteDataLoading,
 } from "../../features/siteData/siteDataSelectors";
 import { uploadService } from "../../features/upload/uploadService";
+import { getFullImageUrl } from "../../utils/imageUtils";
 
 function SiteInfo() {
   const dispatch = useDispatch();
@@ -81,27 +82,7 @@ function SiteInfo() {
   useEffect(() => {
     // Update logo preview when logoUrl changes
     if (logoUrl && logoUrl.trim()) {
-      const trimmedUrl = logoUrl.trim();
-
-      // Check if it's a full URL (starts with http:// or https://)
-      if (
-        trimmedUrl.startsWith("http://") ||
-        trimmedUrl.startsWith("https://")
-      ) {
-        setLogoPreview(trimmedUrl);
-      }
-      // Check if it's a relative path to uploads
-      else if (trimmedUrl.startsWith("/uploads/")) {
-        // Remove /api/v1 from VITE_API_URL to get base URL
-        const baseUrl =
-          import.meta.env.VITE_API_URL?.replace("/api/v1", "") ||
-          "http://localhost:8000";
-        setLogoPreview(`${baseUrl}${trimmedUrl}`);
-      }
-      // Assume it's a relative path and try to load it
-      else {
-        setLogoPreview(trimmedUrl);
-      }
+      setLogoPreview(getFullImageUrl(logoUrl));
     } else {
       setLogoPreview("");
     }

@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink, Link } from "react-router-dom";
 import {
   FiMapPin,
@@ -10,15 +12,12 @@ import {
   FiYoutube,
 } from "react-icons/fi";
 import { FaWhatsapp } from "react-icons/fa";
-
-const socialLinks = [
-  { icon: <FiFacebook size={18} />, url: "#", label: "Facebook" },
-  { icon: <FiTwitter size={18} />, url: "#", label: "Twitter" },
-  { icon: <FiLinkedin size={18} />, url: "#", label: "LinkedIn" },
-  { icon: <FiInstagram size={18} />, url: "#", label: "Instagram" },
-  { icon: <FiYoutube size={18} />, url: "#", label: "YouTube" },
-  { icon: <FaWhatsapp size={18} />, url: "#", label: "WhatsApp" },
-];
+import { getMainSiteData } from "../../features/siteData/siteDataSlice";
+import {
+  selectSiteData,
+  selectFooterData,
+} from "../../features/siteData/siteDataSelectors";
+import { getFullImageUrl } from "../../utils/imageUtils";
 
 const usefulLinks = [
   { name: "HOME", path: "/" },
@@ -37,8 +36,90 @@ const serviceLinks = [
   { name: "E-COMMERCE", path: "/services" },
 ];
 
+// Social media icon mapping
+const socialIconMap = {
+  Facebook: <FiFacebook size={18} />,
+  Twitter: <FiTwitter size={18} />,
+  LinkedIn: <FiLinkedin size={18} />,
+  Instagram: <FiInstagram size={18} />,
+  YouTube: <FiYoutube size={18} />,
+  WhatsApp: <FaWhatsapp size={18} />,
+};
+
 function Footer() {
+  const dispatch = useDispatch();
+  const siteData = useSelector(selectSiteData);
+  const footerData = useSelector(selectFooterData);
+
+  // Get site info data
+  const siteInfo = siteData?.siteinfo || {};
+
+  // Extract data with fallbacks
+  const siteName = siteInfo.siteName || "SAANVI";
+  const companyName = siteInfo.siteName || "SAANVI INNOVATION";
+  const tagline =
+    footerData?.tagline ||
+    siteInfo.tagline ||
+    "DELIVERING INNOVATIVE DIGITAL SOLUTIONS FOR MODERN BUSINESSES";
+  const useLogo = siteInfo.useLogo || false;
+  const logoUrl = siteInfo.logoUrl || "";
+  const phone = siteInfo.phone || "+91 7999840475";
+  const email = siteInfo.email || "CEO@SAANVIINNOVATION.COM";
+  const address =
+    siteInfo.address || "21, NEHRU COLONY, THATIPUR\nGWALIOR (M.P)";
+  const socialLinks = siteInfo.socialLinks || [];
+
   const currentYear = new Date().getFullYear();
+
+  useEffect(() => {
+    dispatch(getMainSiteData());
+  }, [dispatch]);
+
+  // Render logo or text
+  const renderLogo = () => {
+    if (useLogo && logoUrl) {
+      const fullLogoUrl = getFullImageUrl(logoUrl);
+
+      return (
+        <div className="flex items-center space-x-2">
+          <img
+            src={fullLogoUrl}
+            alt={companyName}
+            className="h-8 w-auto"
+            onError={(e) => {
+              console.error("Logo failed to load:", fullLogoUrl);
+              // Hide the image if it fails to load
+              e.target.style.display = "none";
+            }}
+          />
+        </div>
+      );
+    }
+
+    // Default text logo
+    return (
+      <div className="flex items-center space-x-2">
+        <div className="relative">
+          <div className="w-8 h-8 border-2 border-orange-500 transform rotate-45"></div>
+          <div className="absolute inset-0 w-8 h-8 border-2 border-orange-500/50 transform rotate-45 scale-110"></div>
+        </div>
+        <div>
+          <div
+            className="text-lg font-bold text-orange-500 tracking-wider"
+            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
+          >
+            {siteName}
+          </div>
+          <div
+            className="text-[8px] text-gray-400 tracking-widest -mt-1"
+            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
+          >
+            INNOVATION
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <footer className="relative bg-black border-t border-orange-500/20">
@@ -64,32 +145,13 @@ function Footer() {
           {/* Column 1: Company Info */}
           <div className="space-y-6">
             {/* Logo */}
-            <div className="flex items-center space-x-2">
-              <div className="relative">
-                <div className="w-8 h-8 border-2 border-orange-500 transform rotate-45"></div>
-                <div className="absolute inset-0 w-8 h-8 border-2 border-orange-500/50 transform rotate-45 scale-110"></div>
-              </div>
-              <div>
-                <div
-                  className="text-lg font-bold text-orange-500 tracking-wider"
-                  style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-                >
-                  SAANVI
-                </div>
-                <div
-                  className="text-[8px] text-gray-400 tracking-widest -mt-1"
-                  style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-                >
-                  INNOVATION
-                </div>
-              </div>
-            </div>
+            {renderLogo()}
 
             <p
               className="text-gray-400 text-xs leading-relaxed"
               style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
             >
-              DELIVERING INNOVATIVE DIGITAL SOLUTIONS FOR MODERN BUSINESSES
+              {tagline}
             </p>
 
             {/* Contact Info */}
@@ -100,31 +162,34 @@ function Footer() {
                   className="text-xs text-gray-400 leading-relaxed"
                   style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
                 >
-                  21, NEHRU COLONY, THATIPUR
-                  <br />
-                  GWALIOR (M.P)
+                  {address.split("\n").map((line, index) => (
+                    <span key={index}>
+                      {line}
+                      {index < address.split("\n").length - 1 && <br />}
+                    </span>
+                  ))}
                 </div>
               </div>
 
               <div className="flex items-center gap-3">
                 <FiPhone className="text-orange-500 w-4 h-4 flex-shrink-0" />
                 <a
-                  href="tel:+917999840475"
+                  href={`tel:${phone.replace(/\s/g, "")}`}
                   className="text-xs text-gray-400 hover:text-orange-500 transition-colors duration-300"
                   style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
                 >
-                  +91 7999840475
+                  {phone}
                 </a>
               </div>
 
               <div className="flex items-center gap-3">
                 <FiMail className="text-orange-500 w-4 h-4 flex-shrink-0" />
                 <a
-                  href="mailto:ceo@saanviinnovation.com"
+                  href={`mailto:${email}`}
                   className="text-xs text-gray-400 hover:text-orange-500 transition-colors duration-300"
                   style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
                 >
-                  CEO@SAANVIINNOVATION.COM
+                  {email}
                 </a>
               </div>
             </div>
@@ -206,28 +271,30 @@ function Footer() {
             </Link>
 
             {/* Social Media Icons */}
-            <div>
-              <h4
-                className="text-xs font-bold text-gray-400 mb-3 tracking-wider"
-                style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-              >
-                FOLLOW US
-              </h4>
-              <div className="flex flex-wrap gap-2">
-                {socialLinks.map((social, index) => (
-                  <a
-                    key={index}
-                    href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={social.label}
-                    className="w-9 h-9 rounded border border-orange-500/30 bg-orange-500/5 flex items-center justify-center text-orange-500 hover:bg-orange-500 hover:text-black transition-all duration-300 hover:scale-110"
-                  >
-                    {social.icon}
-                  </a>
-                ))}
+            {socialLinks.length > 0 && (
+              <div>
+                <h4
+                  className="text-xs font-bold text-gray-400 mb-3 tracking-wider"
+                  style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
+                >
+                  FOLLOW US
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {socialLinks.map((social, index) => (
+                    <a
+                      key={index}
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={social.type}
+                      className="w-9 h-9 rounded border border-orange-500/30 bg-orange-500/5 flex items-center justify-center text-orange-500 hover:bg-orange-500 hover:text-black transition-all duration-300 hover:scale-110"
+                    >
+                      {socialIconMap[social.type] || <FiFacebook size={18} />}
+                    </a>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
@@ -240,7 +307,7 @@ function Footer() {
               className="text-center text-xs text-gray-400 tracking-wider"
               style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
             >
-              © {currentYear} SAANVI INNOVATION. ALL RIGHTS RESERVED.
+              © {currentYear} {companyName.toUpperCase()}. ALL RIGHTS RESERVED.
             </p>
 
             <div className="flex items-center gap-4">

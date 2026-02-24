@@ -18,7 +18,12 @@ function FooterSettings() {
   const isLoading = useSelector(selectSiteDataLoading);
   const [isFetching, setIsFetching] = useState(true);
 
-  const { register, handleSubmit, reset } = useForm({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
       tagline: "DELIVERING INNOVATIVE DIGITAL SOLUTIONS FOR MODERN BUSINESSES",
     },
@@ -53,20 +58,19 @@ function FooterSettings() {
 
   const onSubmit = async (data) => {
     try {
-      const defaultTagline =
-        "DELIVERING INNOVATIVE DIGITAL SOLUTIONS FOR MODERN BUSINESSES";
-
       const cleanedData = {
-        tagline: data.tagline?.trim() || defaultTagline,
+        tagline:
+          data.tagline?.trim() ||
+          "DELIVERING INNOVATIVE DIGITAL SOLUTIONS FOR MODERN BUSINESSES",
       };
 
       await dispatch(
         updateSiteDataSection({ section: "footer", data: cleanedData }),
       ).unwrap();
 
-      toast.success("Footer data saved successfully");
+      toast.success("Footer settings saved successfully");
     } catch (error) {
-      toast.error(error || "Failed to save footer data");
+      toast.error(error || "Failed to save footer settings");
     }
   };
 
@@ -79,25 +83,39 @@ function FooterSettings() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold text-gray-900 mb-6">Footer</h1>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+          Footer Settings
+        </h1>
+        <p className="text-gray-600">
+          Manage footer tagline. Contact info (phone, email, address) and social
+          links are managed in Site Info.
+        </p>
+      </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Footer Tagline */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            Footer Tagline
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            Company Tagline
           </h2>
           <div>
-            <label className="block text-gray-700 font-medium mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Tagline
             </label>
             <input
               type="text"
-              {...register("tagline")}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none"
+              {...register("tagline", { required: "Tagline is required" })}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
               placeholder="Enter footer tagline"
             />
+            {errors.tagline && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.tagline.message}
+              </p>
+            )}
             <p className="text-sm text-gray-500 mt-2">
               This tagline will be displayed in the footer section of your
               website.
@@ -106,11 +124,11 @@ function FooterSettings() {
         </div>
 
         {/* Submit Button */}
-        <div className="flex justify-end">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <button
             type="submit"
             disabled={isLoading}
-            className="flex items-center space-x-2 bg-orange-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-orange-600 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full sm:w-auto bg-orange-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? (
               <>

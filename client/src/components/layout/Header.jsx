@@ -1,6 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { FiMenu, FiX } from "react-icons/fi";
+import { getMainSiteData } from "../../features/siteData/siteDataSlice";
+import { selectSiteData } from "../../features/siteData/siteDataSelectors";
+import { getFullImageUrl } from "../../utils/imageUtils";
 
 const navItems = [
   { name: "HOME", path: "/" },
@@ -12,10 +16,78 @@ const navItems = [
 ];
 
 function Header() {
+  const dispatch = useDispatch();
+  const siteData = useSelector(selectSiteData);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // Get site info data
+  const siteInfo = siteData?.siteinfo || {};
+
+  // Extract data with fallbacks
+  const siteName = siteInfo.siteName || "SAANVI";
+  const companyName = siteInfo.siteName || "SAANVI INNOVATION";
+  const useLogo = siteInfo.useLogo || false;
+  const logoUrl = siteInfo.logoUrl || "";
+
+  useEffect(() => {
+    dispatch(getMainSiteData());
+  }, [dispatch]);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  // Render logo or text
+  const renderLogo = () => {
+    if (useLogo && logoUrl) {
+      const fullLogoUrl = getFullImageUrl(logoUrl);
+
+      return (
+        <div className="flex items-center">
+          <img
+            src={fullLogoUrl}
+            alt={companyName}
+            className="h-10 w-auto"
+            onError={(e) => {
+              console.error("Header logo failed to load:", fullLogoUrl);
+              // Hide the image if it fails to load and show text logo instead
+              e.target.style.display = "none";
+            }}
+          />
+        </div>
+      );
+    }
+
+    // Default text logo
+    return (
+      <div className="flex items-center">
+        {/* Logo Icon */}
+        <div className="relative">
+          <div className="w-10 h-10 border-2 border-orange-500 transform rotate-45 group-hover:rotate-90 transition-transform duration-300"></div>
+          <div className="absolute inset-0 w-10 h-10 border-2 border-orange-500/50 transform rotate-45 scale-110 group-hover:scale-125 transition-transform duration-300"></div>
+        </div>
+
+        {/* Logo Text */}
+        <div className="ml-3">
+          <div
+            className="text-xl md:text-2xl font-bold text-orange-500 tracking-wider"
+            style={{
+              fontFamily: "'Orbitron', 'Courier New', monospace",
+            }}
+          >
+            {siteName}
+          </div>
+          <div
+            className="text-[10px] text-gray-400 tracking-widest -mt-1"
+            style={{
+              fontFamily: "'Orbitron', 'Courier New', monospace",
+            }}
+          >
+            INNOVATION
+          </div>
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -38,33 +110,7 @@ function Header() {
           <div className="flex justify-between items-center h-20">
             {/* Logo */}
             <NavLink to="/" className="flex items-center space-x-2 group">
-              <div className="flex items-center">
-                {/* Logo Icon */}
-                <div className="relative">
-                  <div className="w-10 h-10 border-2 border-orange-500 transform rotate-45 group-hover:rotate-90 transition-transform duration-300"></div>
-                  <div className="absolute inset-0 w-10 h-10 border-2 border-orange-500/50 transform rotate-45 scale-110 group-hover:scale-125 transition-transform duration-300"></div>
-                </div>
-
-                {/* Logo Text */}
-                <div className="ml-3">
-                  <div
-                    className="text-xl md:text-2xl font-bold text-orange-500 tracking-wider"
-                    style={{
-                      fontFamily: "'Orbitron', 'Courier New', monospace",
-                    }}
-                  >
-                    SAANVI
-                  </div>
-                  <div
-                    className="text-[10px] text-gray-400 tracking-widest -mt-1"
-                    style={{
-                      fontFamily: "'Orbitron', 'Courier New', monospace",
-                    }}
-                  >
-                    INNOVATION
-                  </div>
-                </div>
-              </div>
+              {renderLogo()}
             </NavLink>
 
             {/* Desktop Navigation */}

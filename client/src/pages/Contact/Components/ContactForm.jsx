@@ -1,7 +1,17 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { FiSend } from "react-icons/fi";
+import { selectSiteData } from "../../../features/siteData/siteDataSelectors";
 
 function ContactForm() {
+  const siteData = useSelector(selectSiteData);
+  const contactSettings = siteData?.contactSettings || {};
+
+  const formTitle = contactSettings.formTitle || "Send Us a Message";
+  const formSubtitle =
+    contactSettings.formSubtitle ||
+    "Fill out the form below and we'll get back to you shortly";
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -37,17 +47,25 @@ function ContactForm() {
           className="text-2xl md:text-3xl font-bold text-gray-900 mb-3"
           style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
         >
-          Send Us a{" "}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-orange-600">
-            Message
-          </span>
+          {formTitle.split(" ").map((word, index) => (
+            <span key={index}>
+              {word === "Message" ? (
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-orange-600">
+                  {word}
+                </span>
+              ) : (
+                word
+              )}
+              {index < formTitle.split(" ").length - 1 && " "}
+            </span>
+          ))}
         </h3>
 
         <p
           className="text-gray-600"
           style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
         >
-          Fill out the form below and we'll get back to you shortly
+          {formSubtitle}
         </p>
       </div>
 

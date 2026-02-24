@@ -1,19 +1,51 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { FiMail, FiPhone, FiMapPin } from "react-icons/fi";
 import ContactForm from "./Components/ContactForm";
 import LocationMap from "./Components/LocationMap";
+import { getMainSiteData } from "../../features/siteData/siteDataSlice";
+import { selectSiteData } from "../../features/siteData/siteDataSelectors";
 
 function Contact() {
+  const dispatch = useDispatch();
+  const siteData = useSelector(selectSiteData);
+
+  // Get contact settings with fallbacks
+  const contactSettings = siteData?.contactSettings || {};
+  const siteInfo = siteData?.siteinfo || {};
+
+  const pageTitle =
+    contactSettings.pageTitle ||
+    "Contact Us - Get in Touch | SAANVI INNOVATION";
+  const pageDescription =
+    contactSettings.pageDescription ||
+    "Contact SAANVI INNOVATION for web development, mobile apps, and digital solutions. Located in Gwalior, Madhya Pradesh. Call +91 8305233223 or email ceo@saanviinnovation.com";
+  const pageKeywords =
+    contactSettings.pageKeywords ||
+    "contact saanvi innovation, web development gwalior, IT company contact, software development inquiry";
+  const heroTitle = contactSettings.heroTitle || "GET IN TOUCH";
+  const heroSubtitle =
+    contactSettings.heroSubtitle ||
+    "HAVE A PROJECT IN MIND? WE'D LOVE TO HEAR FROM YOU. SEND US A MESSAGE AND WE'LL RESPOND AS SOON AS POSSIBLE.";
+  const businessHours =
+    contactSettings.businessHours || "Mon-Fri: 9AM-6PM, Sat: 10AM-4PM";
+
+  // Get contact info from site info
+  const email = siteInfo.email || "ceo@saanviinnovation.com";
+  const phone = siteInfo.phone || "+91 8305233223";
+  const address =
+    siteInfo.address ||
+    "21, Near Garg Clinic,\nNehru Colony, Mayur Nagar,\nThatipur, Gwalior,\nMadhya Pradesh – 474011";
+
+  useEffect(() => {
+    dispatch(getMainSiteData());
+  }, [dispatch]);
+
   return (
     <>
-      <title>Contact Us - Get in Touch | SAANVI INNOVATION</title>
-      <meta
-        name="description"
-        content="Contact SAANVI INNOVATION for web development, mobile apps, and digital solutions. Located in Gwalior, Madhya Pradesh. Call +91 8305233223 or email ceo@saanviinnovation.com"
-      />
-      <meta
-        name="keywords"
-        content="contact saanvi innovation, web development gwalior, IT company contact, software development inquiry"
-      />
+      <title>{pageTitle}</title>
+      <meta name="description" content={pageDescription} />
+      <meta name="keywords" content={pageKeywords} />
       <meta property="og:title" content="Contact Us - SAANVI INNOVATION" />
       <meta
         property="og:description"
@@ -30,14 +62,22 @@ function Contact() {
                 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 tracking-wide"
                 style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
               >
-                GET IN <span className="text-orange-500">TOUCH</span>
+                {heroTitle.split(" ").map((word, index) => (
+                  <span key={index}>
+                    {word === "TOUCH" ? (
+                      <span className="text-orange-500">{word}</span>
+                    ) : (
+                      word
+                    )}
+                    {index < heroTitle.split(" ").length - 1 && " "}
+                  </span>
+                ))}
               </h1>
               <p
                 className="text-gray-600 text-sm md:text-base tracking-wide"
                 style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
               >
-                HAVE A PROJECT IN MIND? WE'D LOVE TO HEAR FROM YOU. SEND US A
-                MESSAGE AND WE'LL RESPOND AS SOON AS POSSIBLE.
+                {heroSubtitle}
               </p>
             </div>
           </div>
@@ -86,14 +126,14 @@ function Contact() {
                             Email
                           </h3>
                           <a
-                            href="mailto:ceo@saanviinnovation.com"
+                            href={`mailto:${email}`}
                             className="text-gray-800 font-medium hover:text-orange-600 transition-colors tracking-wide"
                             style={{
                               fontFamily:
                                 "'Orbitron', 'Courier New', monospace",
                             }}
                           >
-                            ceo@saanviinnovation.com
+                            {email}
                           </a>
                         </div>
                       </div>
@@ -117,14 +157,14 @@ function Contact() {
                             Phone
                           </h3>
                           <a
-                            href="tel:+918305233223"
+                            href={`tel:${phone.replace(/\s/g, "")}`}
                             className="text-gray-800 font-medium hover:text-orange-600 transition-colors tracking-wide"
                             style={{
                               fontFamily:
                                 "'Orbitron', 'Courier New', monospace",
                             }}
                           >
-                            +91 8305233223
+                            {phone}
                           </a>
                           <p
                             className="text-sm text-gray-500 mt-1 tracking-wide"
@@ -133,7 +173,7 @@ function Contact() {
                                 "'Orbitron', 'Courier New', monospace",
                             }}
                           >
-                            Mon-Fri: 9AM-6PM, Sat: 10AM-4PM
+                            {businessHours}
                           </p>
                         </div>
                       </div>
@@ -163,13 +203,14 @@ function Contact() {
                                 "'Orbitron', 'Courier New', monospace",
                             }}
                           >
-                            21, Near Garg Clinic,
-                            <br />
-                            Nehru Colony, Mayur Nagar,
-                            <br />
-                            Thatipur, Gwalior,
-                            <br />
-                            Madhya Pradesh – 474011
+                            {address.split("\n").map((line, index) => (
+                              <span key={index}>
+                                {line}
+                                {index < address.split("\n").length - 1 && (
+                                  <br />
+                                )}
+                              </span>
+                            ))}
                           </p>
                         </div>
                       </div>
