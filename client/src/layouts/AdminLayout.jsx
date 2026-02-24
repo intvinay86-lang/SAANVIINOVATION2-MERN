@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import { logout } from "../features/auth/authSlice";
 import {
-  logout,
   selectUser,
   selectIsAuthenticated,
-} from "../redux/slices/authSlice";
+} from "../features/auth/authSelectors";
 import AdminNavbar from "../components/admin/AdminNavbar";
 import AdminSidebar from "../components/admin/AdminSidebar";
 import { ADMIN_MENU_ITEMS } from "../components/admin/adminMenuConfig";

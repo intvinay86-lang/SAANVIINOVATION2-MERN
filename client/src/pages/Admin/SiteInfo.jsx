@@ -16,10 +16,12 @@ import {
 import {
   getMainSiteData,
   updateSiteDataSection,
+} from "../../features/siteData/siteDataSlice";
+import {
   selectSiteData,
   selectSiteDataLoading,
-} from "../../redux/slices/siteDataSlice";
-import { uploadService } from "../../services/uploadService";
+} from "../../features/siteData/siteDataSelectors";
+import { uploadService } from "../../features/upload/uploadService";
 
 function SiteInfo() {
   const dispatch = useDispatch();

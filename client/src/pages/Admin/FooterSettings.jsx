@@ -6,9 +6,11 @@ import { FiSave } from "react-icons/fi";
 import {
   getMainSiteData,
   updateSiteDataSection,
+} from "../../features/siteData/siteDataSlice";
+import {
   selectFooterData,
   selectSiteDataLoading,
-} from "../../redux/slices/siteDataSlice";
+} from "../../features/siteData/siteDataSelectors";
 
 function FooterSettings() {
   const dispatch = useDispatch();

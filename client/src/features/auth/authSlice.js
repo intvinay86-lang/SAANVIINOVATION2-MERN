@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { authService } from "../../services/authService";
+import { authService } from "./authService";
 
 // Initial state
 const initialState = {
@@ -70,6 +70,21 @@ const authSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
+    // Handle cross-tab authentication sync
+    syncAuthState: (state) => {
+      const storedUser = authService.getUser();
+      const isAuthenticated = authService.isAuthenticated();
+
+      if (isAuthenticated && storedUser) {
+        state.user = storedUser;
+        state.isAuthenticated = true;
+      } else {
+        state.user = null;
+        state.isAuthenticated = false;
+      }
+      state.loading = false;
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -93,14 +108,7 @@ const authSlice = createSlice({
 });
 
 // Export actions
-export const { logout, clearError } = authSlice.actions;
-
-// Selectors
-export const selectAuth = (state) => state.auth;
-export const selectUser = (state) => state.auth.user;
-export const selectIsAuthenticated = (state) => state.auth.isAuthenticated;
-export const selectAuthLoading = (state) => state.auth.loading;
-export const selectAuthError = (state) => state.auth.error;
+export const { logout, clearError, syncAuthState } = authSlice.actions;
 
 // Export reducer
 export default authSlice.reducer;

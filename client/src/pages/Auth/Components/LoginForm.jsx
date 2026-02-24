@@ -4,12 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { FiMail, FiLock, FiLogIn, FiEye, FiEyeOff } from "react-icons/fi";
+import { loginUser, clearError } from "../../../features/auth/authSlice";
 import {
-  loginUser,
-  clearError,
   selectAuthLoading,
   selectAuthError,
-} from "../../../redux/slices/authSlice";
+} from "../../../features/auth/authSelectors";
 
 function LoginForm() {
   const navigate = useNavigate();

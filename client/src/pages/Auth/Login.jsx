@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { selectIsAuthenticated } from "../../redux/slices/authSlice";
+import { selectIsAuthenticated } from "../../features/auth/authSelectors";
 import LoginForm from "./Components/LoginForm";
 
 function Login() {

@@ -1,4 +1,4 @@
-import { authService } from "../services/authService";
+import { authService } from "../features/auth/authService";
 
 // Re-export authService methods for backward compatibility
 export const auth = {

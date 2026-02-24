@@ -9,7 +9,7 @@ import {
   FiEye,
   FiEyeOff,
 } from "react-icons/fi";
-import { userService } from "../../services/userService";
+import { userService } from "../../features/user/userService";
 
 function Profile() {
   const [isLoading, setIsLoading] = useState(false);

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { siteDataService } from "../../services/siteDataService";
+import { siteDataService } from "./siteDataService";
 
 const initialState = {
   mainData: null,
@@ -95,11 +95,5 @@ const siteDataSlice = createSlice({
 });
 
 export const { clearError } = siteDataSlice.actions;
-
-// Selectors
-export const selectSiteData = (state) => state.siteData.mainData;
-export const selectSiteDataLoading = (state) => state.siteData.loading;
-export const selectSiteDataError = (state) => state.siteData.error;
-export const selectFooterData = (state) => state.siteData.mainData?.footer;
 
 export default siteDataSlice.reducer;

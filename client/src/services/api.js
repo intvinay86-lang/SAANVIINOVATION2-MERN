@@ -14,8 +14,7 @@ const api = axios.create({
 // Request interceptor to add token
 api.interceptors.request.use(
   (config) => {
-    const token =
-      localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
+    const token = localStorage.getItem("authToken");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -38,8 +37,16 @@ api.interceptors.response.use(
       // Clear auth data on unauthorized
       localStorage.removeItem("authToken");
       localStorage.removeItem("authUser");
-      sessionStorage.removeItem("authToken");
-      sessionStorage.removeItem("authUser");
+
+      // Dispatch storage event for cross-tab synchronization
+      window.dispatchEvent(
+        new StorageEvent("storage", {
+          key: "authToken",
+          newValue: null,
+          storageArea: localStorage,
+        }),
+      );
+
       window.location.href = "/login";
     }
     return Promise.reject(error);
