@@ -1,6 +1,12 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { FiBriefcase, FiImage, FiUsers, FiMail } from "react-icons/fi";
+import {
+  FiBriefcase,
+  FiImage,
+  FiUsers,
+  FiMail,
+  FiRefreshCw,
+} from "react-icons/fi";
 import IconCard from "../../components/cards/IconCard";
 import { getMainSiteData } from "../../features/siteData/siteDataSlice";
 import { selectSiteData } from "../../features/siteData/siteDataSelectors";
@@ -19,6 +25,11 @@ function Dashboard() {
     }
     dispatch(getContactStats());
   }, [dispatch, siteData]);
+
+  const handleRefresh = () => {
+    dispatch(getMainSiteData());
+    dispatch(getContactStats());
+  };
 
   // Get counts from Redux store
   const servicesCount = siteData?.services?.length || 0;
@@ -60,11 +71,21 @@ function Dashboard() {
 
       <div className="space-y-6">
         {/* Page Header */}
-        <div>
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Dashboard</h1>
-          <p className="text-gray-600">
-            Welcome back! Here's an overview of your content.
-          </p>
+        <div className="flex justify-between items-start">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-800 mb-2">Dashboard</h1>
+            <p className="text-gray-600">
+              Welcome back! Here's an overview of your content.
+            </p>
+          </div>
+          <button
+            onClick={handleRefresh}
+            className="flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
+            title="Refresh data"
+          >
+            <FiRefreshCw className="w-4 h-4" />
+            Refresh
+          </button>
         </div>
 
         {/* Stats Cards */}

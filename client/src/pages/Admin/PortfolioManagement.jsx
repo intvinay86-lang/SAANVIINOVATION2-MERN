@@ -8,6 +8,7 @@ import {
   FiX,
   FiSave,
   FiExternalLink,
+  FiRefreshCw,
 } from "react-icons/fi";
 import {
   getMainSiteData,
@@ -193,6 +194,10 @@ function PortfolioManagement() {
     }
   };
 
+  const handleRefresh = () => {
+    loadPortfolioProjects();
+  };
+
   if (isFetching) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -214,13 +219,23 @@ function PortfolioManagement() {
               Manage your portfolio projects - add, edit, or delete projects
             </p>
           </div>
-          <button
-            onClick={() => handleOpenModal()}
-            className="bg-orange-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-orange-600 transition-colors duration-200 flex items-center gap-2"
-          >
-            <FiPlus />
-            Add Project
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={handleRefresh}
+              className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-semibold hover:bg-gray-200 transition-colors duration-200 flex items-center gap-2"
+              title="Refresh data"
+            >
+              <FiRefreshCw />
+              Refresh
+            </button>
+            <button
+              onClick={() => handleOpenModal()}
+              className="bg-orange-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-orange-600 transition-colors duration-200 flex items-center gap-2"
+            >
+              <FiPlus />
+              Add Project
+            </button>
+          </div>
         </div>
       </div>
 

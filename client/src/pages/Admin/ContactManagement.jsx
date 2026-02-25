@@ -9,6 +9,7 @@ import {
   FiX,
   FiChevronLeft,
   FiChevronRight,
+  FiRefreshCw,
 } from "react-icons/fi";
 import {
   getAllContacts,
@@ -81,6 +82,11 @@ function ContactManagement() {
     }
   };
 
+  const handleRefresh = () => {
+    dispatch(getAllContacts(filters));
+    dispatch(getContactStats());
+  };
+
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
@@ -108,13 +114,23 @@ function ContactManagement() {
 
       <div className="space-y-6">
         {/* Page Header */}
-        <div>
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">
-            Contact Management
-          </h1>
-          <p className="text-gray-600">
-            Manage and respond to contact form submissions
-          </p>
+        <div className="flex justify-between items-start">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-800 mb-2">
+              Contact Management
+            </h1>
+            <p className="text-gray-600">
+              Manage and respond to contact form submissions
+            </p>
+          </div>
+          <button
+            onClick={handleRefresh}
+            className="flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
+            title="Refresh data"
+          >
+            <FiRefreshCw className="w-4 h-4" />
+            Refresh
+          </button>
         </div>
 
         {/* Statistics Cards */}
