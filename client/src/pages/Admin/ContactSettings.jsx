@@ -1,8 +1,15 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import toast from "react-hot-toast";
-import { FiSave, FiClock, FiMapPin } from "react-icons/fi";
+import {
+  FiSave,
+  FiClock,
+  FiMapPin,
+  FiPhone,
+  FiPlus,
+  FiTrash2,
+} from "react-icons/fi";
 import {
   getMainSiteData,
   updateSiteDataSection,
@@ -22,6 +29,7 @@ function ContactSettings() {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -29,6 +37,10 @@ function ContactSettings() {
       heroSubtitle:
         "HAVE A PROJECT IN MIND? WE'D LOVE TO HEAR FROM YOU. SEND US A MESSAGE AND WE'LL RESPOND AS SOON AS POSSIBLE.",
       businessHours: "Mon-Fri: 9AM-6PM, Sat: 10AM-4PM",
+      contactNumbers: [
+        { label: "Primary", number: "+91 8305233223" },
+        { label: "Support", number: "+91 9876543210" },
+      ],
       mapEmbedUrl:
         "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3578.0234567890123!2d78.203263!3d26.216247!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjbCsDEyJzU4LjUiTiA3OMKwMTInMTEuNyJF!5e0!3m2!1sen!2sin!4v1234567890123!5m2!1sen!2sin",
       formTitle: "Send Us a Message",
@@ -36,6 +48,11 @@ function ContactSettings() {
       responseMessage:
         "Thank you for your message! We'll get back to you within 24 hours.",
     },
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "contactNumbers",
   });
 
   useEffect(() => {
@@ -51,6 +68,10 @@ function ContactSettings() {
         heroSubtitle:
           "HAVE A PROJECT IN MIND? WE'D LOVE TO HEAR FROM YOU. SEND US A MESSAGE AND WE'LL RESPOND AS SOON AS POSSIBLE.",
         businessHours: "Mon-Fri: 9AM-6PM, Sat: 10AM-4PM",
+        contactNumbers: [
+          { label: "Primary", number: "+91 8305233223" },
+          { label: "Support", number: "+91 9876543210" },
+        ],
         mapEmbedUrl:
           "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3578.0234567890123!2d78.203263!3d26.216247!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjbCsDEyJzU4LjUiTiA3OMKwMTInMTEuNyJF!5e0!3m2!1sen!2sin!4v1234567890123!5m2!1sen!2sin",
         formTitle: "Send Us a Message",
@@ -65,6 +86,8 @@ function ContactSettings() {
         heroSubtitle: contactSettings.heroSubtitle || defaultData.heroSubtitle,
         businessHours:
           contactSettings.businessHours || defaultData.businessHours,
+        contactNumbers:
+          contactSettings.contactNumbers || defaultData.contactNumbers,
         mapEmbedUrl: contactSettings.mapEmbedUrl || defaultData.mapEmbedUrl,
         formTitle: contactSettings.formTitle || defaultData.formTitle,
         formSubtitle: contactSettings.formSubtitle || defaultData.formSubtitle,
@@ -169,6 +192,82 @@ function ContactSettings() {
                 </p>
               )}
             </div>
+          </div>
+        </div>
+
+        {/* Contact Numbers */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+              <FiPhone className="text-orange-500" />
+              Contact Numbers
+            </h2>
+            <button
+              type="button"
+              onClick={() => append({ label: "", number: "" })}
+              className="flex items-center gap-2 px-3 py-2 text-sm bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-colors"
+            >
+              <FiPlus />
+              Add Number
+            </button>
+          </div>
+
+          <div className="space-y-4">
+            {fields.map((field, index) => (
+              <div
+                key={field.id}
+                className="flex gap-3 items-start p-4 bg-gray-50 rounded-lg"
+              >
+                <div className="flex-1 space-y-3">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Label
+                    </label>
+                    <input
+                      type="text"
+                      {...register(`contactNumbers.${index}.label`, {
+                        required: "Label is required",
+                      })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
+                      placeholder="e.g., Primary, Support, Sales"
+                    />
+                    {errors.contactNumbers?.[index]?.label && (
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.contactNumbers[index].label.message}
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Phone Number
+                    </label>
+                    <input
+                      type="text"
+                      {...register(`contactNumbers.${index}.number`, {
+                        required: "Phone number is required",
+                      })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
+                      placeholder="+91 1234567890"
+                    />
+                    {errors.contactNumbers?.[index]?.number && (
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.contactNumbers[index].number.message}
+                      </p>
+                    )}
+                  </div>
+                </div>
+                {fields.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => remove(index)}
+                    className="mt-8 p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                    title="Remove number"
+                  >
+                    <FiTrash2 size={18} />
+                  </button>
+                )}
+              </div>
+            ))}
           </div>
         </div>
 

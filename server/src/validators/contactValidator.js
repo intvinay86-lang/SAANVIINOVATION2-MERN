@@ -33,8 +33,5 @@ export const createContactSchema = Joi.object({
 });
 
 export const updateContactSchema = Joi.object({
-  status: Joi.string().valid("new", "read", "replied", "archived").messages({
-    "any.only": "Status must be one of: new, read, replied, archived",
-  }),
-  isRead: Joi.boolean(),
-}).min(1);
+  // Reserved for future fields like notes, tags, etc.
+}).min(0);

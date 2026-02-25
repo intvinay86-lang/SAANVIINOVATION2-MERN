@@ -12,14 +12,16 @@ export const authService = {
     localStorage.setItem("authToken", token);
     localStorage.setItem("authUser", JSON.stringify(user));
 
-    // Dispatch storage event for cross-tab synchronization
-    window.dispatchEvent(
-      new StorageEvent("storage", {
-        key: "authToken",
-        newValue: token,
-        storageArea: localStorage,
-      }),
-    );
+    // Dispatch storage event for cross-tab synchronization (async)
+    setTimeout(() => {
+      window.dispatchEvent(
+        new StorageEvent("storage", {
+          key: "authToken",
+          newValue: token,
+          storageArea: localStorage,
+        }),
+      );
+    }, 0);
   },
 
   // Get stored token from localStorage
@@ -38,14 +40,16 @@ export const authService = {
     localStorage.removeItem("authToken");
     localStorage.removeItem("authUser");
 
-    // Dispatch storage event for cross-tab synchronization
-    window.dispatchEvent(
-      new StorageEvent("storage", {
-        key: "authToken",
-        newValue: null,
-        storageArea: localStorage,
-      }),
-    );
+    // Dispatch storage event for cross-tab synchronization (async)
+    setTimeout(() => {
+      window.dispatchEvent(
+        new StorageEvent("storage", {
+          key: "authToken",
+          newValue: null,
+          storageArea: localStorage,
+        }),
+      );
+    }, 0);
   },
 
   // Check if authenticated

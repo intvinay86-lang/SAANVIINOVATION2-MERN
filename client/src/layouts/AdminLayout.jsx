@@ -25,6 +25,18 @@ function AdminLayout() {
 
   const handleLogout = () => {
     dispatch(logout());
+
+    // Dispatch storage event after reducer completes for cross-tab sync
+    setTimeout(() => {
+      window.dispatchEvent(
+        new StorageEvent("storage", {
+          key: "authToken",
+          newValue: null,
+          storageArea: localStorage,
+        }),
+      );
+    }, 0);
+
     toast.success("Logged out successfully!");
     navigate("/login");
   };

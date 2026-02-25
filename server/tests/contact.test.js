@@ -57,11 +57,11 @@ describe("Contacts API Tests", () => {
 
       expect(response.body.success).toBe(true);
       expect(response.body.data.email).toBe("jane.smith@example.com");
-      expect(response.body.data.status).toBe("new");
-      expect(response.body.data.isRead).toBe(false);
+      expect(response.body.data.firstName).toBe("Jane");
+      expect(response.body.data.lastName).toBe("Smith");
     });
 
-    it("should create contact without phone (optional field)", async () => {
+    it("should fail without phone (required field)", async () => {
       const response = await request(app)
         .post("/api/v1/contacts")
         .send({
@@ -138,27 +138,6 @@ describe("Contacts API Tests", () => {
       expect(response.body.success).toBe(false);
     });
 
-    it("should filter contacts by status", async () => {
-      await Contact.create({
-        firstName: "Read",
-        lastName: "Contact",
-        email: "read@example.com",
-        phone: "+1 444 444 4444",
-        subject: "Read Subject",
-        message: "This contact has been read",
-        status: "read",
-      });
-
-      const response = await request(app)
-        .get("/api/v1/contacts?status=read")
-        .set("Authorization", `Bearer ${authToken}`)
-        .expect(200);
-
-      expect(response.body.success).toBe(true);
-      expect(response.body.data.contacts).toHaveLength(1);
-      expect(response.body.data.contacts[0].status).toBe("read");
-    });
-
     it("should search contacts", async () => {
       const response = await request(app)
         .get("/api/v1/contacts?search=john")
@@ -167,6 +146,37 @@ describe("Contacts API Tests", () => {
 
       expect(response.body.success).toBe(true);
       expect(response.body.data.contacts.length).toBeGreaterThan(0);
+    });
+
+    it("should support pagination", async () => {
+      // Create additional contacts
+      await Contact.create([
+        {
+          firstName: "Contact2",
+          lastName: "Test",
+          email: "contact2@example.com",
+          phone: "+1 222 222 2222",
+          subject: "Subject 2",
+          message: "Message 2 for testing pagination",
+        },
+        {
+          firstName: "Contact3",
+          lastName: "Test",
+          email: "contact3@example.com",
+          phone: "+1 333 333 3333",
+          subject: "Subject 3",
+          message: "Message 3 for testing pagination",
+        },
+      ]);
+
+      const response = await request(app)
+        .get("/api/v1/contacts?page=1&limit=2")
+        .set("Authorization", `Bearer ${authToken}`)
+        .expect(200);
+
+      expect(response.body.success).toBe(true);
+      expect(response.body.data.contacts).toHaveLength(2);
+      expect(response.body.data.totalPages).toBe(2);
     });
   });
 
@@ -201,50 +211,32 @@ describe("Contacts API Tests", () => {
   });
 
   describe("PUT /api/v1/contacts/:id", () => {
-    it("should update contact status", async () => {
+    it("should update contact successfully", async () => {
       const response = await request(app)
         .put(`/api/v1/contacts/${testContactId}`)
         .set("Authorization", `Bearer ${authToken}`)
-        .send({
-          status: "read",
-        })
+        .send({})
         .expect(200);
 
       expect(response.body.success).toBe(true);
-      expect(response.body.data.status).toBe("read");
+      expect(response.body.data._id).toBe(testContactId);
     });
 
-    it("should update isRead flag", async () => {
+    it("should fail with invalid contact id", async () => {
       const response = await request(app)
-        .put(`/api/v1/contacts/${testContactId}`)
+        .put("/api/v1/contacts/507f1f77bcf86cd799439011")
         .set("Authorization", `Bearer ${authToken}`)
-        .send({
-          isRead: true,
-        })
-        .expect(200);
-
-      expect(response.body.success).toBe(true);
-      expect(response.body.data.isRead).toBe(true);
-    });
-
-    it("should fail with invalid status", async () => {
-      const response = await request(app)
-        .put(`/api/v1/contacts/${testContactId}`)
-        .set("Authorization", `Bearer ${authToken}`)
-        .send({
-          status: "invalid-status",
-        })
-        .expect(422);
+        .send({})
+        .expect(404);
 
       expect(response.body.success).toBe(false);
+      expect(response.body.message).toBe("Contact not found");
     });
 
     it("should fail without authentication", async () => {
       const response = await request(app)
         .put(`/api/v1/contacts/${testContactId}`)
-        .send({
-          status: "read",
-        })
+        .send({})
         .expect(401);
 
       expect(response.body.success).toBe(false);
@@ -287,37 +279,31 @@ describe("Contacts API Tests", () => {
     beforeEach(async () => {
       await Contact.deleteMany({});
 
-      // Create contacts with different statuses
+      // Create multiple contacts for statistics
       await Contact.create([
         {
           firstName: "Contact1",
-          lastName: "New",
+          lastName: "Test",
           email: "contact1@example.com",
           phone: "+1 111 111 1111",
           subject: "Subject 1",
-          message: "Message 1 for testing",
-          status: "new",
-          isRead: false,
+          message: "Message 1 for testing statistics",
         },
         {
           firstName: "Contact2",
-          lastName: "Read",
+          lastName: "Test",
           email: "contact2@example.com",
           phone: "+1 222 222 2222",
           subject: "Subject 2",
-          message: "Message 2 for testing",
-          status: "read",
-          isRead: true,
+          message: "Message 2 for testing statistics",
         },
         {
           firstName: "Contact3",
-          lastName: "Replied",
+          lastName: "Test",
           email: "contact3@example.com",
           phone: "+1 333 333 3333",
           subject: "Subject 3",
-          message: "Message 3 for testing",
-          status: "replied",
-          isRead: true,
+          message: "Message 3 for testing statistics",
         },
       ]);
     });
@@ -330,8 +316,6 @@ describe("Contacts API Tests", () => {
 
       expect(response.body.success).toBe(true);
       expect(response.body.data.total).toBe(3);
-      expect(response.body.data.unread).toBe(1);
-      expect(response.body.data.byStatus).toHaveLength(3);
     });
 
     it("should fail without authentication", async () => {

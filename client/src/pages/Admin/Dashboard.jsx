@@ -35,7 +35,12 @@ function Dashboard() {
   const servicesCount = siteData?.services?.length || 0;
   const portfolioCount = siteData?.portfolioProjects?.length || 0;
   const clientsCount = siteData?.clients?.length || 0;
-  const unreadMessages = contactStats?.unread || 0;
+  const totalMessages = contactStats?.total || 0;
+
+  // Format message count: show "100+" if greater than 100
+  const formatMessageCount = (count) => {
+    return count > 100 ? "100+" : count.toString();
+  };
 
   const stats = [
     {
@@ -57,8 +62,8 @@ function Dashboard() {
       color: "green",
     },
     {
-      title: "Unread Messages",
-      value: unreadMessages.toString(),
+      title: "Total Messages",
+      value: formatMessageCount(totalMessages),
       icon: <FiMail />,
       color: "purple",
     },

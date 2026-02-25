@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { FiMenu, FiX, FiLogOut, FiUser, FiExternalLink } from "react-icons/fi";
 
 function AdminNavbar({ user, isSidebarOpen, toggleSidebar, handleLogout }) {
@@ -20,10 +19,6 @@ function AdminNavbar({ user, isSidebarOpen, toggleSidebar, handleLogout }) {
             <a
               href="#dashboard"
               className="flex items-center hover:opacity-80 transition-opacity duration-300"
-              onClick={(e) => {
-                e.preventDefault();
-                window.location.hash = "dashboard";
-              }}
             >
               <h1
                 className="text-xl font-bold"
@@ -37,18 +32,23 @@ function AdminNavbar({ user, isSidebarOpen, toggleSidebar, handleLogout }) {
           {/* Right: User Profile + Actions */}
           <div className="flex items-center space-x-4">
             {/* Site View Button */}
-            <Link
-              to="/"
+            <a
+              href="/"
               target="_blank"
+              rel="noopener noreferrer"
               className="flex items-center space-x-2 bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded-lg transition-colors duration-300"
               aria-label="View site"
             >
               <FiExternalLink size={16} />
               <span className="hidden sm:inline">Site View</span>
-            </Link>
+            </a>
 
-            {/* User Profile (Desktop) */}
-            <div className="hidden md:flex items-center space-x-3 bg-slate-800 px-4 py-2 rounded-lg">
+            {/* User Profile (Desktop) - Clickable */}
+            <a
+              href="#profile"
+              className="hidden md:flex items-center space-x-3 bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded-lg transition-colors duration-300"
+              aria-label="View profile"
+            >
               <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
                 <FiUser size={16} />
               </div>
@@ -56,7 +56,16 @@ function AdminNavbar({ user, isSidebarOpen, toggleSidebar, handleLogout }) {
                 <p className="text-sm font-semibold">{user.name}</p>
                 <p className="text-xs text-gray-400">{user.role}</p>
               </div>
-            </div>
+            </a>
+
+            {/* Profile Button (Mobile) */}
+            <a
+              href="#profile"
+              className="md:hidden flex items-center justify-center w-10 h-10 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors duration-300"
+              aria-label="Profile"
+            >
+              <FiUser size={18} />
+            </a>
 
             {/* Logout Button */}
             <button

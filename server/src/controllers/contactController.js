@@ -7,7 +7,7 @@ import Contact from "../models/Contact.js";
 // @route   GET /api/v1/contacts
 // @access  Private
 export const getAllContacts = asyncHandler(async (req, res) => {
-  const { page = 1, limit = 10, search, status } = req.query;
+  const { page = 1, limit = 10, search } = req.query;
 
   const query = {};
 
@@ -18,10 +18,6 @@ export const getAllContacts = asyncHandler(async (req, res) => {
       { email: { $regex: search, $options: "i" } },
       { subject: { $regex: search, $options: "i" } },
     ];
-  }
-
-  if (status) {
-    query.status = status;
   }
 
   const contacts = await Contact.find(query)
@@ -80,17 +76,13 @@ export const createContact = asyncHandler(async (req, res) => {
 // @route   PUT /api/v1/contacts/:id
 // @access  Private
 export const updateContact = asyncHandler(async (req, res) => {
-  const { status, isRead } = req.body;
-
   const contact = await Contact.findById(req.params.id);
 
   if (!contact) {
     throw new ApiError(404, "Contact not found");
   }
 
-  if (status !== undefined) contact.status = status;
-  if (isRead !== undefined) contact.isRead = isRead;
-
+  // Contact can be updated if needed (e.g., for notes or other fields in future)
   await contact.save();
 
   res
@@ -119,23 +111,11 @@ export const deleteContact = asyncHandler(async (req, res) => {
 // @route   GET /api/v1/contacts/stats
 // @access  Private
 export const getContactStats = asyncHandler(async (req, res) => {
-  const stats = await Contact.aggregate([
-    {
-      $group: {
-        _id: "$status",
-        count: { $sum: 1 },
-      },
-    },
-  ]);
-
   const total = await Contact.countDocuments();
-  const unread = await Contact.countDocuments({ isRead: false });
 
   res.status(200).json(
     new ApiResponse(200, "Contact statistics retrieved successfully", {
       total,
-      unread,
-      byStatus: stats,
     }),
   );
 });

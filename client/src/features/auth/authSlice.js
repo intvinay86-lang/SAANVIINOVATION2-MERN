@@ -65,7 +65,9 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       state.loading = false;
       state.error = null;
-      authService.clearAuthData();
+      // Clear auth data without triggering storage event during reducer execution
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("authUser");
     },
     clearError: (state) => {
       state.error = null;

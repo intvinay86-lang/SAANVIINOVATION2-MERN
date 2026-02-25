@@ -20,10 +20,13 @@ function Contact() {
     "HAVE A PROJECT IN MIND? WE'D LOVE TO HEAR FROM YOU. SEND US A MESSAGE AND WE'LL RESPOND AS SOON AS POSSIBLE.";
   const businessHours =
     contactSettings.businessHours || "Mon-Fri: 9AM-6PM, Sat: 10AM-4PM";
+  const contactNumbers = contactSettings.contactNumbers || [
+    { label: "Primary", number: "+91 8305233223" },
+    { label: "Support", number: "+91 9876543210" },
+  ];
 
   // Get contact info from site info
   const email = siteInfo.email || "ceo@saanviinnovation.com";
-  const phone = siteInfo.phone || "+91 8305233223";
   const address =
     siteInfo.address ||
     "21, Near Garg Clinic,\nNehru Colony, Mayur Nagar,\nThatipur, Gwalior,\nMadhya Pradesh – 474011";
@@ -134,45 +137,52 @@ function Contact() {
                         </div>
                       </div>
 
-                      {/* Phone */}
-                      <div className="flex items-start gap-4 group">
-                        <div className="flex-shrink-0 w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center group-hover:bg-orange-500 transition-all duration-300">
-                          <FiPhone
-                            className="text-orange-600 group-hover:text-white transition-colors duration-300"
-                            size={20}
-                          />
+                      {/* Phone Numbers */}
+                      {contactNumbers.map((contact, index) => (
+                        <div
+                          key={index}
+                          className="flex items-start gap-4 group"
+                        >
+                          <div className="flex-shrink-0 w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center group-hover:bg-orange-500 transition-all duration-300">
+                            <FiPhone
+                              className="text-orange-600 group-hover:text-white transition-colors duration-300"
+                              size={20}
+                            />
+                          </div>
+                          <div>
+                            <h3
+                              className="text-sm font-semibold text-gray-500 mb-1 tracking-wide"
+                              style={{
+                                fontFamily:
+                                  "'Orbitron', 'Courier New', monospace",
+                              }}
+                            >
+                              {contact.label}
+                            </h3>
+                            <a
+                              href={`tel:${contact.number.replace(/\s/g, "")}`}
+                              className="text-gray-800 font-medium hover:text-orange-600 transition-colors tracking-wide"
+                              style={{
+                                fontFamily:
+                                  "'Orbitron', 'Courier New', monospace",
+                              }}
+                            >
+                              {contact.number}
+                            </a>
+                            {index === 0 && (
+                              <p
+                                className="text-sm text-gray-500 mt-1 tracking-wide"
+                                style={{
+                                  fontFamily:
+                                    "'Orbitron', 'Courier New', monospace",
+                                }}
+                              >
+                                {businessHours}
+                              </p>
+                            )}
+                          </div>
                         </div>
-                        <div>
-                          <h3
-                            className="text-sm font-semibold text-gray-500 mb-1 tracking-wide"
-                            style={{
-                              fontFamily:
-                                "'Orbitron', 'Courier New', monospace",
-                            }}
-                          >
-                            Phone
-                          </h3>
-                          <a
-                            href={`tel:${phone.replace(/\s/g, "")}`}
-                            className="text-gray-800 font-medium hover:text-orange-600 transition-colors tracking-wide"
-                            style={{
-                              fontFamily:
-                                "'Orbitron', 'Courier New', monospace",
-                            }}
-                          >
-                            {phone}
-                          </a>
-                          <p
-                            className="text-sm text-gray-500 mt-1 tracking-wide"
-                            style={{
-                              fontFamily:
-                                "'Orbitron', 'Courier New', monospace",
-                            }}
-                          >
-                            {businessHours}
-                          </p>
-                        </div>
-                      </div>
+                      ))}
 
                       {/* Address */}
                       <div className="flex items-start gap-4 group">

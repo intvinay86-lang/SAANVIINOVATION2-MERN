@@ -8,7 +8,7 @@ import ClientsSection from "./Components/ClientsSection";
 function Home() {
   return (
     <>
-      <title>Home</title>
+      <title>SAANVI INNOVATION | Home</title>
       <meta
         name="description"
         content="Delivers innovative digital solutions including web development, mobile apps, software development, and digital marketing services to help businesses grow."

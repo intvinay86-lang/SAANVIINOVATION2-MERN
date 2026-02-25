@@ -8,12 +8,14 @@ import {
   updateSiteDataSection,
 } from "../../features/siteData/siteDataSlice";
 import {
+  selectSiteData,
   selectFooterData,
   selectSiteDataLoading,
 } from "../../features/siteData/siteDataSelectors";
 
 function FooterSettings() {
   const dispatch = useDispatch();
+  const siteData = useSelector(selectSiteData);
   const footerData = useSelector(selectFooterData);
   const isLoading = useSelector(selectSiteDataLoading);
   const [isFetching, setIsFetching] = useState(true);
@@ -34,15 +36,16 @@ function FooterSettings() {
   }, []);
 
   useEffect(() => {
-    if (footerData) {
+    // Check if siteData has been loaded (not null)
+    if (siteData !== null) {
       const defaultTagline =
         "DELIVERING INNOVATIVE DIGITAL SOLUTIONS FOR MODERN BUSINESSES";
       reset({
-        tagline: footerData.tagline || defaultTagline,
+        tagline: footerData?.tagline || defaultTagline,
       });
       setIsFetching(false);
     }
-  }, [footerData, reset]);
+  }, [siteData, footerData, reset]);
 
   const loadFooterData = async () => {
     setIsFetching(true);
