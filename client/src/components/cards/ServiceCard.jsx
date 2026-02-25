@@ -1,4 +1,18 @@
-function ServiceCard({ service, index }) {
+import React from "react";
+
+function ServiceCard({ service, index = 0 }) {
+  // Clone the icon element to ensure proper rendering with size
+  const renderIcon = () => {
+    if (React.isValidElement(service.icon)) {
+      const iconClassName = service.icon.props.className || "w-7 h-7";
+      return React.cloneElement(service.icon, {
+        className: iconClassName,
+        style: { color: "inherit" },
+      });
+    }
+    return service.icon;
+  };
+
   return (
     <div
       className="group relative bg-white rounded-xl p-8 border border-gray-200 hover:border-orange-500 transition-all duration-500 hover:shadow-xl"
@@ -12,9 +26,9 @@ function ServiceCard({ service, index }) {
         {/* Icon */}
         <div className="mb-6">
           <div
-            className={`inline-flex w-14 h-14 bg-gradient-to-br ${service.gradient} rounded-lg items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-md`}
+            className={`inline-flex w-14 h-14 ${service.gradient ? `bg-gradient-to-br ${service.gradient}` : "bg-gradient-to-br from-orange-500 to-orange-600"} rounded-lg items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-md text-white`}
           >
-            <div className="text-white">{service.icon}</div>
+            {renderIcon()}
           </div>
         </div>
 

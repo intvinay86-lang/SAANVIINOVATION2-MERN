@@ -1,6 +1,6 @@
 import PricingCard from "./Components/PricingCard";
 import WhyChooseSection from "./Components/WhyChooseSection";
-import CustomSolutionCTA from "./Components/CustomSolutionCTA";
+import CTASection from "../../components/sections/CTASection";
 import { pricingPlans } from "./Components/pricingData";
 
 function Pricing() {
@@ -60,7 +60,19 @@ function Pricing() {
           <WhyChooseSection />
 
           {/* Contact CTA */}
-          <CustomSolutionCTA />
+          <CTASection
+            variant="custom"
+            title={
+              <>
+                Need a{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-orange-600">
+                  Custom Solution?
+                </span>
+              </>
+            }
+            subtitle="We can create a tailored package that perfectly fits your specific requirements and budget"
+            buttonText="Contact Us for Custom Quote"
+          />
         </div>
       </div>
     </>

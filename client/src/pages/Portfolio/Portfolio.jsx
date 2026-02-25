@@ -1,5 +1,5 @@
-import ProjectsGrid from "./Components/ProjectsGrid";
-import { projects } from "./Components/projectsData";
+import ProjectCard from "../../components/cards/ProjectCard";
+import { projects } from "./projectsData";
 
 function Portfolio() {
   return (
@@ -46,7 +46,11 @@ function Portfolio() {
 
         {/* Projects Grid */}
         <div className="container mx-auto px-4 md:px-8 py-16">
-          <ProjectsGrid projects={projects} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {projects.map((project) => (
+              <ProjectCard key={project.id} project={project} />
+            ))}
+          </div>
         </div>
       </div>
     </>

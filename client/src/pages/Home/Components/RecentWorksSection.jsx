@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { FiArrowRight, FiExternalLink } from "react-icons/fi";
-import RecentWorkCard from "./RecentWorkCard";
+import { FiArrowRight } from "react-icons/fi";
+import ProjectCard from "../../../components/cards/ProjectCard";
 
 function RecentWorksSection() {
   const recentWorks = [
@@ -67,7 +67,7 @@ function RecentWorksSection() {
         {/* Works Grid - Modern Card Design */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {recentWorks.map((work) => (
-            <RecentWorkCard key={work.id} work={work} />
+            <ProjectCard key={work.id} project={work} />
           ))}
         </div>
 

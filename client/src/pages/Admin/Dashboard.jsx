@@ -1,5 +1,5 @@
 import { FiBriefcase, FiImage, FiUsers, FiMail } from "react-icons/fi";
-import StatsCard from "./Components/StatsCard";
+import IconCard from "../../components/cards/IconCard";
 import RecentMessages from "./Components/RecentMessages";
 import QuickActions from "./Components/QuickActions";
 
@@ -48,8 +48,9 @@ function Dashboard() {
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {stats.map((stat, index) => (
-            <StatsCard
+            <IconCard
               key={index}
+              variant="stats"
               title={stat.title}
               value={stat.value}
               icon={stat.icon}

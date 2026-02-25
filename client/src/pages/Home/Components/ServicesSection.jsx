@@ -6,6 +6,7 @@ import {
   FiCloud,
   FiTrendingUp,
 } from "react-icons/fi";
+import ServiceCard from "../../../components/cards/ServiceCard";
 
 function ServicesSection() {
   const services = [
@@ -80,42 +81,7 @@ function ServicesSection() {
         {/* Services Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => (
-            <div
-              key={index}
-              className="group relative bg-white rounded-xl p-8 border border-gray-200 hover:border-orange-500 transition-all duration-500 hover:shadow-xl"
-            >
-              {/* Hover Background */}
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl"></div>
-
-              {/* Content */}
-              <div className="relative z-10">
-                {/* Icon */}
-                <div className="mb-6">
-                  <div className="inline-flex w-14 h-14 bg-orange-100 rounded-lg items-center justify-center text-orange-600 group-hover:scale-110 transition-transform duration-500">
-                    {service.icon}
-                  </div>
-                </div>
-
-                {/* Title */}
-                <h3
-                  className="text-xl font-bold text-gray-900 mb-4 group-hover:text-orange-600 transition-colors duration-300"
-                  style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-                >
-                  {service.title}
-                </h3>
-
-                {/* Description */}
-                <p
-                  className="text-gray-600 leading-relaxed text-sm"
-                  style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-                >
-                  {service.description}
-                </p>
-
-                {/* Bottom Line Accent */}
-                <div className="mt-6 w-12 h-1 bg-orange-500 rounded-full group-hover:w-full transition-all duration-500"></div>
-              </div>
-            </div>
+            <ServiceCard key={index} service={service} index={index} />
           ))}
         </div>
       </div>
