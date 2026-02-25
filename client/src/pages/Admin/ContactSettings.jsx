@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { FiSave, FiClock, FiMapPin, FiGlobe } from "react-icons/fi";
+import { FiSave, FiClock, FiMapPin } from "react-icons/fi";
 import {
   getMainSiteData,
   updateSiteDataSection,
@@ -25,11 +25,6 @@ function ContactSettings() {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      pageTitle: "Contact Us - Get in Touch | SAANVI INNOVATION",
-      pageDescription:
-        "Contact SAANVI INNOVATION for web development, mobile apps, and digital solutions. Located in Gwalior, Madhya Pradesh. Call +91 8305233223 or email ceo@saanviinnovation.com",
-      pageKeywords:
-        "contact saanvi innovation, web development gwalior, IT company contact, software development inquiry",
       heroTitle: "GET IN TOUCH",
       heroSubtitle:
         "HAVE A PROJECT IN MIND? WE'D LOVE TO HEAR FROM YOU. SEND US A MESSAGE AND WE'LL RESPOND AS SOON AS POSSIBLE.",
@@ -52,11 +47,6 @@ function ContactSettings() {
       const contactSettings = siteData?.contactSettings || {};
 
       const defaultData = {
-        pageTitle: "Contact Us - Get in Touch | SAANVI INNOVATION",
-        pageDescription:
-          "Contact SAANVI INNOVATION for web development, mobile apps, and digital solutions. Located in Gwalior, Madhya Pradesh. Call +91 8305233223 or email ceo@saanviinnovation.com",
-        pageKeywords:
-          "contact saanvi innovation, web development gwalior, IT company contact, software development inquiry",
         heroTitle: "GET IN TOUCH",
         heroSubtitle:
           "HAVE A PROJECT IN MIND? WE'D LOVE TO HEAR FROM YOU. SEND US A MESSAGE AND WE'LL RESPOND AS SOON AS POSSIBLE.",
@@ -71,10 +61,6 @@ function ContactSettings() {
       };
 
       const mergedData = {
-        pageTitle: contactSettings.pageTitle || defaultData.pageTitle,
-        pageDescription:
-          contactSettings.pageDescription || defaultData.pageDescription,
-        pageKeywords: contactSettings.pageKeywords || defaultData.pageKeywords,
         heroTitle: contactSettings.heroTitle || defaultData.heroTitle,
         heroSubtitle: contactSettings.heroSubtitle || defaultData.heroSubtitle,
         businessHours:
@@ -135,72 +121,12 @@ function ContactSettings() {
           Contact Page Settings
         </h1>
         <p className="text-gray-600">
-          Manage contact page content, SEO settings, and form configuration.
-          Basic contact info (phone, email, address) is managed in Site Info.
+          Manage contact page content and form configuration. Basic contact info
+          (phone, email, address) is managed in Site Info.
         </p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {/* SEO Settings */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <FiGlobe className="text-orange-500" />
-            SEO Settings
-          </h2>
-
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Page Title
-              </label>
-              <input
-                type="text"
-                {...register("pageTitle", {
-                  required: "Page title is required",
-                })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
-                placeholder="Contact Us - Get in Touch | SAANVI INNOVATION"
-              />
-              {errors.pageTitle && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.pageTitle.message}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Meta Description
-              </label>
-              <textarea
-                {...register("pageDescription", {
-                  required: "Meta description is required",
-                })}
-                rows="3"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
-                placeholder="Contact SAANVI INNOVATION for web development..."
-              />
-              {errors.pageDescription && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.pageDescription.message}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Keywords
-              </label>
-              <input
-                type="text"
-                {...register("pageKeywords")}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
-                placeholder="contact saanvi innovation, web development gwalior..."
-              />
-            </div>
-          </div>
-        </div>
-
         {/* Hero Section */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">

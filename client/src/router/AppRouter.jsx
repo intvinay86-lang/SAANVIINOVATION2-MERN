@@ -24,6 +24,8 @@ const Dashboard = lazy(() => import("../pages/Admin/Dashboard"));
 const SiteInfo = lazy(() => import("../pages/Admin/SiteInfo"));
 const ContactSettings = lazy(() => import("../pages/Admin/ContactSettings"));
 const FooterSettings = lazy(() => import("../pages/Admin/FooterSettings"));
+const TermsSettings = lazy(() => import("../pages/Admin/TermsSettings"));
+const PrivacySettings = lazy(() => import("../pages/Admin/PrivacySettings"));
 const Profile = lazy(() => import("../pages/Admin/Profile"));
 const NotFound = lazy(() => import("../pages/Errors/NotFound"));
 const Login = lazy(() => import("../pages/Auth/Login"));
@@ -63,6 +65,8 @@ export default function AppRouter() {
             <Route path="siteinfo" element={<SiteInfo />} />
             <Route path="contact" element={<ContactSettings />} />
             <Route path="footer" element={<FooterSettings />} />
+            <Route path="terms" element={<TermsSettings />} />
+            <Route path="privacy" element={<PrivacySettings />} />
             <Route path="profile" element={<Profile />} />
           </Route>
 

@@ -14,15 +14,6 @@ function Contact() {
   const contactSettings = siteData?.contactSettings || {};
   const siteInfo = siteData?.siteinfo || {};
 
-  const pageTitle =
-    contactSettings.pageTitle ||
-    "Contact Us - Get in Touch | SAANVI INNOVATION";
-  const pageDescription =
-    contactSettings.pageDescription ||
-    "Contact SAANVI INNOVATION for web development, mobile apps, and digital solutions. Located in Gwalior, Madhya Pradesh. Call +91 8305233223 or email ceo@saanviinnovation.com";
-  const pageKeywords =
-    contactSettings.pageKeywords ||
-    "contact saanvi innovation, web development gwalior, IT company contact, software development inquiry";
   const heroTitle = contactSettings.heroTitle || "GET IN TOUCH";
   const heroSubtitle =
     contactSettings.heroSubtitle ||
@@ -43,15 +34,20 @@ function Contact() {
 
   return (
     <>
-      <title>{pageTitle}</title>
-      <meta name="description" content={pageDescription} />
-      <meta name="keywords" content={pageKeywords} />
-      <meta property="og:title" content="Contact Us - SAANVI INNOVATION" />
+      <title>Contact Us - Get in Touch</title>
+      <meta
+        name="description"
+        content="Get in touch with us for your web development, mobile app development, and digital solution needs. We're here to help bring your ideas to life."
+      />
+      <meta
+        name="keywords"
+        content="contact us, get in touch, web development contact, IT services inquiry, software development contact"
+      />
+      <meta property="og:title" content="Contact Us - Get in Touch" />
       <meta
         property="og:description"
         content="Get in touch with us for your digital solution needs."
       />
-      <link rel="canonical" href="https://saanviinnovation.com/contact" />
 
       <div className="bg-white">
         {/* Page Header */}
