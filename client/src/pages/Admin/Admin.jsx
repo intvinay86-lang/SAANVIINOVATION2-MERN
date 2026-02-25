@@ -7,6 +7,7 @@ import {
   FiMail,
   FiFileText,
   FiShield,
+  FiDollarSign,
 } from "react-icons/fi";
 import Loading from "../../components/Loading";
 
@@ -15,6 +16,7 @@ const Dashboard = lazy(() => import("./Dashboard"));
 const SiteInfo = lazy(() => import("./SiteInfo"));
 const ContactSettings = lazy(() => import("./ContactSettings"));
 const FooterSettings = lazy(() => import("./FooterSettings"));
+const PricingSettings = lazy(() => import("./PricingSettings"));
 const TermsSettings = lazy(() => import("./TermsSettings"));
 const PrivacySettings = lazy(() => import("./PrivacySettings"));
 const Profile = lazy(() => import("./Profile"));
@@ -34,6 +36,12 @@ const MENU_ITEMS = [
     name: "Footer Settings",
     icon: FiLayout,
     component: FooterSettings,
+  },
+  {
+    id: "pricing",
+    name: "Pricing Settings",
+    icon: FiDollarSign,
+    component: PricingSettings,
   },
   {
     id: "terms",
