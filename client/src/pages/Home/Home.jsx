@@ -1,28 +1,42 @@
 // import ModernHero from "./Components/ModernHero";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import TechHero from "./Components/TechHero";
 import AboutImageGrid from "./Components/AboutImageGrid";
 import ServicesSection from "./Components/ServicesSection";
 import RecentWorksSection from "./Components/RecentWorksSection";
 import ClientsSection from "./Components/ClientsSection";
+import { getMainSiteData } from "../../features/siteData/siteDataSlice";
+import { selectSiteData } from "../../features/siteData/siteDataSelectors";
 
 function Home() {
+  const dispatch = useDispatch();
+  const siteData = useSelector(selectSiteData);
+
+  useEffect(() => {
+    dispatch(getMainSiteData());
+  }, [dispatch]);
+
+  const seoSettings = siteData?.homeSettings?.seo || {
+    title: "SAANVI INNOVATION | Home",
+    description:
+      "Delivers innovative digital solutions including web development, mobile apps, software development, and digital marketing services to help businesses grow.",
+    keywords:
+      "web development, mobile app development, software development, digital marketing, e-commerce solutions",
+    ogTitle: "Innovative Digital Solutions",
+    ogDescription:
+      "Professional web development, mobile apps, and digital solutions for modern businesses.",
+    ogType: "website",
+  };
+
   return (
     <>
-      <title>SAANVI INNOVATION | Home</title>
-      <meta
-        name="description"
-        content="Delivers innovative digital solutions including web development, mobile apps, software development, and digital marketing services to help businesses grow."
-      />
-      <meta
-        name="keywords"
-        content="web development, mobile app development, software development, digital marketing, e-commerce solutions"
-      />
-      <meta property="og:title" content="Innovative Digital Solutions" />
-      <meta
-        property="og:description"
-        content="Professional web development, mobile apps, and digital solutions for modern businesses."
-      />
-      <meta property="og:type" content="website" />
+      <title>{seoSettings.title}</title>
+      <meta name="description" content={seoSettings.description} />
+      <meta name="keywords" content={seoSettings.keywords} />
+      <meta property="og:title" content={seoSettings.ogTitle} />
+      <meta property="og:description" content={seoSettings.ogDescription} />
+      <meta property="og:type" content={seoSettings.ogType} />
       <div>
         <TechHero />
         <div className="bg-white">

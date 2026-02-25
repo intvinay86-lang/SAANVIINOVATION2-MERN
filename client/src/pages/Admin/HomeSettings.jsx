@@ -68,6 +68,15 @@ function HomeSettings() {
       clientsSectionTitle: "Our Clients",
       clientsSectionDescription:
         "Trusted by leading companies worldwide to deliver exceptional digital solutions and drive business growth.",
+      seoTitle: "SAANVI INNOVATION | Home",
+      seoDescription:
+        "Delivers innovative digital solutions including web development, mobile apps, software development, and digital marketing services to help businesses grow.",
+      seoKeywords:
+        "web development, mobile app development, software development, digital marketing, e-commerce solutions",
+      seoOgTitle: "Innovative Digital Solutions",
+      seoOgDescription:
+        "Professional web development, mobile apps, and digital solutions for modern businesses.",
+      seoOgType: "website",
     },
   });
 
@@ -113,6 +122,15 @@ function HomeSettings() {
         clientsSectionTitle: "Our Clients",
         clientsSectionDescription:
           "Trusted by leading companies worldwide to deliver exceptional digital solutions and drive business growth.",
+        seoTitle: "SAANVI INNOVATION | Home",
+        seoDescription:
+          "Delivers innovative digital solutions including web development, mobile apps, software development, and digital marketing services to help businesses grow.",
+        seoKeywords:
+          "web development, mobile app development, software development, digital marketing, e-commerce solutions",
+        seoOgTitle: "Innovative Digital Solutions",
+        seoOgDescription:
+          "Professional web development, mobile apps, and digital solutions for modern businesses.",
+        seoOgType: "website",
       };
 
       const mergedData = {
@@ -149,6 +167,14 @@ function HomeSettings() {
         clientsSectionDescription:
           homeSettings.clientsSectionDescription ||
           defaultData.clientsSectionDescription,
+        seoTitle: homeSettings.seo?.title || defaultData.seoTitle,
+        seoDescription:
+          homeSettings.seo?.description || defaultData.seoDescription,
+        seoKeywords: homeSettings.seo?.keywords || defaultData.seoKeywords,
+        seoOgTitle: homeSettings.seo?.ogTitle || defaultData.seoOgTitle,
+        seoOgDescription:
+          homeSettings.seo?.ogDescription || defaultData.seoOgDescription,
+        seoOgType: homeSettings.seo?.ogType || defaultData.seoOgType,
       };
 
       reset(mergedData);
@@ -263,10 +289,33 @@ function HomeSettings() {
 
   const onSubmit = async (data) => {
     try {
+      // Separate SEO data from other settings
+      const {
+        seoTitle,
+        seoDescription,
+        seoKeywords,
+        seoOgTitle,
+        seoOgDescription,
+        seoOgType,
+        ...otherSettings
+      } = data;
+
+      const homeSettingsData = {
+        ...otherSettings,
+        seo: {
+          title: seoTitle,
+          description: seoDescription,
+          keywords: seoKeywords,
+          ogTitle: seoOgTitle,
+          ogDescription: seoOgDescription,
+          ogType: seoOgType,
+        },
+      };
+
       await dispatch(
         updateSiteDataSection({
           section: "homeSettings",
-          data: data,
+          data: homeSettingsData,
         }),
       ).unwrap();
 
@@ -298,6 +347,137 @@ function HomeSettings() {
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        {/* SEO Section */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <FiHome className="text-orange-500" />
+            SEO Settings
+          </h2>
+
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Page Title <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                {...register("seoTitle", {
+                  required: "Page title is required",
+                })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
+                placeholder="SAANVI INNOVATION | Home"
+              />
+              {errors.seoTitle && (
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.seoTitle.message}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Meta Description <span className="text-red-500">*</span>
+              </label>
+              <textarea
+                {...register("seoDescription", {
+                  required: "Meta description is required",
+                })}
+                rows="3"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
+                placeholder="Delivers innovative digital solutions..."
+              />
+              {errors.seoDescription && (
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.seoDescription.message}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Meta Keywords <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                {...register("seoKeywords", {
+                  required: "Meta keywords are required",
+                })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
+                placeholder="web development, mobile app development, software development"
+              />
+              {errors.seoKeywords && (
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.seoKeywords.message}
+                </p>
+              )}
+            </div>
+
+            <div className="border-t pt-4">
+              <h3 className="text-sm font-semibold text-gray-900 mb-3">
+                Open Graph (Social Media)
+              </h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    OG Title <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    {...register("seoOgTitle", {
+                      required: "OG title is required",
+                    })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
+                    placeholder="Innovative Digital Solutions"
+                  />
+                  {errors.seoOgTitle && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.seoOgTitle.message}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    OG Description <span className="text-red-500">*</span>
+                  </label>
+                  <textarea
+                    {...register("seoOgDescription", {
+                      required: "OG description is required",
+                    })}
+                    rows="2"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
+                    placeholder="Professional web development, mobile apps, and digital solutions..."
+                  />
+                  {errors.seoOgDescription && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.seoOgDescription.message}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    OG Type <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    {...register("seoOgType", {
+                      required: "OG type is required",
+                    })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
+                    placeholder="website"
+                  />
+                  {errors.seoOgType && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.seoOgType.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Hero Section */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
