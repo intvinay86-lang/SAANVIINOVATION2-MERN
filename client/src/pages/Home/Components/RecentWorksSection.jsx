@@ -1,40 +1,32 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { FiArrowRight } from "react-icons/fi";
 import ProjectCard from "../../../components/cards/ProjectCard";
+import { getMainSiteData } from "../../../features/siteData/siteDataSlice";
+import { selectSiteData } from "../../../features/siteData/siteDataSelectors";
 
 function RecentWorksSection() {
-  const recentWorks = [
-    {
-      id: 1,
-      title: "E-commerce Platform",
-      category: "Web Development",
-      description:
-        "Modern e-commerce solution with advanced features and seamless user experience.",
-      image:
-        "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      technologies: ["React", "Node.js", "MongoDB", "Stripe"],
-    },
-    {
-      id: 2,
-      title: "Mobile Banking App",
-      category: "Mobile Development",
-      description:
-        "Secure banking application with biometric authentication and real-time transactions.",
-      image:
-        "https://images.unsplash.com/photo-1563013544-824ae1b704d3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      technologies: ["React Native", "Firebase", "Redux", "Biometric API"],
-    },
-    {
-      id: 3,
-      title: "Corporate Website",
-      category: "Web Design",
-      description:
-        "Professional corporate website with modern design and optimized performance.",
-      image:
-        "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      technologies: ["React", "Tailwind CSS", "Vite", "Vercel"],
-    },
-  ];
+  const dispatch = useDispatch();
+  const siteData = useSelector(selectSiteData);
+
+  // Get portfolio projects from Redux store
+  const portfolioProjects = siteData?.portfolioProjects || [];
+
+  // Get only the first 3 projects for recent works
+  const recentWorks = portfolioProjects.slice(0, 3);
+
+  useEffect(() => {
+    // Fetch site data if not already loaded
+    if (!siteData) {
+      dispatch(getMainSiteData());
+    }
+  }, [dispatch, siteData]);
+
+  // Don't render section if no projects
+  if (recentWorks.length === 0) {
+    return null;
+  }
 
   return (
     <section className="py-16 md:py-20 bg-gradient-to-b from-white to-gray-50">
@@ -71,17 +63,19 @@ function RecentWorksSection() {
           ))}
         </div>
 
-        {/* View All Button */}
-        <div className="text-center mt-12 md:mt-16">
-          <Link
-            to="/portfolio"
-            className="inline-flex items-center gap-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-8 py-4 rounded-full font-semibold hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
-            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-          >
-            <span>View All Projects</span>
-            <FiArrowRight className="w-5 h-5" />
-          </Link>
-        </div>
+        {/* View All Button - Only show if there are more projects */}
+        {portfolioProjects.length > 3 && (
+          <div className="text-center mt-12 md:mt-16">
+            <Link
+              to="/portfolio"
+              className="inline-flex items-center gap-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-8 py-4 rounded-full font-semibold hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+              style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
+            >
+              <span>View All Projects</span>
+              <FiArrowRight className="w-5 h-5" />
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );
