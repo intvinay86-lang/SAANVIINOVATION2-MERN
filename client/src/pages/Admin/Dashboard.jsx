@@ -1,24 +1,30 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { FiBriefcase, FiImage, FiUsers } from "react-icons/fi";
+import { FiBriefcase, FiImage, FiUsers, FiMail } from "react-icons/fi";
 import IconCard from "../../components/cards/IconCard";
 import { getMainSiteData } from "../../features/siteData/siteDataSlice";
 import { selectSiteData } from "../../features/siteData/siteDataSelectors";
+import { getContactStats } from "../../features/contact/contactSlice";
+import { selectContactStats } from "../../features/contact/contactSelectors";
+import RecentMessages from "./Components/RecentMessages";
 
 function Dashboard() {
   const dispatch = useDispatch();
   const siteData = useSelector(selectSiteData);
+  const contactStats = useSelector(selectContactStats);
 
   useEffect(() => {
     if (!siteData) {
       dispatch(getMainSiteData());
     }
+    dispatch(getContactStats());
   }, [dispatch, siteData]);
 
   // Get counts from Redux store
   const servicesCount = siteData?.services?.length || 0;
   const portfolioCount = siteData?.portfolioProjects?.length || 0;
   const clientsCount = siteData?.clients?.length || 0;
+  const unreadMessages = contactStats?.unread || 0;
 
   const stats = [
     {
@@ -39,6 +45,12 @@ function Dashboard() {
       icon: <FiUsers />,
       color: "green",
     },
+    {
+      title: "Unread Messages",
+      value: unreadMessages.toString(),
+      icon: <FiMail />,
+      color: "purple",
+    },
   ];
 
   return (
@@ -56,7 +68,7 @@ function Dashboard() {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {stats.map((stat, index) => (
             <IconCard
               key={index}
@@ -68,6 +80,9 @@ function Dashboard() {
             />
           ))}
         </div>
+
+        {/* Recent Messages */}
+        <RecentMessages />
       </div>
     </>
   );

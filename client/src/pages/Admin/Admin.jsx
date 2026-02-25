@@ -12,6 +12,7 @@ import {
   FiSettings,
   FiFolder,
   FiBriefcase,
+  FiMessageSquare,
 } from "react-icons/fi";
 import Loading from "../../components/Loading";
 
@@ -24,6 +25,7 @@ const ServicesSettings = lazy(() => import("./ServicesSettings"));
 const PortfolioSettings = lazy(() => import("./PortfolioSettings"));
 const PortfolioManagement = lazy(() => import("./PortfolioManagement"));
 const ContactSettings = lazy(() => import("./ContactSettings"));
+const ContactManagement = lazy(() => import("./ContactManagement"));
 const FooterSettings = lazy(() => import("./FooterSettings"));
 const PricingSettings = lazy(() => import("./PricingSettings"));
 const TermsSettings = lazy(() => import("./TermsSettings"));
@@ -69,6 +71,12 @@ const MENU_ITEMS = [
     name: "Contact Page",
     icon: FiMail,
     component: ContactSettings,
+  },
+  {
+    id: "contact-messages",
+    name: "Contact Messages",
+    icon: FiMessageSquare,
+    component: ContactManagement,
   },
   {
     id: "footer",
