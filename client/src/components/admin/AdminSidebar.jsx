@@ -1,7 +1,9 @@
 import { FiUser } from "react-icons/fi";
-import AdminMenuItem from "./AdminMenuItem";
+import { MENU_ITEMS } from "../../pages/Admin/Admin";
 
-function AdminSidebar({ user, isSidebarOpen, closeSidebar, menuItems }) {
+function AdminSidebar({ user, isSidebarOpen, closeSidebar }) {
+  const activeSection = window.location.hash.slice(1) || "dashboard";
+
   return (
     <aside
       className={`fixed left-0 top-16 h-full bg-slate-900 text-white w-64 transform transition-transform duration-300 ease-in-out z-40 ${
@@ -24,13 +26,26 @@ function AdminSidebar({ user, isSidebarOpen, closeSidebar, menuItems }) {
 
         {/* Menu Items */}
         <nav className="space-y-2">
-          {menuItems.map((item) => (
-            <AdminMenuItem
-              key={item.path}
-              item={item}
-              closeSidebar={closeSidebar}
-            />
-          ))}
+          {MENU_ITEMS.map((item) => {
+            const Icon = item.icon;
+            const isActive = activeSection === item.id;
+
+            return (
+              <a
+                key={item.id}
+                href={`#${item.id}`}
+                onClick={closeSidebar}
+                className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+                  isActive
+                    ? "bg-orange-500 text-white"
+                    : "text-gray-300 hover:bg-slate-800"
+                }`}
+              >
+                <Icon size={20} />
+                <span className="font-medium">{item.name}</span>
+              </a>
+            );
+          })}
         </nav>
       </div>
     </aside>

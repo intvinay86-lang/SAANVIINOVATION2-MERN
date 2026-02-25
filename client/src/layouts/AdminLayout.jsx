@@ -9,7 +9,6 @@ import {
 } from "../features/auth/authSelectors";
 import AdminNavbar from "../components/admin/AdminNavbar";
 import AdminSidebar from "../components/admin/AdminSidebar";
-import { ADMIN_MENU_ITEMS } from "../components/admin/adminMenuConfig";
 
 function AdminLayout() {
   const navigate = useNavigate();
@@ -50,7 +49,6 @@ function AdminLayout() {
         user={user}
         isSidebarOpen={isSidebarOpen}
         closeSidebar={closeSidebar}
-        menuItems={ADMIN_MENU_ITEMS}
       />
 
       {/* Overlay for mobile */}

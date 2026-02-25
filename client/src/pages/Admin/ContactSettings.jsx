@@ -312,7 +312,7 @@ function ContactSettings() {
             ) : (
               <>
                 <FiSave />
-                <span>Save Contact Settings</span>
+                <span>Save Changes</span>
               </>
             )}
           </button>

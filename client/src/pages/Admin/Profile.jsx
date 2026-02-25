@@ -185,7 +185,7 @@ function Profile() {
               ) : (
                 <>
                   <FiSave />
-                  <span>Update Profile</span>
+                  <span>Save Changes</span>
                 </>
               )}
             </button>

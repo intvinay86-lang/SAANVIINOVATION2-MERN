@@ -138,7 +138,7 @@ function FooterSettings() {
             ) : (
               <>
                 <FiSave />
-                <span>Save Footer Settings</span>
+                <span>Save Changes</span>
               </>
             )}
           </button>

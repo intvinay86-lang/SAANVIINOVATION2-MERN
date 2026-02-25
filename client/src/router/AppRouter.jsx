@@ -20,13 +20,7 @@ const Pricing = lazy(() => import("../pages/Pricing/Pricing"));
 const Contact = lazy(() => import("../pages/Contact/Contact"));
 const Terms = lazy(() => import("../pages/Terms/Terms"));
 const Privacy = lazy(() => import("../pages/Privacy/Privacy"));
-const Dashboard = lazy(() => import("../pages/Admin/Dashboard"));
-const SiteInfo = lazy(() => import("../pages/Admin/SiteInfo"));
-const ContactSettings = lazy(() => import("../pages/Admin/ContactSettings"));
-const FooterSettings = lazy(() => import("../pages/Admin/FooterSettings"));
-const TermsSettings = lazy(() => import("../pages/Admin/TermsSettings"));
-const PrivacySettings = lazy(() => import("../pages/Admin/PrivacySettings"));
-const Profile = lazy(() => import("../pages/Admin/Profile"));
+const Admin = lazy(() => import("../pages/Admin/Admin"));
 const NotFound = lazy(() => import("../pages/Errors/NotFound"));
 const Login = lazy(() => import("../pages/Auth/Login"));
 
@@ -61,13 +55,7 @@ export default function AppRouter() {
               </ProtectedRoute>
             }
           >
-            <Route index element={<Dashboard />} />
-            <Route path="siteinfo" element={<SiteInfo />} />
-            <Route path="contact" element={<ContactSettings />} />
-            <Route path="footer" element={<FooterSettings />} />
-            <Route path="terms" element={<TermsSettings />} />
-            <Route path="privacy" element={<PrivacySettings />} />
-            <Route path="profile" element={<Profile />} />
+            <Route index element={<Admin />} />
           </Route>
 
           {/* 404 Not Found - Catch all unmatched routes */}

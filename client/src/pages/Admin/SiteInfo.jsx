@@ -534,7 +534,7 @@ function SiteInfo() {
             ) : (
               <>
                 <FiSave />
-                <span>Save Site Information</span>
+                <span>Save Changes</span>
               </>
             )}
           </button>

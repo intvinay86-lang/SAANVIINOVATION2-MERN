@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { FiSave, FiShield } from "react-icons/fi";
-import JoditEditor from "jodit-react";
+import RichTextEditor from "../../components/RichTextEditor";
 import {
   getMainSiteData,
   updateSiteDataSection,
@@ -19,35 +19,6 @@ function PrivacySettings() {
   const isLoading = useSelector(selectSiteDataLoading);
   const [isFetching, setIsFetching] = useState(true);
   const [content, setContent] = useState("");
-  const editor = useRef(null);
-
-  const config = useMemo(
-    () => ({
-      readonly: false,
-      placeholder: "Start typing the privacy policy content...",
-      minHeight: 500,
-      buttons: [
-        "bold",
-        "italic",
-        "underline",
-        "|",
-        "ul",
-        "ol",
-        "|",
-        "font",
-        "fontsize",
-        "brush",
-        "|",
-        "align",
-        "|",
-        "link",
-        "|",
-        "undo",
-        "redo",
-      ],
-    }),
-    [],
-  );
 
   const {
     register,
@@ -201,12 +172,11 @@ function PrivacySettings() {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Main Content
             </label>
-            <JoditEditor
-              ref={editor}
+            <RichTextEditor
               value={content}
-              config={config}
               onBlur={(newContent) => setContent(newContent)}
-              onChange={(newContent) => {}}
+              onChange={() => {}}
+              placeholder="Start typing the privacy policy content..."
             />
             <p className="mt-2 text-sm text-gray-500">
               Use the rich text editor to format your privacy policy content
@@ -258,7 +228,7 @@ function PrivacySettings() {
             ) : (
               <>
                 <FiSave />
-                <span>Save Privacy Settings</span>
+                <span>Save Changes</span>
               </>
             )}
           </button>
