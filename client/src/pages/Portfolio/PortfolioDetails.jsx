@@ -1,11 +1,36 @@
+import { useEffect } from "react";
 import { useParams, Navigate, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { FiArrowLeft, FiExternalLink, FiGithub } from "react-icons/fi";
-import { portfolioDetailsData } from "./portfolioDetailsData";
+import { getMainSiteData } from "../../features/siteData/siteDataSlice";
+import { selectSiteData } from "../../features/siteData/siteDataSelectors";
 
 function PortfolioDetails() {
   const { id } = useParams();
+  const dispatch = useDispatch();
+  const siteData = useSelector(selectSiteData);
 
-  const project = portfolioDetailsData.find((p) => p.id === parseInt(id));
+  // Get portfolio settings with fallbacks
+  const portfolioSettings = siteData?.portfolioSettings || {};
+  const portfolioProjects = siteData?.portfolioProjects || [];
+
+  const backButtonText =
+    portfolioSettings.detailsBackButtonText || "Back to Portfolio";
+  const technologiesTitle =
+    portfolioSettings.detailsTechnologiesTitle || "Technologies Used";
+  const livePreviewText =
+    portfolioSettings.detailsLivePreviewText || "Live Preview";
+  const viewCodeText = portfolioSettings.detailsViewCodeText || "View Code";
+  const overviewTitle =
+    portfolioSettings.detailsOverviewTitle || "Project Overview";
+  const keyFeaturesTitle =
+    portfolioSettings.detailsKeyFeaturesTitle || "Key Features";
+
+  const project = portfolioProjects.find((p) => p.id === parseInt(id));
+
+  useEffect(() => {
+    dispatch(getMainSiteData());
+  }, [dispatch]);
 
   if (!project) {
     return <Navigate to="/portfolio" replace />;
@@ -16,11 +41,13 @@ function PortfolioDetails() {
       <title>{project.title} - Portfolio | SAANVI INNOVATION</title>
       <meta
         name="description"
-        content={project.fullDescription.substring(0, 160)}
+        content={
+          project.fullDescription?.substring(0, 160) || project.description
+        }
       />
       <meta
         name="keywords"
-        content={`${project.title}, ${project.category}, ${project.technologies.join(", ")}`}
+        content={`${project.title}, ${project.category}, ${project.technologies?.join(", ") || ""}`}
       />
       <meta
         property="og:title"
@@ -41,7 +68,7 @@ function PortfolioDetails() {
             className="inline-flex items-center space-x-2 text-gray-700 hover:text-orange-500 transition-colors duration-300 mb-10"
           >
             <FiArrowLeft className="w-5 h-5" />
-            <span className="text-base font-semibold">Back to Portfolio</span>
+            <span className="text-base font-semibold">{backButtonText}</span>
           </Link>
 
           {/* Main Card */}
@@ -80,21 +107,23 @@ function PortfolioDetails() {
                 </p>
 
                 {/* Technologies */}
-                <div className="mb-10">
-                  <h3 className="text-base font-bold text-gray-900 mb-4 uppercase tracking-wide">
-                    Technologies Used
-                  </h3>
-                  <div className="flex flex-wrap gap-3">
-                    {project.technologies.map((tech, index) => (
-                      <span
-                        key={index}
-                        className="text-sm font-semibold text-gray-800 bg-gradient-to-br from-gray-100 to-gray-50 px-4 py-2.5 rounded-xl border-2 border-gray-200 hover:border-orange-300 hover:bg-gradient-to-br hover:from-orange-50 hover:to-orange-100 hover:text-orange-700 transition-all duration-200 shadow-sm"
-                      >
-                        {tech}
-                      </span>
-                    ))}
+                {project.technologies && project.technologies.length > 0 && (
+                  <div className="mb-10">
+                    <h3 className="text-base font-bold text-gray-900 mb-4 uppercase tracking-wide">
+                      {technologiesTitle}
+                    </h3>
+                    <div className="flex flex-wrap gap-3">
+                      {project.technologies.map((tech, index) => (
+                        <span
+                          key={index}
+                          className="text-sm font-semibold text-gray-800 bg-gradient-to-br from-gray-100 to-gray-50 px-4 py-2.5 rounded-xl border-2 border-gray-200 hover:border-orange-300 hover:bg-gradient-to-br hover:from-orange-50 hover:to-orange-100 hover:text-orange-700 transition-all duration-200 shadow-sm"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
 
                 {/* Action Buttons */}
                 <div className="flex flex-wrap gap-4">
@@ -106,7 +135,7 @@ function PortfolioDetails() {
                       className="inline-flex items-center space-x-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-8 py-4 rounded-xl font-semibold text-base hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
                     >
                       <FiExternalLink className="w-5 h-5" />
-                      <span>Live Preview</span>
+                      <span>{livePreviewText}</span>
                     </a>
                   )}
                   {project.githubUrl && (
@@ -117,7 +146,7 @@ function PortfolioDetails() {
                       className="inline-flex items-center space-x-2 bg-gradient-to-r from-gray-800 to-gray-900 text-white px-8 py-4 rounded-xl font-semibold text-base hover:from-gray-900 hover:to-black transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
                     >
                       <FiGithub className="w-5 h-5" />
-                      <span>View Code</span>
+                      <span>{viewCodeText}</span>
                     </a>
                   )}
                 </div>
@@ -128,34 +157,38 @@ function PortfolioDetails() {
           {/* Additional Details Section */}
           <div className="mt-10 grid md:grid-cols-2 gap-8">
             {/* Project Overview */}
-            <div className="bg-white rounded-2xl shadow-lg p-8 border-2 border-gray-200 hover:border-orange-200 transition-all duration-300">
-              <h2 className="text-2xl font-bold text-gray-900 mb-5 flex items-center">
-                <span className="w-1.5 h-8 bg-orange-500 rounded-full mr-3"></span>
-                Project Overview
-              </h2>
-              <p className="text-gray-700 text-base leading-relaxed">
-                {project.fullDescription}
-              </p>
-            </div>
+            {project.fullDescription && (
+              <div className="bg-white rounded-2xl shadow-lg p-8 border-2 border-gray-200 hover:border-orange-200 transition-all duration-300">
+                <h2 className="text-2xl font-bold text-gray-900 mb-5 flex items-center">
+                  <span className="w-1.5 h-8 bg-orange-500 rounded-full mr-3"></span>
+                  {overviewTitle}
+                </h2>
+                <p className="text-gray-700 text-base leading-relaxed">
+                  {project.fullDescription}
+                </p>
+              </div>
+            )}
 
             {/* Key Features */}
-            <div className="bg-white rounded-2xl shadow-lg p-8 border-2 border-gray-200 hover:border-orange-200 transition-all duration-300">
-              <h2 className="text-2xl font-bold text-gray-900 mb-5 flex items-center">
-                <span className="w-1.5 h-8 bg-orange-500 rounded-full mr-3"></span>
-                Key Features
-              </h2>
-              <ul className="space-y-3">
-                {project.features.slice(0, 6).map((feature, index) => (
-                  <li
-                    key={index}
-                    className="flex items-start text-base text-gray-700"
-                  >
-                    <span className="w-2 h-2 bg-orange-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                    <span className="leading-relaxed">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {project.features && project.features.length > 0 && (
+              <div className="bg-white rounded-2xl shadow-lg p-8 border-2 border-gray-200 hover:border-orange-200 transition-all duration-300">
+                <h2 className="text-2xl font-bold text-gray-900 mb-5 flex items-center">
+                  <span className="w-1.5 h-8 bg-orange-500 rounded-full mr-3"></span>
+                  {keyFeaturesTitle}
+                </h2>
+                <ul className="space-y-3">
+                  {project.features.slice(0, 6).map((feature, index) => (
+                    <li
+                      key={index}
+                      className="flex items-start text-base text-gray-700"
+                    >
+                      <span className="w-2 h-2 bg-orange-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                      <span className="leading-relaxed">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         </div>
       </div>

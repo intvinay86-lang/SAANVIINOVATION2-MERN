@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   FiCode,
   FiSmartphone,
@@ -6,17 +8,15 @@ import {
   FiCloud,
   FiTrendingUp,
   FiArrowRight,
-  FiGithub,
-  FiLinkedin,
-  FiTwitter,
-  FiMail,
 } from "react-icons/fi";
 import ServiceCard from "../../components/cards/ServiceCard";
 import WhyChooseSection from "../../components/sections/WhyChooseSection";
 import CTASection from "../../components/sections/CTASection";
+import { getMainSiteData } from "../../features/siteData/siteDataSlice";
+import { selectSiteData } from "../../features/siteData/siteDataSelectors";
 
 // Hero Section Component
-function ServiceHero() {
+function ServiceHero({ settings }) {
   return (
     <section className="relative py-24 md:py-32 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 md:px-8 relative z-10">
@@ -35,7 +35,7 @@ function ServiceHero() {
                 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-8"
                 style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
               >
-                Dedicated to Your Digital Success
+                {settings.heroTitle}
               </h1>
             </div>
 
@@ -47,9 +47,7 @@ function ServiceHero() {
                 lineHeight: "1.7",
               }}
             >
-              We deliver scalable and modern digital solutions tailored to your
-              business goals. Partner with experienced professionals committed
-              to long-term growth and measurable success.
+              {settings.heroDescription}
             </p>
 
             <div className="flex flex-wrap gap-4 pt-4">
@@ -75,7 +73,7 @@ function ServiceHero() {
           <div className="relative">
             <div className="overflow-hidden rounded-lg shadow-2xl">
               <img
-                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80"
+                src={settings.heroImage}
                 alt="Professional team collaboration"
                 className="w-full h-[500px] lg:h-[600px] object-cover hover:scale-105 transition-transform duration-700"
               />
@@ -88,7 +86,7 @@ function ServiceHero() {
 }
 
 // Services Grid Component
-function ServicesGrid({ services = [] }) {
+function ServicesGrid({ services = [], settings }) {
   return (
     <section className="py-20 bg-white">
       <div className="max-w-6xl mx-auto px-4 md:px-8">
@@ -98,7 +96,7 @@ function ServicesGrid({ services = [] }) {
             className="text-3xl md:text-4xl font-semibold text-gray-900 mb-4 uppercase tracking-wide"
             style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
           >
-            Our Services
+            {settings.servicesGridTitle}
           </h2>
 
           <div className="w-20 h-1 bg-orange-500 mx-auto mb-6 rounded"></div>
@@ -107,7 +105,7 @@ function ServicesGrid({ services = [] }) {
             className="text-gray-600 max-w-2xl mx-auto"
             style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
           >
-            Comprehensive digital solutions tailored to your business needs.
+            {settings.servicesGridSubtitle}
           </p>
         </div>
 
@@ -123,72 +121,133 @@ function ServicesGrid({ services = [] }) {
 }
 
 // Why Choose Section Wrapper
-function ServicesWhyChoose() {
+function ServicesWhyChoose({ settings }) {
   const features = [
-    "Experienced & Certified Developers",
-    "24/7 Technical Support",
-    "Advanced Technology Stack",
-    "Client-Centric Approach",
-    "Seamless Project Management",
+    settings.whyChooseFeature1,
+    settings.whyChooseFeature2,
+    settings.whyChooseFeature3,
+    settings.whyChooseFeature4,
+    settings.whyChooseFeature5,
   ];
 
   return (
     <WhyChooseSection
       variant="image"
-      title="Your Success is Our Commitment"
-      subtitle="Here's what makes us the right technology partner for your business."
+      title={settings.whyChooseTitle}
+      subtitle={settings.whyChooseSubtitle}
       features={features}
-      description="Welcome to SAANVI INNOVATION, where innovation meets reliability. We provide scalable digital solutions tailored to your business needs — from web development to advanced technical systems — delivered with expertise, precision, and long-term vision."
+      description={settings.whyChooseDescription}
     />
   );
 }
 
 // Main Services Component
 function Services() {
-  const services = [
+  const dispatch = useDispatch();
+  const siteData = useSelector(selectSiteData);
+
+  // Get services settings with fallbacks
+  const servicesSettings = siteData?.servicesSettings || {};
+  const servicesData = siteData?.services || [];
+
+  const settings = {
+    heroTitle:
+      servicesSettings.heroTitle || "Dedicated to Your Digital Success",
+    heroDescription:
+      servicesSettings.heroDescription ||
+      "We deliver scalable and modern digital solutions tailored to your business goals. Partner with experienced professionals committed to long-term growth and measurable success.",
+    heroImage:
+      servicesSettings.heroImage ||
+      "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80",
+    servicesGridTitle: servicesSettings.servicesGridTitle || "Our Services",
+    servicesGridSubtitle:
+      servicesSettings.servicesGridSubtitle ||
+      "Comprehensive digital solutions tailored to your business needs.",
+    whyChooseTitle:
+      servicesSettings.whyChooseTitle || "Your Success is Our Commitment",
+    whyChooseSubtitle:
+      servicesSettings.whyChooseSubtitle ||
+      "Here's what makes us the right technology partner for your business.",
+    whyChooseDescription:
+      servicesSettings.whyChooseDescription ||
+      "Welcome to SAANVI INNOVATION, where innovation meets reliability. We provide scalable digital solutions tailored to your business needs — from web development to advanced technical systems — delivered with expertise, precision, and long-term vision.",
+    whyChooseFeature1:
+      servicesSettings.whyChooseFeature1 ||
+      "Experienced & Certified Developers",
+    whyChooseFeature2:
+      servicesSettings.whyChooseFeature2 || "24/7 Technical Support",
+    whyChooseFeature3:
+      servicesSettings.whyChooseFeature3 || "Advanced Technology Stack",
+    whyChooseFeature4:
+      servicesSettings.whyChooseFeature4 || "Client-Centric Approach",
+    whyChooseFeature5:
+      servicesSettings.whyChooseFeature5 || "Seamless Project Management",
+    ctaTitle: servicesSettings.ctaTitle || "Ready to Elevate Your Business?",
+    ctaSubtitle:
+      servicesSettings.ctaSubtitle ||
+      "Partner with experienced professionals to build scalable, modern digital solutions tailored to your business goals.",
+    ctaImage:
+      servicesSettings.ctaImage ||
+      "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=800&q=80",
+  };
+
+  // Default services if none are configured
+  const defaultServices = [
     {
-      icon: <FiGlobe className="w-10 h-10" />,
+      id: 1,
+      icon: "FiGlobe",
       title: "Web Development",
       description:
         "Custom web applications built with modern technologies and best practices for optimal performance.",
       gradient: "from-orange-500 to-orange-600",
     },
     {
-      icon: <FiSmartphone className="w-10 h-10" />,
+      id: 2,
+      icon: "FiSmartphone",
       title: "Mobile Development",
       description:
         "Native and cross-platform mobile applications for iOS and Android with seamless user experience.",
       gradient: "from-orange-400 to-orange-500",
     },
     {
-      icon: <FiCode className="w-10 h-10" />,
+      id: 3,
+      icon: "FiCode",
       title: "Software Development",
       description:
         "Enterprise software solutions tailored to your business needs with scalable architecture.",
       gradient: "from-orange-500 to-orange-700",
     },
     {
-      icon: <FiShoppingCart className="w-10 h-10" />,
+      id: 4,
+      icon: "FiShoppingCart",
       title: "E-commerce Solutions",
       description:
         "Complete e-commerce platforms with payment integration and inventory management systems.",
       gradient: "from-orange-600 to-orange-500",
     },
     {
-      icon: <FiCloud className="w-10 h-10" />,
+      id: 5,
+      icon: "FiCloud",
       title: "Cloud Services",
       description:
         "Cloud infrastructure setup, migration, and management for improved scalability and security.",
       gradient: "from-orange-500 to-orange-600",
     },
     {
-      icon: <FiTrendingUp className="w-10 h-10" />,
+      id: 6,
+      icon: "FiTrendingUp",
       title: "Digital Marketing",
       description:
         "Comprehensive digital marketing strategies to grow your online presence and reach target audience.",
       gradient: "from-orange-400 to-orange-600",
     },
   ];
+
+  const services = servicesData.length > 0 ? servicesData : defaultServices;
+
+  useEffect(() => {
+    dispatch(getMainSiteData());
+  }, [dispatch]);
 
   return (
     <>
@@ -213,19 +272,19 @@ function Services() {
 
       <div className="bg-white">
         {/* Hero Section */}
-        <ServiceHero />
+        <ServiceHero settings={settings} />
 
         {/* Why Choose Section */}
-        <ServicesWhyChoose />
+        <ServicesWhyChoose settings={settings} />
 
         {/* Services Grid Section */}
-        <ServicesGrid services={services} />
+        <ServicesGrid services={services} settings={settings} />
 
         {/* CTA Section */}
         <CTASection
-          title="Ready to Elevate Your Business?"
-          subtitle="Partner with experienced professionals to build scalable, modern digital solutions tailored to your business goals."
-          image="https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=800&q=80"
+          title={settings.ctaTitle}
+          subtitle={settings.ctaSubtitle}
+          image={settings.ctaImage}
         />
       </div>
     </>

@@ -1,8 +1,45 @@
 import React from "react";
+import {
+  FiGlobe,
+  FiSmartphone,
+  FiCode,
+  FiShoppingCart,
+  FiCloud,
+  FiTrendingUp,
+  FiDatabase,
+  FiLayers,
+  FiSettings,
+  FiZap,
+  FiShield,
+  FiCpu,
+} from "react-icons/fi";
+
+// Icon mapping
+const iconMap = {
+  FiGlobe,
+  FiSmartphone,
+  FiCode,
+  FiShoppingCart,
+  FiCloud,
+  FiTrendingUp,
+  FiDatabase,
+  FiLayers,
+  FiSettings,
+  FiZap,
+  FiShield,
+  FiCpu,
+};
 
 function ServiceCard({ service, index = 0 }) {
-  // Clone the icon element to ensure proper rendering with size
+  // Render icon from string name or React element
   const renderIcon = () => {
+    // If icon is a string (icon name), get the component from iconMap
+    if (typeof service.icon === "string") {
+      const IconComponent = iconMap[service.icon] || FiGlobe;
+      return <IconComponent className="w-7 h-7" style={{ color: "inherit" }} />;
+    }
+
+    // If icon is already a React element
     if (React.isValidElement(service.icon)) {
       const iconClassName = service.icon.props.className || "w-7 h-7";
       return React.cloneElement(service.icon, {
@@ -10,7 +47,9 @@ function ServiceCard({ service, index = 0 }) {
         style: { color: "inherit" },
       });
     }
-    return service.icon;
+
+    // Fallback to Globe icon
+    return <FiGlobe className="w-7 h-7" style={{ color: "inherit" }} />;
   };
 
   return (

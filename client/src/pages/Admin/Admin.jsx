@@ -8,12 +8,21 @@ import {
   FiFileText,
   FiShield,
   FiDollarSign,
+  FiBookOpen,
+  FiSettings,
+  FiFolder,
+  FiBriefcase,
 } from "react-icons/fi";
 import Loading from "../../components/Loading";
 
 // Lazy load admin components
 const Dashboard = lazy(() => import("./Dashboard"));
 const SiteInfo = lazy(() => import("./SiteInfo"));
+const HomeSettings = lazy(() => import("./HomeSettings"));
+const AboutSettings = lazy(() => import("./AboutSettings"));
+const ServicesSettings = lazy(() => import("./ServicesSettings"));
+const PortfolioSettings = lazy(() => import("./PortfolioSettings"));
+const PortfolioManagement = lazy(() => import("./PortfolioManagement"));
 const ContactSettings = lazy(() => import("./ContactSettings"));
 const FooterSettings = lazy(() => import("./FooterSettings"));
 const PricingSettings = lazy(() => import("./PricingSettings"));
@@ -25,6 +34,36 @@ const Profile = lazy(() => import("./Profile"));
 const MENU_ITEMS = [
   { id: "dashboard", name: "Dashboard", icon: FiHome, component: Dashboard },
   { id: "siteinfo", name: "Site Info", icon: FiInfo, component: SiteInfo },
+  {
+    id: "home",
+    name: "Home Settings",
+    icon: FiHome,
+    component: HomeSettings,
+  },
+  {
+    id: "about",
+    name: "About Settings",
+    icon: FiBookOpen,
+    component: AboutSettings,
+  },
+  {
+    id: "services",
+    name: "Services Settings",
+    icon: FiSettings,
+    component: ServicesSettings,
+  },
+  {
+    id: "portfolio",
+    name: "Portfolio Settings",
+    icon: FiFolder,
+    component: PortfolioSettings,
+  },
+  {
+    id: "portfolio-projects",
+    name: "Portfolio Projects",
+    icon: FiBriefcase,
+    component: PortfolioManagement,
+  },
   {
     id: "contact",
     name: "Contact Settings",

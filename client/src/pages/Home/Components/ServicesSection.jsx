@@ -1,52 +1,68 @@
-import {
-  FiCode,
-  FiSmartphone,
-  FiGlobe,
-  FiShoppingCart,
-  FiCloud,
-  FiTrendingUp,
-} from "react-icons/fi";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import ServiceCard from "../../../components/cards/ServiceCard";
+import { getMainSiteData } from "../../../features/siteData/siteDataSlice";
+import { selectSiteData } from "../../../features/siteData/siteDataSelectors";
 
 function ServicesSection() {
-  const services = [
+  const dispatch = useDispatch();
+  const siteData = useSelector(selectSiteData);
+
+  useEffect(() => {
+    if (!siteData) {
+      dispatch(getMainSiteData());
+    }
+  }, [dispatch, siteData]);
+
+  const servicesData = siteData?.services || [];
+
+  // Default services if none are configured
+  const defaultServices = [
     {
-      icon: <FiGlobe className="w-7 h-7" />,
+      id: 1,
+      icon: "FiGlobe",
       title: "Web Development",
       description:
         "Custom web applications built with modern technologies and best practices for optimal performance.",
     },
     {
-      icon: <FiSmartphone className="w-7 h-7" />,
+      id: 2,
+      icon: "FiSmartphone",
       title: "Mobile Development",
       description:
         "Native and cross-platform mobile applications with seamless user experience.",
     },
     {
-      icon: <FiCode className="w-7 h-7" />,
+      id: 3,
+      icon: "FiCode",
       title: "Software Development",
       description:
         "Enterprise software solutions with scalable architecture and robust functionality.",
     },
     {
-      icon: <FiShoppingCart className="w-7 h-7" />,
+      id: 4,
+      icon: "FiShoppingCart",
       title: "E-commerce Solutions",
       description:
         "Complete e-commerce platforms with payment integration and inventory management.",
     },
     {
-      icon: <FiCloud className="w-7 h-7" />,
+      id: 5,
+      icon: "FiCloud",
       title: "Cloud Services",
       description:
         "Cloud infrastructure setup and management for improved scalability and security.",
     },
     {
-      icon: <FiTrendingUp className="w-7 h-7" />,
+      id: 6,
+      icon: "FiTrendingUp",
       title: "Digital Marketing",
       description:
         "Comprehensive strategies to grow your online presence and reach target audience.",
     },
   ];
+
+  const services = servicesData.length > 0 ? servicesData : defaultServices;
 
   return (
     <section className="py-20 md:py-24 bg-white">
@@ -81,7 +97,11 @@ function ServicesSection() {
         {/* Services Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => (
-            <ServiceCard key={index} service={service} index={index} />
+            <ServiceCard
+              key={service.id || index}
+              service={service}
+              index={index}
+            />
           ))}
         </div>
       </div>

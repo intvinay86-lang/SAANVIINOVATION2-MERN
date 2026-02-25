@@ -51,17 +51,11 @@ function AdminLayout() {
         closeSidebar={closeSidebar}
       />
 
-      {/* Overlay for mobile */}
-      {isSidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
-          onClick={closeSidebar}
-        />
-      )}
-
       {/* Main Content */}
-      <main className="lg:ml-64 mt-16 p-6">
-        <Outlet />
+      <main className="lg:ml-64 mt-16 p-4 sm:p-6 min-h-[calc(100vh-4rem)]">
+        <div className="max-w-7xl mx-auto">
+          <Outlet />
+        </div>
       </main>
     </div>
   );
