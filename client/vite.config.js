@@ -10,8 +10,10 @@ export default defineConfig({
     },
   },
   server: {
-    host: true,
-    allowedHosts: true,
+    port: parseInt(process.env.VITE_PORT) || 5173,
+  },
+  preview: {
+    port: parseInt(process.env.VITE_PORT) || 5173,
   },
   build: {
     rollupOptions: {
