@@ -23,9 +23,7 @@ function Portfolio() {
 
   return (
     <>
-      <title>
-        Our Portfolio - Recent Projects & Case Studies | SAANVI INNOVATION
-      </title>
+      <title>Our Portfolio - Recent Projects</title>
       <meta
         name="description"
         content="Explore our portfolio of successful web development, mobile app, and software projects. See how we've helped businesses achieve their digital goals."
@@ -34,12 +32,11 @@ function Portfolio() {
         name="keywords"
         content="portfolio, web projects, mobile apps, case studies, client work, project showcase"
       />
-      <meta property="og:title" content="Portfolio - SAANVI INNOVATION" />
+      <meta property="og:title" content="Portfolio" />
       <meta
         property="og:description"
         content="View our recent projects and success stories."
       />
-      <link rel="canonical" href="https://saanviinnovation.com/portfolio" />
 
       <div className="min-h-screen bg-white">
         {/* Page Header */}

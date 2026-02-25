@@ -1,4 +1,41 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getMainSiteData } from "../../../features/siteData/siteDataSlice";
+import { selectSiteData } from "../../../features/siteData/siteDataSelectors";
+
 function AboutImageGrid() {
+  const dispatch = useDispatch();
+  const siteData = useSelector(selectSiteData);
+
+  useEffect(() => {
+    if (!siteData) {
+      dispatch(getMainSiteData());
+    }
+  }, [dispatch, siteData]);
+
+  // Get home settings from Redux
+  const homeSettings = siteData?.homeSettings || {};
+
+  const aboutTitle = homeSettings.aboutTitle || "SAANVI INNOVATION";
+  const aboutParagraph1 =
+    homeSettings.aboutParagraph1 ||
+    "Where we elevate digital experiences in web development, mobile applications, and enterprise solutions across India.";
+  const aboutParagraph2 =
+    homeSettings.aboutParagraph2 ||
+    "Our mission is to deliver innovative technology solutions that energize your business and enhance your digital presence.";
+  const aboutParagraph3 =
+    homeSettings.aboutParagraph3 ||
+    "We have a network of satisfied clients across multiple states including Madhya Pradesh, Maharashtra, and Gujarat.";
+  const aboutImage1 =
+    homeSettings.aboutImage1 ||
+    "https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
+  const aboutImage2 =
+    homeSettings.aboutImage2 ||
+    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80";
+  const aboutImage3 =
+    homeSettings.aboutImage3 ||
+    "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80";
+
   return (
     <section className="py-20 md:py-28 bg-white">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
@@ -17,7 +54,7 @@ function AboutImageGrid() {
                 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-8 leading-tight"
                 style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
               >
-                SAANVI INNOVATION
+                {aboutTitle}
               </h2>
             </div>
 
@@ -30,8 +67,7 @@ function AboutImageGrid() {
                   lineHeight: "1.7",
                 }}
               >
-                Where we elevate digital experiences in web development, mobile
-                applications, and enterprise solutions across India.
+                {aboutParagraph1}
               </p>
 
               <p
@@ -41,8 +77,7 @@ function AboutImageGrid() {
                   lineHeight: "1.7",
                 }}
               >
-                Our mission is to deliver innovative technology solutions that
-                energize your business and enhance your digital presence.
+                {aboutParagraph2}
               </p>
 
               <p
@@ -52,8 +87,7 @@ function AboutImageGrid() {
                   lineHeight: "1.7",
                 }}
               >
-                We have a network of satisfied clients across multiple states
-                including Madhya Pradesh, Maharashtra, and Gujarat.
+                {aboutParagraph3}
               </p>
             </div>
           </div>
@@ -64,7 +98,7 @@ function AboutImageGrid() {
               {/* Large Image - Top */}
               <div className="col-span-2 overflow-hidden rounded-lg">
                 <img
-                  src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+                  src={aboutImage1}
                   alt="Team Collaboration"
                   className="w-full h-[400px] object-cover hover:scale-105 transition-transform duration-700"
                 />
@@ -73,7 +107,7 @@ function AboutImageGrid() {
               {/* Bottom Left */}
               <div className="overflow-hidden rounded-lg">
                 <img
-                  src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                  src={aboutImage2}
                   alt="Modern Workspace"
                   className="w-full h-[250px] object-cover hover:scale-105 transition-transform duration-700"
                 />
@@ -82,7 +116,7 @@ function AboutImageGrid() {
               {/* Bottom Right */}
               <div className="overflow-hidden rounded-lg">
                 <img
-                  src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                  src={aboutImage3}
                   alt="Business Meeting"
                   className="w-full h-[250px] object-cover hover:scale-105 transition-transform duration-700"
                 />

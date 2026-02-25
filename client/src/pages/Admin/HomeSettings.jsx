@@ -289,9 +289,7 @@ function HomeSettings() {
     <div className="space-y-6">
       {/* Header */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
-          Home Page Settings
-        </h1>
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">Home Page</h1>
         <p className="text-gray-600">
           Manage home page content including hero section, about section, and
           clients section. Services and Portfolio sections are managed
@@ -773,17 +771,15 @@ function HomeSettings() {
               </svg>
             </div>
             <div className="ml-3">
-              <h3 className="text-sm font-medium text-blue-800">
-                Note about Home Page Sections
-              </h3>
+              <h3 className="text-sm font-medium text-blue-800">Note</h3>
               <div className="mt-2 text-sm text-blue-700">
                 <p>
                   Services and Recent Works (Portfolio) sections on the home
                   page are managed through their respective settings pages:
                 </p>
                 <ul className="list-disc list-inside mt-2 space-y-1">
-                  <li>Services content - Services Settings page</li>
-                  <li>Portfolio projects - Portfolio Projects page</li>
+                  <li>Services content - Services Page</li>
+                  <li>Portfolio projects - Portfolio Projects</li>
                 </ul>
               </div>
             </div>

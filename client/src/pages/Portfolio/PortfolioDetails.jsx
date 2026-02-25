@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useParams, Navigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { FiArrowLeft, FiExternalLink, FiGithub } from "react-icons/fi";
+import { FiArrowLeft, FiExternalLink } from "react-icons/fi";
 import { getMainSiteData } from "../../features/siteData/siteDataSlice";
 import { selectSiteData } from "../../features/siteData/siteDataSelectors";
 
@@ -20,7 +20,6 @@ function PortfolioDetails() {
     portfolioSettings.detailsTechnologiesTitle || "Technologies Used";
   const livePreviewText =
     portfolioSettings.detailsLivePreviewText || "Live Preview";
-  const viewCodeText = portfolioSettings.detailsViewCodeText || "View Code";
   const overviewTitle =
     portfolioSettings.detailsOverviewTitle || "Project Overview";
   const keyFeaturesTitle =
@@ -38,7 +37,7 @@ function PortfolioDetails() {
 
   return (
     <>
-      <title>{project.title} - Portfolio | SAANVI INNOVATION</title>
+      <title>Portfolio Details | {project.title}</title>
       <meta
         name="description"
         content={
@@ -49,16 +48,9 @@ function PortfolioDetails() {
         name="keywords"
         content={`${project.title}, ${project.category}, ${project.technologies?.join(", ") || ""}`}
       />
-      <meta
-        property="og:title"
-        content={`${project.title} - SAANVI INNOVATION`}
-      />
+      <meta property="og:title" content={`${project.title}`} />
       <meta property="og:description" content={project.description} />
       <meta property="og:image" content={project.image} />
-      <link
-        rel="canonical"
-        href={`https://saanviinnovation.com/portfolio/${id}`}
-      />
 
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-orange-50/30 py-16 px-4">
         <div className="max-w-6xl mx-auto">
@@ -136,17 +128,6 @@ function PortfolioDetails() {
                     >
                       <FiExternalLink className="w-5 h-5" />
                       <span>{livePreviewText}</span>
-                    </a>
-                  )}
-                  {project.githubUrl && (
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center space-x-2 bg-gradient-to-r from-gray-800 to-gray-900 text-white px-8 py-4 rounded-xl font-semibold text-base hover:from-gray-900 hover:to-black transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
-                    >
-                      <FiGithub className="w-5 h-5" />
-                      <span>{viewCodeText}</span>
                     </a>
                   )}
                 </div>

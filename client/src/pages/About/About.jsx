@@ -370,24 +370,16 @@ function About() {
 
   return (
     <>
-      <title>
-        About Us - SAANVI INNOVATION | Leading Software Development Company
-      </title>
+      <title>About Us</title>
       <meta
         name="description"
-        content="Learn about SAANVI INNOVATION, a leading software and web development company in Gwalior. We deliver scalable, modern applications for business growth."
+        content="Learn about a leading software and web development company in Gwalior. We deliver scalable, modern applications for business growth."
       />
-      <meta
-        name="keywords"
-        content="about saanvi innovation, software company gwalior, web development company, IT services"
-      />
-      <meta property="og:title" content="About SAANVI INNOVATION" />
+      <meta property="og:title" content="About Us" />
       <meta
         property="og:description"
         content="Leading software and web development company delivering exceptional digital solutions."
       />
-      <link rel="canonical" href="https://saanviinnovation.com/about" />
-
       <div className="bg-white">
         {/* Page Header */}
         <div className="bg-gradient-to-br from-orange-50 to-white border-b border-orange-100">

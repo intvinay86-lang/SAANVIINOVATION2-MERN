@@ -4,7 +4,7 @@ import { FiHome, FiArrowLeft } from "react-icons/fi";
 function NotFound() {
   return (
     <>
-      <title>404 - Page Not Found | SAANVI INNOVATION</title>
+      <title>404 - Page Not Found</title>
       <meta
         name="description"
         content="The page you are looking for could not be found."

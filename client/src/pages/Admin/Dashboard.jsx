@@ -1,39 +1,49 @@
-import { FiBriefcase, FiImage, FiUsers, FiMail } from "react-icons/fi";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { FiBriefcase, FiImage, FiUsers } from "react-icons/fi";
 import IconCard from "../../components/cards/IconCard";
-import RecentMessages from "./Components/RecentMessages";
-import QuickActions from "./Components/QuickActions";
+import { getMainSiteData } from "../../features/siteData/siteDataSlice";
+import { selectSiteData } from "../../features/siteData/siteDataSelectors";
 
 function Dashboard() {
+  const dispatch = useDispatch();
+  const siteData = useSelector(selectSiteData);
+
+  useEffect(() => {
+    if (!siteData) {
+      dispatch(getMainSiteData());
+    }
+  }, [dispatch, siteData]);
+
+  // Get counts from Redux store
+  const servicesCount = siteData?.services?.length || 0;
+  const portfolioCount = siteData?.portfolioProjects?.length || 0;
+  const clientsCount = siteData?.clients?.length || 0;
+
   const stats = [
     {
       title: "Total Services",
-      value: "6",
+      value: servicesCount.toString(),
       icon: <FiBriefcase />,
       color: "orange",
     },
     {
       title: "Portfolio Items",
-      value: "12",
+      value: portfolioCount.toString(),
       icon: <FiImage />,
       color: "blue",
     },
     {
       title: "Total Clients",
-      value: "8",
+      value: clientsCount.toString(),
       icon: <FiUsers />,
       color: "green",
-    },
-    {
-      title: "Total Messages",
-      value: "24",
-      icon: <FiMail />,
-      color: "purple",
     },
   ];
 
   return (
     <>
-      <title>Admin Dashboard - SAANVI INNOVATION</title>
+      <title>Admin Dashboard</title>
       <meta name="robots" content="noindex, nofollow" />
 
       <div className="space-y-6">
@@ -41,12 +51,12 @@ function Dashboard() {
         <div>
           <h1 className="text-3xl font-bold text-gray-800 mb-2">Dashboard</h1>
           <p className="text-gray-600">
-            Welcome back! Here's what's happening today.
+            Welcome back! Here's an overview of your content.
           </p>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {stats.map((stat, index) => (
             <IconCard
               key={index}
@@ -58,12 +68,6 @@ function Dashboard() {
             />
           ))}
         </div>
-
-        {/* Quick Actions */}
-        <QuickActions />
-
-        {/* Recent Messages Table */}
-        <RecentMessages />
       </div>
     </>
   );

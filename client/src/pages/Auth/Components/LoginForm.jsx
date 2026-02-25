@@ -83,7 +83,7 @@ function LoginForm() {
   return (
     <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
       <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-        Welcome Back
+        Admin Login
       </h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
@@ -193,16 +193,6 @@ function LoginForm() {
           )}
         </button>
       </form>
-
-      {/* Demo Credentials */}
-      <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-        <p className="text-xs text-gray-800 text-center mb-2 font-semibold">
-          Demo Credentials:
-        </p>
-        <p className="text-xs text-gray-700 text-center">
-          Use the admin account created via seed script
-        </p>
-      </div>
     </div>
   );
 }

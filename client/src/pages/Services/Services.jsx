@@ -251,10 +251,7 @@ function Services() {
 
   return (
     <>
-      <title>
-        Our Services - Web Development, Mobile Apps & Digital Solutions | SAANVI
-        INNOVATION
-      </title>
+      <title>Our Services</title>
       <meta
         name="description"
         content="Explore our comprehensive digital services including web development, mobile app development, e-commerce solutions, cloud services, and digital marketing."
@@ -263,7 +260,7 @@ function Services() {
         name="keywords"
         content="web development services, mobile app development, e-commerce solutions, cloud services, digital marketing, software development"
       />
-      <meta property="og:title" content="Our Services - SAANVI INNOVATION" />
+      <meta property="og:title" content="Our Services" />
       <meta
         property="og:description"
         content="Professional digital services for modern businesses."

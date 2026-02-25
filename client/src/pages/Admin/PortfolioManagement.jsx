@@ -35,7 +35,6 @@ function PortfolioManagement() {
     technologies: "",
     features: "",
     liveUrl: "",
-    githubUrl: "",
     client: "",
     duration: "",
     year: "",
@@ -81,7 +80,6 @@ function PortfolioManagement() {
           ? project.features.join("\n")
           : "",
         liveUrl: project.liveUrl || "",
-        githubUrl: project.githubUrl || "",
         client: project.client || "",
         duration: project.duration || "",
         year: project.year || "",
@@ -97,7 +95,6 @@ function PortfolioManagement() {
         technologies: "",
         features: "",
         liveUrl: "",
-        githubUrl: "",
         client: "",
         duration: "",
         year: "",
@@ -138,7 +135,6 @@ function PortfolioManagement() {
         .map((feature) => feature.trim())
         .filter((feature) => feature),
       liveUrl: formData.liveUrl,
-      githubUrl: formData.githubUrl,
       client: formData.client,
       duration: formData.duration,
       year: formData.year,
@@ -483,34 +479,18 @@ function PortfolioManagement() {
                   Project Links & Information
                 </h3>
 
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Live URL
-                    </label>
-                    <input
-                      type="url"
-                      name="liveUrl"
-                      value={formData.liveUrl}
-                      onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
-                      placeholder="https://example.com"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      GitHub URL
-                    </label>
-                    <input
-                      type="url"
-                      name="githubUrl"
-                      value={formData.githubUrl}
-                      onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
-                      placeholder="https://github.com/..."
-                    />
-                  </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Live URL
+                  </label>
+                  <input
+                    type="url"
+                    name="liveUrl"
+                    value={formData.liveUrl}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
+                    placeholder="https://example.com"
+                  />
                 </div>
 
                 <div className="grid md:grid-cols-3 gap-4">

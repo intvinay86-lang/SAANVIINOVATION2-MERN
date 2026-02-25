@@ -15,9 +15,23 @@ function AdminNavbar({ user, isSidebarOpen, toggleSidebar, handleLogout }) {
             >
               {isSidebarOpen ? <FiX size={24} /> : <FiMenu size={24} />}
             </button>
-            <h1 className="text-xl font-bold">
-              <span className="text-orange-500">SAANVI</span> INNOVATION
-            </h1>
+
+            {/* Admin Dashboard Title with Link */}
+            <a
+              href="#dashboard"
+              className="flex items-center hover:opacity-80 transition-opacity duration-300"
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.hash = "dashboard";
+              }}
+            >
+              <h1
+                className="text-xl font-bold"
+                style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
+              >
+                <span className="text-orange-500">Admin</span> Dashboard
+              </h1>
+            </a>
           </div>
 
           {/* Right: User Profile + Actions */}

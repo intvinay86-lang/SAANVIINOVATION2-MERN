@@ -6,9 +6,7 @@ import { pricingPlans } from "./Components/pricingData";
 function Pricing() {
   return (
     <>
-      <title>
-        Pricing Plans - Affordable Web Development Packages | SAANVI INNOVATION
-      </title>
+      <title>Pricing Plans</title>
       <meta
         name="description"
         content="Explore our competitive pricing plans for web development, mobile apps, and software solutions. Choose the perfect package for your business needs."
@@ -17,12 +15,11 @@ function Pricing() {
         name="keywords"
         content="pricing, web development cost, mobile app pricing, software development packages, affordable web solutions"
       />
-      <meta property="og:title" content="Pricing Plans - SAANVI INNOVATION" />
+      <meta property="og:title" content="Pricing Plans" />
       <meta
         property="og:description"
         content="Affordable pricing plans for all your digital needs."
       />
-      <link rel="canonical" href="https://saanviinnovation.com/pricing" />
 
       <div className="bg-white">
         {/* Page Header */}

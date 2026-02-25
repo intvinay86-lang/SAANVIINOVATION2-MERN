@@ -106,7 +106,7 @@ function TermsSettings() {
       {/* Header */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">
-          Terms & Conditions Settings
+          Terms & Conditions Page
         </h1>
         <p className="text-gray-600">
           Manage the Terms & Conditions page content using the rich text editor

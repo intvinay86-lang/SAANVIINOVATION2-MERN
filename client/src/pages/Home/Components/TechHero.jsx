@@ -1,15 +1,12 @@
 import { useEffect, useRef, lazy, Suspense } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
 import GlobeLoader from "@/components/GlobeLoader";
+import { getMainSiteData } from "../../../features/siteData/siteDataSlice";
+import { selectSiteData } from "../../../features/siteData/siteDataSelectors";
 
 const Globe3D = lazy(() => import("@/components/Globe3D"));
-
-const STATS_DATA = [
-  { value: "50+", label: "Projects Delivered", speed: "0.5" },
-  { value: "30+", label: "Happy Clients", speed: "0.6" },
-  { value: "5+", label: "Years Experience", speed: "0.7" },
-];
 
 const FLOATING_KEYWORDS = [
   { text: "INNOVATIVE", position: "top-10 right-0" },
@@ -19,10 +16,18 @@ const FLOATING_KEYWORDS = [
 ];
 
 function TechHero() {
+  const dispatch = useDispatch();
+  const siteData = useSelector(selectSiteData);
   const heroRef = useRef(null);
   const titleRef = useRef(null);
   const statsRef = useRef([]);
   const descRef = useRef(null);
+
+  useEffect(() => {
+    if (!siteData) {
+      dispatch(getMainSiteData());
+    }
+  }, [dispatch, siteData]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -63,6 +68,33 @@ function TechHero() {
       statsRef.current.push(el);
     }
   };
+
+  // Get home settings from Redux
+  const homeSettings = siteData?.homeSettings || {};
+
+  const heroTitle1 = homeSettings.heroTitle1 || "WHERE INNOVATION";
+  const heroTitle2 = homeSettings.heroTitle2 || "MEETS IMPACT";
+  const heroDescription =
+    homeSettings.heroDescription ||
+    "CUTTING-EDGE TECHNOLOGY MEETS CREATIVE EXCELLENCE. TRANSFORMING IDEAS INTO DIGITAL REALITY — WEB DEVELOPMENT, MOBILE APPS, AND COMPREHENSIVE DIGITAL SOLUTIONS.";
+
+  const STATS_DATA = [
+    {
+      value: homeSettings.heroStat1Value || "50+",
+      label: homeSettings.heroStat1Label || "Projects Delivered",
+      speed: "0.5",
+    },
+    {
+      value: homeSettings.heroStat2Value || "30+",
+      label: homeSettings.heroStat2Label || "Happy Clients",
+      speed: "0.6",
+    },
+    {
+      value: homeSettings.heroStat3Value || "5+",
+      label: homeSettings.heroStat3Label || "Years Experience",
+      speed: "0.7",
+    },
+  ];
 
   const renderBinaryBackground = () => (
     <div className="absolute inset-0 opacity-5 font-mono text-xs text-orange-500 overflow-hidden">
@@ -115,13 +147,13 @@ function TechHero() {
           className="text-white font-mono tracking-wider"
           style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
         >
-          WHERE INNOVATION
+          {heroTitle1}
         </div>
         <div
           className="text-orange-500 font-mono tracking-wider"
           style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
         >
-          MEETS IMPACT
+          {heroTitle2}
         </div>
       </h1>
     </div>
@@ -154,11 +186,7 @@ function TechHero() {
   const renderDescription = () => (
     <div ref={descRef} className="space-y-4 lg:space-y-6">
       <p className="text-gray-300 text-xs sm:text-sm lg:text-sm xl:text-base leading-relaxed font-mono lg:max-w-xl">
-        <span className="text-orange-500">CUTTING-EDGE TECHNOLOGY</span> MEETS{" "}
-        <span className="text-orange-500">CREATIVE EXCELLENCE</span>.
-        TRANSFORMING IDEAS INTO{" "}
-        <span className="text-orange-500">DIGITAL REALITY</span> — WEB
-        DEVELOPMENT, MOBILE APPS, AND COMPREHENSIVE DIGITAL SOLUTIONS.
+        {heroDescription}
       </p>
 
       <div className="flex flex-wrap justify-center lg:justify-start gap-3 lg:gap-4">
