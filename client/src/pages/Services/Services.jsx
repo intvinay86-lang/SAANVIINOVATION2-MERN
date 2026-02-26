@@ -137,6 +137,7 @@ function ServicesWhyChoose({ settings }) {
       subtitle={settings.whyChooseSubtitle}
       features={features}
       description={settings.whyChooseDescription}
+      image={settings.whyChooseImage}
     />
   );
 }
@@ -182,6 +183,9 @@ function Services() {
       servicesSettings.whyChooseFeature4 || "Client-Centric Approach",
     whyChooseFeature5:
       servicesSettings.whyChooseFeature5 || "Seamless Project Management",
+    whyChooseImage:
+      servicesSettings.whyChooseImage ||
+      "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=1200&q=80",
     ctaTitle: servicesSettings.ctaTitle || "Ready to Elevate Your Business?",
     ctaSubtitle:
       servicesSettings.ctaSubtitle ||

@@ -61,6 +61,8 @@ function ServicesSettings() {
       whyChooseFeature3: "Advanced Technology Stack",
       whyChooseFeature4: "Client-Centric Approach",
       whyChooseFeature5: "Seamless Project Management",
+      whyChooseImage:
+        "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=1200&q=80",
       ctaTitle: "Ready to Elevate Your Business?",
       ctaSubtitle:
         "Partner with experienced professionals to build scalable, modern digital solutions tailored to your business goals.",
@@ -71,6 +73,7 @@ function ServicesSettings() {
 
   // Watch image URLs for preview (must be after useForm)
   const heroImage = watch("heroImage");
+  const whyChooseImage = watch("whyChooseImage");
   const ctaImage = watch("ctaImage");
 
   useEffect(() => {
@@ -101,6 +104,8 @@ function ServicesSettings() {
         whyChooseFeature3: "Advanced Technology Stack",
         whyChooseFeature4: "Client-Centric Approach",
         whyChooseFeature5: "Seamless Project Management",
+        whyChooseImage:
+          "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=1200&q=80",
         ctaTitle: "Ready to Elevate Your Business?",
         ctaSubtitle:
           "Partner with experienced professionals to build scalable, modern digital solutions tailored to your business goals.",
@@ -135,6 +140,8 @@ function ServicesSettings() {
           servicesSettings.whyChooseFeature4 || defaultData.whyChooseFeature4,
         whyChooseFeature5:
           servicesSettings.whyChooseFeature5 || defaultData.whyChooseFeature5,
+        whyChooseImage:
+          servicesSettings.whyChooseImage || defaultData.whyChooseImage,
         ctaTitle: servicesSettings.ctaTitle || defaultData.ctaTitle,
         ctaSubtitle: servicesSettings.ctaSubtitle || defaultData.ctaSubtitle,
         ctaImage: servicesSettings.ctaImage || defaultData.ctaImage,
@@ -521,6 +528,49 @@ function ServicesSettings() {
                   </div>
                 ))}
               </div>
+            </div>
+
+            <div className="border-t pt-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Why Choose Image URL
+              </label>
+              <input
+                type="url"
+                {...register("whyChooseImage", {
+                  required: "Why choose image URL is required",
+                })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
+                placeholder="https://images.unsplash.com/..."
+              />
+              {errors.whyChooseImage && (
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.whyChooseImage.message}
+                </p>
+              )}
+              {whyChooseImage && (
+                <div className="mt-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Preview
+                  </label>
+                  <div className="border border-gray-300 rounded-md p-4 bg-gray-50 flex items-center justify-center h-48">
+                    <img
+                      src={whyChooseImage}
+                      alt="Why Choose Image Preview"
+                      className="max-w-full max-h-full object-contain"
+                      onError={(e) => {
+                        e.target.style.display = "none";
+                        e.target.nextSibling.style.display = "block";
+                      }}
+                    />
+                    <p
+                      className="text-sm text-red-500 hidden"
+                      style={{ display: "none" }}
+                    >
+                      Failed to load image
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
