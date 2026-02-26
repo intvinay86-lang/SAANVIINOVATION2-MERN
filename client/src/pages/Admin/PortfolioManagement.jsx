@@ -82,8 +82,8 @@ function PortfolioManagement() {
     try {
       await dispatch(getMainSiteData()).unwrap();
     } catch (error) {
-      if (error !== "Failed to fetch site data") {
-        toast.error("Failed to load portfolio projects");
+      if (error !== "Failed to fetch data") {
+        toast.error("Failed to load data");
       }
       setIsFetching(false);
     }

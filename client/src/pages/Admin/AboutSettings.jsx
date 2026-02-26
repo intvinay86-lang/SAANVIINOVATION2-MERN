@@ -197,8 +197,8 @@ function AboutSettings() {
     try {
       await dispatch(getMainSiteData()).unwrap();
     } catch (error) {
-      if (error !== "Failed to fetch site data") {
-        toast.error("Failed to load about settings");
+      if (error !== "Failed to fetch data") {
+        toast.error("Failed to load data");
       }
       setIsFetching(false);
     }
@@ -215,11 +215,10 @@ function AboutSettings() {
       ).unwrap();
 
       if (!skipToast) {
-        toast.success("About settings updated successfully!");
+        toast.success("Changes saved.");
       }
     } catch (error) {
-      toast.error("Failed to update about settings");
-      console.error("Update error:", error);
+      toast.error("Failed to save changes.");
       throw error;
     }
   };

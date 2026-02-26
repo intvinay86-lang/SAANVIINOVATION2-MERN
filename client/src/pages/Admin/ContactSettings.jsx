@@ -109,8 +109,8 @@ function ContactSettings() {
     try {
       await dispatch(getMainSiteData()).unwrap();
     } catch (error) {
-      if (error !== "Failed to fetch site data") {
-        toast.error("Failed to load contact settings");
+      if (error !== "Failed to fetch data") {
+        toast.error("Failed to load data");
       }
       setIsFetching(false);
     }
@@ -125,10 +125,9 @@ function ContactSettings() {
         }),
       ).unwrap();
 
-      toast.success("Contact settings updated successfully!");
+      toast.success("Changes saved.");
     } catch (error) {
-      toast.error("Failed to update contact settings");
-      console.error("Update error:", error);
+      toast.error("Failed to save changes.");
     }
   };
 

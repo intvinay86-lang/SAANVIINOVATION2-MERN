@@ -210,8 +210,8 @@ function PricingSettings() {
     try {
       await dispatch(getMainSiteData()).unwrap();
     } catch (error) {
-      if (error !== "Failed to fetch site data") {
-        toast.error("Failed to load pricing settings");
+      if (error !== "Failed to fetch data") {
+        toast.error("Failed to load data");
       }
       setIsFetching(false);
     }
@@ -238,10 +238,9 @@ function PricingSettings() {
         }),
       ).unwrap();
 
-      toast.success("Pricing settings updated successfully!");
+      toast.success("Changes saved.");
     } catch (error) {
-      toast.error("Failed to update pricing settings");
-      console.error("Update error:", error);
+      toast.error("Failed to save changes.");
     }
   };
 

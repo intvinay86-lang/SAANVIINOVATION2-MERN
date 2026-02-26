@@ -67,8 +67,8 @@ function PrivacySettings() {
     try {
       await dispatch(getMainSiteData()).unwrap();
     } catch (error) {
-      if (error !== "Failed to fetch site data") {
-        toast.error("Failed to load privacy settings");
+      if (error !== "Failed to fetch data") {
+        toast.error("Failed to load data");
       }
       setIsFetching(false);
     }
@@ -86,10 +86,9 @@ function PrivacySettings() {
         }),
       ).unwrap();
 
-      toast.success("Privacy settings updated successfully!");
+      toast.success("Changes saved.");
     } catch (error) {
-      toast.error("Failed to update privacy settings");
-      console.error("Update error:", error);
+      toast.error("Failed to save changes.");
     }
   };
 

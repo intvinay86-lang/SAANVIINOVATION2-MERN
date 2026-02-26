@@ -282,8 +282,8 @@ function HomeSettings() {
     try {
       await dispatch(getMainSiteData()).unwrap();
     } catch (error) {
-      if (error !== "Failed to fetch site data") {
-        toast.error("Failed to load home settings");
+      if (error !== "Failed to fetch data") {
+        toast.error("Failed to load data");
       }
       setIsFetching(false);
     }
@@ -360,7 +360,6 @@ function HomeSettings() {
       handleCloseClientModal();
     } catch (error) {
       toast.error("Failed to save client");
-      console.error("Save error:", error);
     }
   };
 
@@ -383,7 +382,6 @@ function HomeSettings() {
       setClients(updatedClients);
     } catch (error) {
       toast.error("Failed to delete client");
-      console.error("Delete error:", error);
     }
   };
 
@@ -421,11 +419,10 @@ function HomeSettings() {
       ).unwrap();
 
       if (!skipToast) {
-        toast.success("Home settings updated successfully!");
+        toast.success("Changes saved.");
       }
     } catch (error) {
-      toast.error("Failed to update home settings");
-      console.error("Update error:", error);
+      toast.error("Failed to save changes.");
       throw error;
     }
   };

@@ -91,9 +91,7 @@ function ContactManagement() {
             <h1 className="text-3xl font-bold text-gray-800 mb-2">
               Contact Management
             </h1>
-            <p className="text-gray-600">
-              Manage and respond to contact form submissions
-            </p>
+            <p className="text-gray-600">Manage contact form submissions</p>
           </div>
           <button
             onClick={handleRefresh}
@@ -107,15 +105,17 @@ function ContactManagement() {
 
         {/* Statistics Cards */}
         {stats && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-white rounded-lg shadow p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600">Total Contacts</p>
-                  <p className="text-2xl font-bold text-gray-800">
-                    {stats.total}
-                  </p>
-                </div>
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 w-fit">
+            <div className="flex items-center justify-between gap-8">
+              <div>
+                <p className="text-sm font-medium text-gray-500 mb-1">
+                  Total Contacts
+                </p>
+                <p className="text-3xl font-bold text-gray-900">
+                  {stats.total}
+                </p>
+              </div>
+              <div className="bg-blue-100 p-4 rounded-lg">
                 <FiMail className="text-3xl text-blue-500" />
               </div>
             </div>

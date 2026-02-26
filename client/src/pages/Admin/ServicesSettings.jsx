@@ -332,7 +332,6 @@ function ServicesSettings() {
       setServices(updatedServices);
     } catch (error) {
       toast.error("Failed to delete service");
-      console.error("Delete error:", error);
     }
   };
 
@@ -347,11 +346,10 @@ function ServicesSettings() {
       ).unwrap();
 
       if (!skipToast) {
-        toast.success("Services settings updated successfully!");
+        toast.success("Changes saved.");
       }
     } catch (error) {
-      toast.error("Failed to update services settings");
-      console.error("Update error:", error);
+      toast.error("Failed to save changes.");
       throw error;
     }
   };

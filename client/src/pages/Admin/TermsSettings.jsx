@@ -67,8 +67,8 @@ function TermsSettings() {
     try {
       await dispatch(getMainSiteData()).unwrap();
     } catch (error) {
-      if (error !== "Failed to fetch site data") {
-        toast.error("Failed to load terms settings");
+      if (error !== "Failed to fetch data") {
+        toast.error("Failed to load data");
       }
       setIsFetching(false);
     }
@@ -86,9 +86,9 @@ function TermsSettings() {
         }),
       ).unwrap();
 
-      toast.success("Terms settings updated successfully!");
+      toast.success("Changes saved.");
     } catch (error) {
-      toast.error("Failed to update terms settings");
+      toast.error("Failed to save changes.");
       console.error("Update error:", error);
     }
   };
