@@ -18,7 +18,7 @@ export const getFullImageUrl = (imageUrl) => {
   // If it's a relative path starting with /uploads/, prepend the backend URL
   if (trimmedUrl.startsWith("/uploads/")) {
     const baseUrl =
-      import.meta.env.VITE_API_URL?.replace("/api/v1", "") ||
+      import.meta.env.VITE_BACKEND_URL?.replace("/api/v1", "") ||
       "http://localhost:8000";
     return `${baseUrl}${trimmedUrl}`;
   }
@@ -26,7 +26,7 @@ export const getFullImageUrl = (imageUrl) => {
   // For any other relative paths, try to construct the full URL
   if (!trimmedUrl.startsWith("http")) {
     const baseUrl =
-      import.meta.env.VITE_API_URL?.replace("/api/v1", "") ||
+      import.meta.env.VITE_BACKEND_URL?.replace("/api/v1", "") ||
       "http://localhost:8000";
     return `${baseUrl}${trimmedUrl.startsWith("/") ? trimmedUrl : "/" + trimmedUrl}`;
   }
