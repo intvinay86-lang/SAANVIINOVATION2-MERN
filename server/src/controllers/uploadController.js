@@ -1,6 +1,7 @@
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import asyncHandler from "../utils/asyncHandler.js";
+import Upload from "../models/Upload.js";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -19,13 +20,23 @@ export const uploadImage = asyncHandler(async (req, res) => {
   // Generate URL for the uploaded file
   const fileUrl = `/uploads/${req.file.filename}`;
 
+  // Save upload record to database
+  const upload = await Upload.create({
+    filename: req.file.filename,
+    originalName: req.file.originalname,
+    size: req.file.size,
+    mimetype: req.file.mimetype,
+    url: fileUrl,
+    uploadedBy: req.user._id,
+  });
+
   res.status(200).json(
     new ApiResponse(200, "Image uploaded successfully", {
-      filename: req.file.filename,
-      originalName: req.file.originalname,
-      size: req.file.size,
-      mimetype: req.file.mimetype,
-      url: fileUrl,
+      filename: upload.filename,
+      originalName: upload.originalName,
+      size: upload.size,
+      mimetype: upload.mimetype,
+      url: upload.url,
     }),
   );
 });
@@ -40,16 +51,23 @@ export const deleteImage = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Filename is required");
   }
 
-  const uploadsDir = path.join(__dirname, "../../uploads");
-  const filePath = path.join(uploadsDir, filename);
+  // Find upload record in database
+  const upload = await Upload.findOne({ filename });
 
-  // Check if file exists
-  if (!fs.existsSync(filePath)) {
+  if (!upload) {
     throw new ApiError(404, "File not found");
   }
 
-  // Delete the file
-  fs.unlinkSync(filePath);
+  const uploadsDir = path.join(__dirname, "../../uploads");
+  const filePath = path.join(uploadsDir, filename);
+
+  // Delete the physical file if it exists
+  if (fs.existsSync(filePath)) {
+    fs.unlinkSync(filePath);
+  }
+
+  // Delete the database record
+  await upload.deleteOne();
 
   res
     .status(200)
@@ -60,33 +78,20 @@ export const deleteImage = asyncHandler(async (req, res) => {
 // @route   GET /api/v1/upload/images
 // @access  Private
 export const getAllImages = asyncHandler(async (req, res) => {
-  const uploadsDir = path.join(__dirname, "../../uploads");
+  // Get all uploads from database
+  const uploads = await Upload.find()
+    .populate("uploadedBy", "name email")
+    .sort({ createdAt: -1 });
 
-  // Check if uploads directory exists
-  if (!fs.existsSync(uploadsDir)) {
-    return res.status(200).json(new ApiResponse(200, "No images found", []));
-  }
-
-  // Read all files from uploads directory
-  const files = fs.readdirSync(uploadsDir);
-
-  // Filter only image files and get their details
-  const imageExtensions = [".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg"];
-  const images = files
-    .filter((file) => {
-      const ext = path.extname(file).toLowerCase();
-      return imageExtensions.includes(ext);
-    })
-    .map((file) => {
-      const filePath = path.join(uploadsDir, file);
-      const stats = fs.statSync(filePath);
-      return {
-        filename: file,
-        url: `/uploads/${file}`,
-        size: stats.size,
-        uploadedAt: stats.birthtime,
-      };
-    });
+  const images = uploads.map((upload) => ({
+    filename: upload.filename,
+    originalName: upload.originalName,
+    url: upload.url,
+    size: upload.size,
+    mimetype: upload.mimetype,
+    uploadedAt: upload.createdAt,
+    uploadedBy: upload.uploadedBy,
+  }));
 
   res
     .status(200)

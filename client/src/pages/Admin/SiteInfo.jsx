@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm, useFieldArray } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -21,17 +21,15 @@ import {
   selectSiteData,
   selectSiteDataLoading,
 } from "../../features/siteData/siteDataSelectors";
-import { uploadService } from "../../features/upload/uploadService";
 import { getFullImageUrl } from "../../utils/imageUtils";
+import { useImageUpload } from "../../hooks/useImageUpload";
 
 function SiteInfo() {
   const dispatch = useDispatch();
   const siteData = useSelector(selectSiteData);
   const isLoading = useSelector(selectSiteDataLoading);
   const [isFetching, setIsFetching] = useState(true);
-  const [isUploading, setIsUploading] = useState(false);
   const [logoPreview, setLogoPreview] = useState("");
-  const fileInputRef = useRef(null);
 
   // Valid social media types
   const VALID_SOCIAL_TYPES = [
@@ -74,6 +72,30 @@ function SiteInfo() {
 
   const useLogo = watch("useLogo");
   const logoUrl = watch("logoUrl");
+
+  // Initialize image upload hook
+  const {
+    isUploading,
+    isDeleting,
+    fileInputRef,
+    handleFileSelect,
+    handleDeleteImage,
+    triggerFileInput,
+  } = useImageUpload({
+    onUploadSuccess: (url) => {
+      setValue("logoUrl", url);
+    },
+    onDeleteSuccess: () => {
+      setValue("logoUrl", "");
+      setLogoPreview("");
+    },
+    onSaveForm: async () => {
+      // Get current form values and save
+      const formData = watch();
+      await saveFormData(formData, true); // Pass true to skip toast in saveFormData
+    },
+    saveSuccessMessage: "Changes saved successfully",
+  });
 
   useEffect(() => {
     loadSiteInfo();
@@ -167,56 +189,8 @@ function SiteInfo() {
     }
   };
 
-  const handleFileSelect = async (event) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    // Validate file type
-    const allowedTypes = [
-      "image/jpeg",
-      "image/jpg",
-      "image/png",
-      "image/gif",
-      "image/webp",
-      "image/svg+xml",
-    ];
-    if (!allowedTypes.includes(file.type)) {
-      toast.error("Only image files are allowed (JPEG, PNG, GIF, WEBP, SVG)");
-      return;
-    }
-
-    // Validate file size (5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error("File size must be less than 5MB");
-      return;
-    }
-
-    setIsUploading(true);
-    try {
-      const response = await uploadService.uploadImage(file);
-      if (response.success) {
-        const uploadedUrl = response.data.url;
-        // Update form with the uploaded URL using setValue
-        setValue("logoUrl", uploadedUrl);
-        toast.success("Logo uploaded successfully");
-      }
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to upload image");
-    } finally {
-      setIsUploading(false);
-      // Reset file input
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
-    }
-  };
-
-  const handleRemoveLogo = () => {
-    setValue("logoUrl", "");
-    setLogoPreview("");
-  };
-
-  const onSubmit = async (data) => {
+  // Generic function to save form data
+  const saveFormData = async (data, skipToast = false) => {
     try {
       // Default values
       const defaults = {
@@ -282,10 +256,29 @@ function SiteInfo() {
         updateSiteDataSection({ section: "siteinfo", data: cleanedData }),
       ).unwrap();
 
-      toast.success("Site information saved successfully");
+      if (!skipToast) {
+        toast.success("Changes saved successfully");
+      }
     } catch (error) {
-      toast.error(error || "Failed to save site information");
+      toast.error(error || "Failed to save changes");
+      throw error; // Re-throw to handle in upload hook
     }
+  };
+
+  const handleRemoveLogo = async () => {
+    const currentLogoUrl = logoUrl;
+    if (currentLogoUrl && currentLogoUrl.trim()) {
+      // Delete image from server and save form
+      await handleDeleteImage(currentLogoUrl);
+    } else {
+      // Just clear the preview if no URL
+      setValue("logoUrl", "");
+      setLogoPreview("");
+    }
+  };
+
+  const onSubmit = async (data) => {
+    await saveFormData(data);
   };
 
   if (isFetching) {
@@ -374,10 +367,15 @@ function SiteInfo() {
                       <button
                         type="button"
                         onClick={handleRemoveLogo}
-                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1.5 hover:bg-red-600 transition-colors shadow-lg"
+                        disabled={isDeleting}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1.5 hover:bg-red-600 transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                         title="Remove logo"
                       >
-                        <FiX size={18} />
+                        {isDeleting ? (
+                          <div className="w-[18px] h-[18px] border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        ) : (
+                          <FiX size={18} />
+                        )}
                       </button>
                     </div>
                   </div>
@@ -394,7 +392,7 @@ function SiteInfo() {
                   />
                   <button
                     type="button"
-                    onClick={() => fileInputRef.current?.click()}
+                    onClick={triggerFileInput}
                     disabled={isUploading}
                     className="flex items-center space-x-2 bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
                   >

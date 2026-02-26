@@ -2,6 +2,7 @@ import request from "supertest";
 import app from "../src/app.js";
 import { connectDB, disconnectDB } from "./setup/testDb.js";
 import User from "../src/models/User.js";
+import Upload from "../src/models/Upload.js";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
@@ -77,6 +78,14 @@ describe("Upload API Tests", () => {
 
       uploadedFilename = response.body.data.filename;
 
+      // Verify upload record was created in database
+      const uploadRecord = await Upload.findOne({
+        filename: uploadedFilename,
+      });
+      expect(uploadRecord).toBeTruthy();
+      expect(uploadRecord.originalName).toBe("test-image.png");
+      expect(uploadRecord.uploadedBy).toBeDefined();
+
       // Clean up test image
       fs.unlinkSync(testImagePath);
     });
@@ -108,6 +117,18 @@ describe("Upload API Tests", () => {
       expect(response.status).toBe(200);
       expect(response.body.success).toBe(true);
       expect(Array.isArray(response.body.data)).toBe(true);
+
+      // Verify response includes database fields
+      if (response.body.data.length > 0) {
+        const image = response.body.data[0];
+        expect(image).toHaveProperty("filename");
+        expect(image).toHaveProperty("originalName");
+        expect(image).toHaveProperty("url");
+        expect(image).toHaveProperty("size");
+        expect(image).toHaveProperty("mimetype");
+        expect(image).toHaveProperty("uploadedAt");
+        expect(image).toHaveProperty("uploadedBy");
+      }
     });
 
     it("should fail without authentication", async () => {
@@ -130,6 +151,12 @@ describe("Upload API Tests", () => {
 
       expect(response.status).toBe(200);
       expect(response.body.success).toBe(true);
+
+      // Verify upload record was deleted from database
+      const uploadRecord = await Upload.findOne({
+        filename: uploadedFilename,
+      });
+      expect(uploadRecord).toBeNull();
     });
 
     it("should fail without authentication", async () => {
