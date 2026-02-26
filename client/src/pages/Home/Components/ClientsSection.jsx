@@ -18,7 +18,6 @@ function ClientsSection() {
     }
   }, [dispatch, siteData]);
 
-  const clients = siteData?.clients || [];
   const homeSettings = siteData?.homeSettings || {};
 
   const badge = homeSettings.clientsSectionBadge || "Trusted Partners";
@@ -26,6 +25,55 @@ function ClientsSection() {
   const description =
     homeSettings.clientsSectionDescription ||
     "Trusted by leading companies worldwide to deliver exceptional digital solutions and drive business growth.";
+
+  // Default clients data when no data is found
+  const defaultClients = [
+    {
+      id: 1,
+      name: "Tech Corp",
+      logo: "https://via.placeholder.com/150x60?text=Tech+Corp",
+    },
+    {
+      id: 2,
+      name: "Digital Solutions",
+      logo: "https://via.placeholder.com/150x60?text=Digital+Solutions",
+    },
+    {
+      id: 3,
+      name: "Innovation Labs",
+      logo: "https://via.placeholder.com/150x60?text=Innovation+Labs",
+    },
+    {
+      id: 4,
+      name: "Global Systems",
+      logo: "https://via.placeholder.com/150x60?text=Global+Systems",
+    },
+    {
+      id: 5,
+      name: "Smart Tech",
+      logo: "https://via.placeholder.com/150x60?text=Smart+Tech",
+    },
+    {
+      id: 6,
+      name: "Future Works",
+      logo: "https://via.placeholder.com/150x60?text=Future+Works",
+    },
+    {
+      id: 7,
+      name: "Cloud Services",
+      logo: "https://via.placeholder.com/150x60?text=Cloud+Services",
+    },
+    {
+      id: 8,
+      name: "Data Systems",
+      logo: "https://via.placeholder.com/150x60?text=Data+Systems",
+    },
+  ];
+
+  const clients =
+    siteData?.clients && siteData.clients.length > 0
+      ? siteData.clients
+      : defaultClients;
 
   if (isLoading && !siteData) {
     return (
@@ -35,10 +83,6 @@ function ClientsSection() {
         </div>
       </section>
     );
-  }
-
-  if (!clients || clients.length === 0) {
-    return null;
   }
 
   return (
