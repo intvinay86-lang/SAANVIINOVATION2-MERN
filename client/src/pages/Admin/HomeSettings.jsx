@@ -10,6 +10,8 @@ import {
   FiEdit2,
   FiTrash2,
   FiX,
+  FiUpload,
+  FiImage,
 } from "react-icons/fi";
 import {
   getMainSiteData,
@@ -19,6 +21,8 @@ import {
   selectSiteData,
   selectSiteDataLoading,
 } from "../../features/siteData/siteDataSelectors";
+import { getFullImageUrl } from "../../utils/imageUtils";
+import { useImageUpload } from "../../hooks/useImageUpload";
 
 function HomeSettings() {
   const dispatch = useDispatch();
@@ -32,12 +36,17 @@ function HomeSettings() {
     name: "",
     logo: "",
   });
+  const [aboutImage1Preview, setAboutImage1Preview] = useState("");
+  const [aboutImage2Preview, setAboutImage2Preview] = useState("");
+  const [aboutImage3Preview, setAboutImage3Preview] = useState("");
+  const [clientLogoPreview, setClientLogoPreview] = useState("");
 
   const {
     register,
     handleSubmit,
     reset,
     watch,
+    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -58,12 +67,9 @@ function HomeSettings() {
         "Our mission is to deliver innovative technology solutions that energize your business and enhance your digital presence.",
       aboutParagraph3:
         "We have a network of satisfied clients across multiple states including Madhya Pradesh, Maharashtra, and Gujarat.",
-      aboutImage1:
-        "https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-      aboutImage2:
-        "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      aboutImage3:
-        "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      aboutImage1: "",
+      aboutImage2: "",
+      aboutImage3: "",
       clientsSectionBadge: "Trusted Partners",
       clientsSectionTitle: "Our Clients",
       clientsSectionDescription:
@@ -85,9 +91,100 @@ function HomeSettings() {
   const aboutImage2 = watch("aboutImage2");
   const aboutImage3 = watch("aboutImage3");
 
+  // Image upload hooks for about images
+  const aboutImage1Upload = useImageUpload({
+    onUploadSuccess: (url) => {
+      setValue("aboutImage1", url);
+    },
+    onDeleteSuccess: () => {
+      setValue("aboutImage1", "");
+      setAboutImage1Preview("");
+    },
+    onSaveForm: async () => {
+      const formData = watch();
+      await saveFormData(formData, true);
+    },
+    saveSuccessMessage: "About image 1 updated successfully",
+  });
+
+  const aboutImage2Upload = useImageUpload({
+    onUploadSuccess: (url) => {
+      setValue("aboutImage2", url);
+    },
+    onDeleteSuccess: () => {
+      setValue("aboutImage2", "");
+      setAboutImage2Preview("");
+    },
+    onSaveForm: async () => {
+      const formData = watch();
+      await saveFormData(formData, true);
+    },
+    saveSuccessMessage: "About image 2 updated successfully",
+  });
+
+  const aboutImage3Upload = useImageUpload({
+    onUploadSuccess: (url) => {
+      setValue("aboutImage3", url);
+    },
+    onDeleteSuccess: () => {
+      setValue("aboutImage3", "");
+      setAboutImage3Preview("");
+    },
+    onSaveForm: async () => {
+      const formData = watch();
+      await saveFormData(formData, true);
+    },
+    saveSuccessMessage: "About image 3 updated successfully",
+  });
+
+  // Image upload hook for client logos
+  const clientLogoUpload = useImageUpload({
+    onUploadSuccess: (url) => {
+      setClientFormData((prev) => ({ ...prev, logo: url }));
+    },
+    onDeleteSuccess: () => {
+      setClientFormData((prev) => ({ ...prev, logo: "" }));
+      setClientLogoPreview("");
+    },
+    saveSuccessMessage: "Client logo uploaded successfully",
+  });
+
   useEffect(() => {
     loadHomeSettings();
   }, []);
+
+  // Update image previews when URLs change
+  useEffect(() => {
+    if (aboutImage1 && aboutImage1.trim()) {
+      setAboutImage1Preview(getFullImageUrl(aboutImage1));
+    } else {
+      setAboutImage1Preview("");
+    }
+  }, [aboutImage1]);
+
+  useEffect(() => {
+    if (aboutImage2 && aboutImage2.trim()) {
+      setAboutImage2Preview(getFullImageUrl(aboutImage2));
+    } else {
+      setAboutImage2Preview("");
+    }
+  }, [aboutImage2]);
+
+  useEffect(() => {
+    if (aboutImage3 && aboutImage3.trim()) {
+      setAboutImage3Preview(getFullImageUrl(aboutImage3));
+    } else {
+      setAboutImage3Preview("");
+    }
+  }, [aboutImage3]);
+
+  useEffect(() => {
+    if (clientFormData.logo && clientFormData.logo.trim()) {
+      setClientLogoPreview(getFullImageUrl(clientFormData.logo));
+    } else {
+      setClientLogoPreview("");
+    }
+  }, [clientFormData.logo]);
 
   useEffect(() => {
     if (siteData !== null) {
@@ -112,12 +209,9 @@ function HomeSettings() {
           "Our mission is to deliver innovative technology solutions that energize your business and enhance your digital presence.",
         aboutParagraph3:
           "We have a network of satisfied clients across multiple states including Madhya Pradesh, Maharashtra, and Gujarat.",
-        aboutImage1:
-          "https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-        aboutImage2:
-          "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-        aboutImage3:
-          "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        aboutImage1: "",
+        aboutImage2: "",
+        aboutImage3: "",
         clientsSectionBadge: "Trusted Partners",
         clientsSectionTitle: "Our Clients",
         clientsSectionDescription:
@@ -228,6 +322,12 @@ function HomeSettings() {
   const handleClientSubmit = async (e) => {
     e.preventDefault();
 
+    // Validate that logo is uploaded
+    if (!clientFormData.logo || !clientFormData.logo.trim()) {
+      toast.error("Please upload a client logo");
+      return;
+    }
+
     const newClient = {
       id: editingClient ? editingClient.id : Date.now(),
       name: clientFormData.name,
@@ -287,7 +387,8 @@ function HomeSettings() {
     }
   };
 
-  const onSubmit = async (data) => {
+  // Generic function to save form data
+  const saveFormData = async (data, skipToast = false) => {
     try {
       // Separate SEO data from other settings
       const {
@@ -319,11 +420,52 @@ function HomeSettings() {
         }),
       ).unwrap();
 
-      toast.success("Home settings updated successfully!");
+      if (!skipToast) {
+        toast.success("Home settings updated successfully!");
+      }
     } catch (error) {
       toast.error("Failed to update home settings");
       console.error("Update error:", error);
+      throw error;
     }
+  };
+
+  const handleRemoveAboutImage = async (imageNumber) => {
+    const imageField = `aboutImage${imageNumber}`;
+    const currentImageUrl = watch(imageField);
+
+    if (currentImageUrl && currentImageUrl.trim()) {
+      // Delete image from server and save form
+      if (imageNumber === 1) {
+        await aboutImage1Upload.handleDeleteImage(currentImageUrl);
+      } else if (imageNumber === 2) {
+        await aboutImage2Upload.handleDeleteImage(currentImageUrl);
+      } else if (imageNumber === 3) {
+        await aboutImage3Upload.handleDeleteImage(currentImageUrl);
+      }
+    } else {
+      // Just clear the preview if no URL
+      setValue(imageField, "");
+      if (imageNumber === 1) setAboutImage1Preview("");
+      else if (imageNumber === 2) setAboutImage2Preview("");
+      else if (imageNumber === 3) setAboutImage3Preview("");
+    }
+  };
+
+  const handleRemoveClientLogo = async () => {
+    const currentLogoUrl = clientFormData.logo;
+    if (currentLogoUrl && currentLogoUrl.trim()) {
+      // Delete image from server
+      await clientLogoUpload.handleDeleteImage(currentLogoUrl);
+    } else {
+      // Just clear the preview if no URL
+      setClientFormData((prev) => ({ ...prev, logo: "" }));
+      setClientLogoPreview("");
+    }
+  };
+
+  const onSubmit = async (data) => {
+    await saveFormData(data);
   };
 
   if (isFetching) {
@@ -671,132 +813,228 @@ function HomeSettings() {
             </div>
 
             <div className="grid md:grid-cols-3 gap-4">
+              {/* About Image 1 */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  About Image 1 URL <span className="text-red-500">*</span>
+                  <FiImage className="inline mr-1" />
+                  About Image 1
                 </label>
-                <input
-                  type="url"
-                  {...register("aboutImage1", {
-                    required: "About image 1 URL is required",
-                  })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
-                  placeholder="https://images.unsplash.com/..."
-                />
+
+                {/* Hidden input to store image URL */}
+                <input type="hidden" {...register("aboutImage1")} />
+
+                {/* Image Preview */}
+                {aboutImage1Preview && (
+                  <div className="mb-3">
+                    <div className="relative inline-block">
+                      <img
+                        src={aboutImage1Preview}
+                        alt="About Image 1 Preview"
+                        className="h-32 w-auto max-w-full border-2 border-gray-300 rounded-lg object-cover bg-white shadow-sm"
+                        onError={(e) => {
+                          e.target.style.display = "none";
+                          toast.error("Failed to load image preview");
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveAboutImage(1)}
+                        disabled={aboutImage1Upload.isDeleting}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1.5 hover:bg-red-600 transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                        title="Remove image"
+                      >
+                        {aboutImage1Upload.isDeleting ? (
+                          <div className="w-[18px] h-[18px] border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        ) : (
+                          <FiX size={18} />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Upload Button */}
+                <div>
+                  <input
+                    type="file"
+                    ref={aboutImage1Upload.fileInputRef}
+                    onChange={aboutImage1Upload.handleFileSelect}
+                    accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,image/svg+xml"
+                    className="hidden"
+                  />
+                  <button
+                    type="button"
+                    onClick={aboutImage1Upload.triggerFileInput}
+                    disabled={aboutImage1Upload.isUploading}
+                    className="flex items-center space-x-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm text-sm"
+                  >
+                    {aboutImage1Upload.isUploading ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        <span>Uploading...</span>
+                      </>
+                    ) : (
+                      <>
+                        <FiUpload size={16} />
+                        <span>{aboutImage1Preview ? "Change" : "Upload"}</span>
+                      </>
+                    )}
+                  </button>
+                </div>
                 {errors.aboutImage1 && (
                   <p className="mt-1 text-sm text-red-600">
                     {errors.aboutImage1.message}
                   </p>
                 )}
-                {aboutImage1 && (
-                  <div className="mt-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Preview
-                    </label>
-                    <div className="border border-gray-300 rounded-md p-2 bg-gray-50 h-32 flex items-center justify-center">
+              </div>
+
+              {/* About Image 2 */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <FiImage className="inline mr-1" />
+                  About Image 2
+                </label>
+
+                {/* Hidden input to store image URL */}
+                <input type="hidden" {...register("aboutImage2")} />
+
+                {/* Image Preview */}
+                {aboutImage2Preview && (
+                  <div className="mb-3">
+                    <div className="relative inline-block">
                       <img
-                        src={aboutImage1}
-                        alt="About Image 1 Preview"
-                        className="max-w-full max-h-full object-contain"
+                        src={aboutImage2Preview}
+                        alt="About Image 2 Preview"
+                        className="h-32 w-auto max-w-full border-2 border-gray-300 rounded-lg object-cover bg-white shadow-sm"
                         onError={(e) => {
                           e.target.style.display = "none";
-                          e.target.nextSibling.style.display = "block";
+                          toast.error("Failed to load image preview");
                         }}
                       />
-                      <p
-                        className="text-sm text-red-500 hidden"
-                        style={{ display: "none" }}
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveAboutImage(2)}
+                        disabled={aboutImage2Upload.isDeleting}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1.5 hover:bg-red-600 transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                        title="Remove image"
                       >
-                        Failed to load image
-                      </p>
+                        {aboutImage2Upload.isDeleting ? (
+                          <div className="w-[18px] h-[18px] border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        ) : (
+                          <FiX size={18} />
+                        )}
+                      </button>
                     </div>
                   </div>
                 )}
-              </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  About Image 2 URL <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="url"
-                  {...register("aboutImage2", {
-                    required: "About image 2 URL is required",
-                  })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
-                  placeholder="https://images.unsplash.com/..."
-                />
+                {/* Upload Button */}
+                <div>
+                  <input
+                    type="file"
+                    ref={aboutImage2Upload.fileInputRef}
+                    onChange={aboutImage2Upload.handleFileSelect}
+                    accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,image/svg+xml"
+                    className="hidden"
+                  />
+                  <button
+                    type="button"
+                    onClick={aboutImage2Upload.triggerFileInput}
+                    disabled={aboutImage2Upload.isUploading}
+                    className="flex items-center space-x-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm text-sm"
+                  >
+                    {aboutImage2Upload.isUploading ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        <span>Uploading...</span>
+                      </>
+                    ) : (
+                      <>
+                        <FiUpload size={16} />
+                        <span>{aboutImage2Preview ? "Change" : "Upload"}</span>
+                      </>
+                    )}
+                  </button>
+                </div>
                 {errors.aboutImage2 && (
                   <p className="mt-1 text-sm text-red-600">
                     {errors.aboutImage2.message}
                   </p>
                 )}
-                {aboutImage2 && (
-                  <div className="mt-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Preview
-                    </label>
-                    <div className="border border-gray-300 rounded-md p-2 bg-gray-50 h-32 flex items-center justify-center">
+              </div>
+
+              {/* About Image 3 */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <FiImage className="inline mr-1" />
+                  About Image 3
+                </label>
+
+                {/* Hidden input to store image URL */}
+                <input type="hidden" {...register("aboutImage3")} />
+
+                {/* Image Preview */}
+                {aboutImage3Preview && (
+                  <div className="mb-3">
+                    <div className="relative inline-block">
                       <img
-                        src={aboutImage2}
-                        alt="About Image 2 Preview"
-                        className="max-w-full max-h-full object-contain"
+                        src={aboutImage3Preview}
+                        alt="About Image 3 Preview"
+                        className="h-32 w-auto max-w-full border-2 border-gray-300 rounded-lg object-cover bg-white shadow-sm"
                         onError={(e) => {
                           e.target.style.display = "none";
-                          e.target.nextSibling.style.display = "block";
+                          toast.error("Failed to load image preview");
                         }}
                       />
-                      <p
-                        className="text-sm text-red-500 hidden"
-                        style={{ display: "none" }}
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveAboutImage(3)}
+                        disabled={aboutImage3Upload.isDeleting}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1.5 hover:bg-red-600 transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                        title="Remove image"
                       >
-                        Failed to load image
-                      </p>
+                        {aboutImage3Upload.isDeleting ? (
+                          <div className="w-[18px] h-[18px] border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        ) : (
+                          <FiX size={18} />
+                        )}
+                      </button>
                     </div>
                   </div>
                 )}
-              </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  About Image 3 URL <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="url"
-                  {...register("aboutImage3", {
-                    required: "About image 3 URL is required",
-                  })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
-                  placeholder="https://images.unsplash.com/..."
-                />
+                {/* Upload Button */}
+                <div>
+                  <input
+                    type="file"
+                    ref={aboutImage3Upload.fileInputRef}
+                    onChange={aboutImage3Upload.handleFileSelect}
+                    accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,image/svg+xml"
+                    className="hidden"
+                  />
+                  <button
+                    type="button"
+                    onClick={aboutImage3Upload.triggerFileInput}
+                    disabled={aboutImage3Upload.isUploading}
+                    className="flex items-center space-x-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm text-sm"
+                  >
+                    {aboutImage3Upload.isUploading ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        <span>Uploading...</span>
+                      </>
+                    ) : (
+                      <>
+                        <FiUpload size={16} />
+                        <span>{aboutImage3Preview ? "Change" : "Upload"}</span>
+                      </>
+                    )}
+                  </button>
+                </div>
                 {errors.aboutImage3 && (
                   <p className="mt-1 text-sm text-red-600">
                     {errors.aboutImage3.message}
                   </p>
-                )}
-                {aboutImage3 && (
-                  <div className="mt-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Preview
-                    </label>
-                    <div className="border border-gray-300 rounded-md p-2 bg-gray-50 h-32 flex items-center justify-center">
-                      <img
-                        src={aboutImage3}
-                        alt="About Image 3 Preview"
-                        className="max-w-full max-h-full object-contain"
-                        onError={(e) => {
-                          e.target.style.display = "none";
-                          e.target.nextSibling.style.display = "block";
-                        }}
-                      />
-                      <p
-                        className="text-sm text-red-500 hidden"
-                        style={{ display: "none" }}
-                      >
-                        Failed to load image
-                      </p>
-                    </div>
-                  </div>
                 )}
               </div>
             </div>
@@ -900,7 +1138,7 @@ function HomeSettings() {
                     >
                       <div className="aspect-square flex items-center justify-center mb-2">
                         <img
-                          src={client.logo}
+                          src={getFullImageUrl(client.logo)}
                           alt={client.name}
                           className="max-w-full max-h-full object-contain"
                         />
@@ -1022,44 +1260,74 @@ function HomeSettings() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Logo URL <span className="text-red-500">*</span>
+                  <FiImage className="inline mr-1" />
+                  Client Logo <span className="text-red-500">*</span>
                 </label>
-                <input
-                  type="url"
-                  name="logo"
-                  value={clientFormData.logo}
-                  onChange={handleClientInputChange}
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
-                  placeholder="https://example.com/logo.png"
-                />
-              </div>
 
-              {/* Image Preview */}
-              {clientFormData.logo && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Preview
-                  </label>
-                  <div className="border border-gray-300 rounded-md p-4 bg-gray-50 flex items-center justify-center h-32">
-                    <img
-                      src={clientFormData.logo}
-                      alt="Preview"
-                      className="max-w-full max-h-full object-contain"
-                      onError={(e) => {
-                        e.target.style.display = "none";
-                        e.target.nextSibling.style.display = "block";
-                      }}
-                    />
-                    <p
-                      className="text-sm text-red-500 hidden"
-                      style={{ display: "none" }}
-                    >
-                      Failed to load image
-                    </p>
+                {/* Logo Preview */}
+                {clientLogoPreview && (
+                  <div className="mb-3">
+                    <div className="relative inline-block">
+                      <img
+                        src={clientLogoPreview}
+                        alt="Client logo preview"
+                        className="h-24 w-auto max-w-xs border-2 border-gray-300 rounded-lg object-contain bg-white p-2 shadow-sm"
+                        onError={(e) => {
+                          e.target.style.display = "none";
+                          toast.error("Failed to load logo preview");
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={handleRemoveClientLogo}
+                        disabled={clientLogoUpload.isDeleting}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1.5 hover:bg-red-600 transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                        title="Remove logo"
+                      >
+                        {clientLogoUpload.isDeleting ? (
+                          <div className="w-[18px] h-[18px] border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        ) : (
+                          <FiX size={18} />
+                        )}
+                      </button>
+                    </div>
                   </div>
+                )}
+
+                {/* Upload Button */}
+                <div>
+                  <input
+                    type="file"
+                    ref={clientLogoUpload.fileInputRef}
+                    onChange={clientLogoUpload.handleFileSelect}
+                    accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,image/svg+xml"
+                    className="hidden"
+                  />
+                  <button
+                    type="button"
+                    onClick={clientLogoUpload.triggerFileInput}
+                    disabled={clientLogoUpload.isUploading}
+                    className="flex items-center space-x-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                  >
+                    {clientLogoUpload.isUploading ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        <span>Uploading...</span>
+                      </>
+                    ) : (
+                      <>
+                        <FiUpload size={16} />
+                        <span>
+                          {clientLogoPreview ? "Change Logo" : "Upload Logo"}
+                        </span>
+                      </>
+                    )}
+                  </button>
+                  <p className="text-sm text-gray-500 mt-2">
+                    Supported formats: JPEG, PNG, GIF, WEBP, SVG (Max 5MB)
+                  </p>
                 </div>
-              )}
+              </div>
 
               <div className="flex justify-end gap-3 pt-4">
                 <button

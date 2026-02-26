@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getMainSiteData } from "../../../features/siteData/siteDataSlice";
 import { selectSiteData } from "../../../features/siteData/siteDataSelectors";
+import { getFullImageUrl } from "../../../utils/imageUtils";
 
 function AboutImageGrid() {
   const dispatch = useDispatch();
@@ -26,15 +27,21 @@ function AboutImageGrid() {
   const aboutParagraph3 =
     homeSettings.aboutParagraph3 ||
     "We have a network of satisfied clients across multiple states including Madhya Pradesh, Maharashtra, and Gujarat.";
-  const aboutImage1 =
+
+  // Use getFullImageUrl to handle both relative and absolute URLs
+  // Fallback to Pexels images if not set
+  const aboutImage1 = getFullImageUrl(
     homeSettings.aboutImage1 ||
-    "https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
-  const aboutImage2 =
+      "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  );
+  const aboutImage2 = getFullImageUrl(
     homeSettings.aboutImage2 ||
-    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80";
-  const aboutImage3 =
+      "https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg?auto=compress&cs=tinysrgb&w=800",
+  );
+  const aboutImage3 = getFullImageUrl(
     homeSettings.aboutImage3 ||
-    "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80";
+      "https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=800",
+  );
 
   return (
     <section className="py-20 md:py-28 bg-white">

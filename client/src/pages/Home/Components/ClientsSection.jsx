@@ -5,6 +5,7 @@ import {
   selectSiteData,
   selectSiteDataLoading,
 } from "../../../features/siteData/siteDataSelectors";
+import { getFullImageUrl } from "../../../utils/imageUtils";
 
 function ClientsSection() {
   const dispatch = useDispatch();
@@ -76,7 +77,7 @@ function ClientsSection() {
               style={{ animationDelay: `${index * 100}ms` }}
             >
               <img
-                src={client.logo}
+                src={getFullImageUrl(client.logo)}
                 alt={client.name}
                 loading="lazy"
                 className="max-w-full h-12 md:h-16 object-contain transition-all duration-500 group-hover:scale-110 group-hover:brightness-110"
