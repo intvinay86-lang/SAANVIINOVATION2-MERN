@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import {
   FiUser,
@@ -10,8 +11,13 @@ import {
   FiEyeOff,
 } from "react-icons/fi";
 import { userService } from "../../features/user/userService";
+import { updateUserProfile } from "../../features/user/userSlice";
+import { updateUser } from "../../features/auth/authSlice";
+import { selectUser } from "../../features/auth/authSelectors";
 
 function Profile() {
+  const dispatch = useDispatch();
+  const authUser = useSelector(selectUser);
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordLoading, setIsPasswordLoading] = useState(false);
   const [showPasswordForm, setShowPasswordForm] = useState(false);
@@ -54,9 +60,21 @@ function Profile() {
   const onSubmitProfile = async (data) => {
     setIsLoading(true);
     try {
-      const response = await userService.updateProfile(data);
-      if (response.success) {
+      const resultAction = await dispatch(updateUserProfile(data));
+
+      if (updateUserProfile.fulfilled.match(resultAction)) {
+        // Update auth user in localStorage and Redux
+        const updatedUser = resultAction.payload;
+        const storedUser = JSON.parse(localStorage.getItem("authUser") || "{}");
+        const mergedUser = { ...storedUser, ...updatedUser };
+        localStorage.setItem("authUser", JSON.stringify(mergedUser));
+
+        // Update auth state to reflect changes in navbar
+        dispatch(updateUser(mergedUser));
+
         toast.success("Profile updated successfully");
+      } else {
+        toast.error(resultAction.payload || "Failed to update profile");
       }
     } catch (error) {
       const message =

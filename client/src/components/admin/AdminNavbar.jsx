@@ -54,7 +54,6 @@ function AdminNavbar({ user, isSidebarOpen, toggleSidebar, handleLogout }) {
               </div>
               <div>
                 <p className="text-sm font-semibold">{user.name}</p>
-                <p className="text-xs text-gray-400">{user.role}</p>
               </div>
             </a>
 

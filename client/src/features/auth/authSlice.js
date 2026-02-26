@@ -87,6 +87,12 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = null;
     },
+    // Update user data (for profile updates)
+    updateUser: (state, action) => {
+      if (state.user) {
+        state.user = { ...state.user, ...action.payload };
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -110,7 +116,8 @@ const authSlice = createSlice({
 });
 
 // Export actions
-export const { logout, clearError, syncAuthState } = authSlice.actions;
+export const { logout, clearError, syncAuthState, updateUser } =
+  authSlice.actions;
 
 // Export reducer
 export default authSlice.reducer;
