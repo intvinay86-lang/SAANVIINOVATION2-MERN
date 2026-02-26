@@ -2,7 +2,15 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { FiSave, FiBookOpen, FiAward, FiTrendingUp } from "react-icons/fi";
+import {
+  FiSave,
+  FiBookOpen,
+  FiAward,
+  FiTrendingUp,
+  FiUpload,
+  FiImage,
+  FiX,
+} from "react-icons/fi";
 import {
   getMainSiteData,
   updateSiteDataSection,
@@ -11,18 +19,23 @@ import {
   selectSiteData,
   selectSiteDataLoading,
 } from "../../features/siteData/siteDataSelectors";
+import { getFullImageUrl } from "../../utils/imageUtils";
+import { useImageUpload } from "../../hooks/useImageUpload";
 
 function AboutSettings() {
   const dispatch = useDispatch();
   const siteData = useSelector(selectSiteData);
   const isLoading = useSelector(selectSiteDataLoading);
   const [isFetching, setIsFetching] = useState(true);
+  const [storyImagePreview, setStoryImagePreview] = useState("");
+  const [coreValuesImagePreview, setCoreValuesImagePreview] = useState("");
 
   const {
     register,
     handleSubmit,
     reset,
     watch,
+    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -34,13 +47,11 @@ function AboutSettings() {
         "SAANVI INNOVATION is a leading software and web development company established with a vision to transform businesses through innovative digital solutions.",
       storyParagraph2:
         "We specialize in creating scalable, modern applications that help businesses grow and succeed in the digital landscape.",
-      storyImage:
-        "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      storyImage: "",
       qualityBadgeTitle: "Quality First",
       qualityBadgeText: "Excellence in every project we deliver",
       coreValuesTitle: "Principles That Guide Us",
-      coreValuesImage:
-        "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      coreValuesImage: "",
       statsTitle: "Numbers That Speak for Themselves",
       statsProjectsValue: "50+",
       statsProjectsLabel: "Projects Completed",
@@ -57,9 +68,57 @@ function AboutSettings() {
   const storyImage = watch("storyImage");
   const coreValuesImage = watch("coreValuesImage");
 
+  // Image upload hooks
+  const storyImageUpload = useImageUpload({
+    onUploadSuccess: (url) => {
+      setValue("storyImage", url);
+    },
+    onDeleteSuccess: () => {
+      setValue("storyImage", "");
+      setStoryImagePreview("");
+    },
+    onSaveForm: async () => {
+      const formData = watch();
+      await saveFormData(formData, true);
+    },
+    saveSuccessMessage: "Story image updated successfully",
+  });
+
+  const coreValuesImageUpload = useImageUpload({
+    onUploadSuccess: (url) => {
+      setValue("coreValuesImage", url);
+    },
+    onDeleteSuccess: () => {
+      setValue("coreValuesImage", "");
+      setCoreValuesImagePreview("");
+    },
+    onSaveForm: async () => {
+      const formData = watch();
+      await saveFormData(formData, true);
+    },
+    saveSuccessMessage: "Core values image updated successfully",
+  });
+
   useEffect(() => {
     loadAboutSettings();
   }, []);
+
+  // Update image previews when URLs change
+  useEffect(() => {
+    if (storyImage && storyImage.trim()) {
+      setStoryImagePreview(getFullImageUrl(storyImage));
+    } else {
+      setStoryImagePreview("");
+    }
+  }, [storyImage]);
+
+  useEffect(() => {
+    if (coreValuesImage && coreValuesImage.trim()) {
+      setCoreValuesImagePreview(getFullImageUrl(coreValuesImage));
+    } else {
+      setCoreValuesImagePreview("");
+    }
+  }, [coreValuesImage]);
 
   useEffect(() => {
     if (siteData !== null) {
@@ -74,13 +133,11 @@ function AboutSettings() {
           "SAANVI INNOVATION is a leading software and web development company established with a vision to transform businesses through innovative digital solutions.",
         storyParagraph2:
           "We specialize in creating scalable, modern applications that help businesses grow and succeed in the digital landscape.",
-        storyImage:
-          "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+        storyImage: "",
         qualityBadgeTitle: "Quality First",
         qualityBadgeText: "Excellence in every project we deliver",
         coreValuesTitle: "Principles That Guide Us",
-        coreValuesImage:
-          "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+        coreValuesImage: "",
         statsTitle: "Numbers That Speak for Themselves",
         statsProjectsValue: "50+",
         statsProjectsLabel: "Projects Completed",
@@ -147,7 +204,8 @@ function AboutSettings() {
     }
   };
 
-  const onSubmit = async (data) => {
+  // Generic function to save form data
+  const saveFormData = async (data, skipToast = false) => {
     try {
       await dispatch(
         updateSiteDataSection({
@@ -156,11 +214,38 @@ function AboutSettings() {
         }),
       ).unwrap();
 
-      toast.success("About settings updated successfully!");
+      if (!skipToast) {
+        toast.success("About settings updated successfully!");
+      }
     } catch (error) {
       toast.error("Failed to update about settings");
       console.error("Update error:", error);
+      throw error;
     }
+  };
+
+  const handleRemoveStoryImage = async () => {
+    const currentImageUrl = storyImage;
+    if (currentImageUrl && currentImageUrl.trim()) {
+      await storyImageUpload.handleDeleteImage(currentImageUrl);
+    } else {
+      setValue("storyImage", "");
+      setStoryImagePreview("");
+    }
+  };
+
+  const handleRemoveCoreValuesImage = async () => {
+    const currentImageUrl = coreValuesImage;
+    if (currentImageUrl && currentImageUrl.trim()) {
+      await coreValuesImageUpload.handleDeleteImage(currentImageUrl);
+    } else {
+      setValue("coreValuesImage", "");
+      setCoreValuesImagePreview("");
+    }
+  };
+
+  const onSubmit = async (data) => {
+    await saveFormData(data);
   };
 
   if (isFetching) {
@@ -297,45 +382,76 @@ function AboutSettings() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Story Image URL
+                <FiImage className="inline mr-1" />
+                Story Image
               </label>
-              <input
-                type="url"
-                {...register("storyImage", {
-                  required: "Story image URL is required",
-                })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
-                placeholder="https://images.unsplash.com/..."
-              />
-              {errors.storyImage && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.storyImage.message}
-                </p>
-              )}
-              {storyImage && (
-                <div className="mt-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Preview
-                  </label>
-                  <div className="border border-gray-300 rounded-md p-4 bg-gray-50 flex items-center justify-center h-48">
+
+              {/* Hidden input to store image URL */}
+              <input type="hidden" {...register("storyImage")} />
+
+              {/* Image Preview */}
+              {storyImagePreview && (
+                <div className="mb-3">
+                  <div className="relative inline-block">
                     <img
-                      src={storyImage}
+                      src={storyImagePreview}
                       alt="Story Image Preview"
-                      className="max-w-full max-h-full object-contain"
+                      className="h-48 w-auto max-w-full border-2 border-gray-300 rounded-lg object-cover bg-white shadow-sm"
                       onError={(e) => {
                         e.target.style.display = "none";
-                        e.target.nextSibling.style.display = "block";
+                        toast.error("Failed to load image preview");
                       }}
                     />
-                    <p
-                      className="text-sm text-red-500 hidden"
-                      style={{ display: "none" }}
+                    <button
+                      type="button"
+                      onClick={handleRemoveStoryImage}
+                      disabled={storyImageUpload.isDeleting}
+                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1.5 hover:bg-red-600 transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                      title="Remove image"
                     >
-                      Failed to load image
-                    </p>
+                      {storyImageUpload.isDeleting ? (
+                        <div className="w-[18px] h-[18px] border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      ) : (
+                        <FiX size={18} />
+                      )}
+                    </button>
                   </div>
                 </div>
               )}
+
+              {/* Upload Button */}
+              <div>
+                <input
+                  type="file"
+                  ref={storyImageUpload.fileInputRef}
+                  onChange={storyImageUpload.handleFileSelect}
+                  accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,image/svg+xml"
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={storyImageUpload.triggerFileInput}
+                  disabled={storyImageUpload.isUploading}
+                  className="flex items-center space-x-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                >
+                  {storyImageUpload.isUploading ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      <span>Uploading...</span>
+                    </>
+                  ) : (
+                    <>
+                      <FiUpload size={16} />
+                      <span>
+                        {storyImagePreview ? "Change Image" : "Upload Image"}
+                      </span>
+                    </>
+                  )}
+                </button>
+                <p className="text-sm text-gray-500 mt-2">
+                  Supported formats: JPEG, PNG, GIF, WEBP, SVG (Max 5MB)
+                </p>
+              </div>
             </div>
 
             <div>
@@ -407,45 +523,78 @@ function AboutSettings() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Core Values Image URL
+                <FiImage className="inline mr-1" />
+                Core Values Image
               </label>
-              <input
-                type="url"
-                {...register("coreValuesImage", {
-                  required: "Core values image URL is required",
-                })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
-                placeholder="https://images.unsplash.com/..."
-              />
-              {errors.coreValuesImage && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.coreValuesImage.message}
-                </p>
-              )}
-              {coreValuesImage && (
-                <div className="mt-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Preview
-                  </label>
-                  <div className="border border-gray-300 rounded-md p-4 bg-gray-50 flex items-center justify-center h-48">
+
+              {/* Hidden input to store image URL */}
+              <input type="hidden" {...register("coreValuesImage")} />
+
+              {/* Image Preview */}
+              {coreValuesImagePreview && (
+                <div className="mb-3">
+                  <div className="relative inline-block">
                     <img
-                      src={coreValuesImage}
+                      src={coreValuesImagePreview}
                       alt="Core Values Image Preview"
-                      className="max-w-full max-h-full object-contain"
+                      className="h-48 w-auto max-w-full border-2 border-gray-300 rounded-lg object-cover bg-white shadow-sm"
                       onError={(e) => {
                         e.target.style.display = "none";
-                        e.target.nextSibling.style.display = "block";
+                        toast.error("Failed to load image preview");
                       }}
                     />
-                    <p
-                      className="text-sm text-red-500 hidden"
-                      style={{ display: "none" }}
+                    <button
+                      type="button"
+                      onClick={handleRemoveCoreValuesImage}
+                      disabled={coreValuesImageUpload.isDeleting}
+                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1.5 hover:bg-red-600 transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                      title="Remove image"
                     >
-                      Failed to load image
-                    </p>
+                      {coreValuesImageUpload.isDeleting ? (
+                        <div className="w-[18px] h-[18px] border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      ) : (
+                        <FiX size={18} />
+                      )}
+                    </button>
                   </div>
                 </div>
               )}
+
+              {/* Upload Button */}
+              <div>
+                <input
+                  type="file"
+                  ref={coreValuesImageUpload.fileInputRef}
+                  onChange={coreValuesImageUpload.handleFileSelect}
+                  accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,image/svg+xml"
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={coreValuesImageUpload.triggerFileInput}
+                  disabled={coreValuesImageUpload.isUploading}
+                  className="flex items-center space-x-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                >
+                  {coreValuesImageUpload.isUploading ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      <span>Uploading...</span>
+                    </>
+                  ) : (
+                    <>
+                      <FiUpload size={16} />
+                      <span>
+                        {coreValuesImagePreview
+                          ? "Change Image"
+                          : "Upload Image"}
+                      </span>
+                    </>
+                  )}
+                </button>
+                <p className="text-sm text-gray-500 mt-2">
+                  Supported formats: JPEG, PNG, GIF, WEBP, SVG (Max 5MB)
+                </p>
+              </div>
             </div>
           </div>
         </div>

@@ -10,6 +10,7 @@ import {
 import WhyChooseSection from "../../components/sections/WhyChooseSection";
 import { getMainSiteData } from "../../features/siteData/siteDataSlice";
 import { selectSiteData } from "../../features/siteData/siteDataSelectors";
+import { getFullImageUrl } from "../../utils/imageUtils";
 
 // Our Story Component
 function OurStory({ settings }) {
@@ -339,18 +340,20 @@ function About() {
     storyParagraph2:
       aboutSettings.storyParagraph2 ||
       "We specialize in creating scalable, modern applications that help businesses grow and succeed in the digital landscape.",
-    storyImage:
+    storyImage: getFullImageUrl(
       aboutSettings.storyImage ||
-      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+        "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    ),
     qualityBadgeTitle: aboutSettings.qualityBadgeTitle || "Quality First",
     qualityBadgeText:
       aboutSettings.qualityBadgeText ||
       "Excellence in every project we deliver",
     coreValuesTitle:
       aboutSettings.coreValuesTitle || "Principles That Guide Us",
-    coreValuesImage:
+    coreValuesImage: getFullImageUrl(
       aboutSettings.coreValuesImage ||
-      "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+        "https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    ),
     statsTitle: aboutSettings.statsTitle || "Numbers That Speak for Themselves",
     statsProjectsValue: aboutSettings.statsProjectsValue || "50+",
     statsProjectsLabel:
