@@ -30,6 +30,7 @@ function ContactSettings() {
     handleSubmit,
     reset,
     control,
+    watch,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -54,6 +55,9 @@ function ContactSettings() {
     control,
     name: "contactNumbers",
   });
+
+  // Watch map URL for preview
+  const mapEmbedUrl = watch("mapEmbedUrl");
 
   useEffect(() => {
     loadContactSettings();
@@ -305,26 +309,70 @@ function ContactSettings() {
             Map Settings
           </h2>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Google Maps Embed URL
-            </label>
-            <textarea
-              {...register("mapEmbedUrl", {
-                required: "Map embed URL is required",
-              })}
-              rows="3"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
-              placeholder="https://www.google.com/maps/embed?pb=..."
-            />
-            {errors.mapEmbedUrl && (
-              <p className="mt-1 text-sm text-red-600">
-                {errors.mapEmbedUrl.message}
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Google Maps Embed URL
+              </label>
+              <textarea
+                {...register("mapEmbedUrl", {
+                  required: "Map embed URL is required",
+                })}
+                rows="3"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
+                placeholder="https://www.google.com/maps/embed?pb=..."
+              />
+              {errors.mapEmbedUrl && (
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.mapEmbedUrl.message}
+                </p>
+              )}
+              <p className="mt-1 text-sm text-gray-500">
+                Get this URL from Google Maps → Share → Embed a map → Copy HTML
               </p>
+            </div>
+
+            {/* Map Preview */}
+            {mapEmbedUrl && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Map Preview
+                </label>
+                <div className="border border-gray-300 rounded-md overflow-hidden bg-gray-50">
+                  <iframe
+                    src={mapEmbedUrl}
+                    width="100%"
+                    height="400"
+                    style={{ border: 0 }}
+                    allowFullScreen=""
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title="Map Preview"
+                    onError={(e) => {
+                      e.target.style.display = "none";
+                      e.target.nextSibling.style.display = "flex";
+                    }}
+                  ></iframe>
+                  <div
+                    className="hidden items-center justify-center h-[400px] bg-gray-100"
+                    style={{ display: "none" }}
+                  >
+                    <div className="text-center p-6">
+                      <FiMapPin className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                      <p className="text-sm text-red-500 font-medium mb-1">
+                        Failed to load map preview
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        Please check if the embed URL is valid
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <p className="mt-2 text-xs text-gray-500">
+                  This is how the map will appear on your contact page
+                </p>
+              </div>
             )}
-            <p className="mt-1 text-sm text-gray-500">
-              Get this URL from Google Maps → Share → Embed a map → Copy HTML
-            </p>
           </div>
         </div>
 
