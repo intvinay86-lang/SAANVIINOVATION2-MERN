@@ -158,10 +158,9 @@ function Services() {
     heroDescription:
       servicesSettings.heroDescription ||
       "We deliver scalable and modern digital solutions tailored to your business goals. Partner with experienced professionals committed to long-term growth and measurable success.",
-    heroImage: getFullImageUrl(
-      servicesSettings.heroImage ||
-        "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1200",
-    ),
+    heroImage: servicesSettings.heroImage
+      ? getFullImageUrl(servicesSettings.heroImage)
+      : "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1200",
     servicesGridTitle: servicesSettings.servicesGridTitle || "Our Services",
     servicesGridSubtitle:
       servicesSettings.servicesGridSubtitle ||
@@ -185,18 +184,16 @@ function Services() {
       servicesSettings.whyChooseFeature4 || "Client-Centric Approach",
     whyChooseFeature5:
       servicesSettings.whyChooseFeature5 || "Seamless Project Management",
-    whyChooseImage: getFullImageUrl(
-      servicesSettings.whyChooseImage ||
-        "https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=1200",
-    ),
+    whyChooseImage: servicesSettings.whyChooseImage
+      ? getFullImageUrl(servicesSettings.whyChooseImage)
+      : "https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=1200",
     ctaTitle: servicesSettings.ctaTitle || "Ready to Elevate Your Business?",
     ctaSubtitle:
       servicesSettings.ctaSubtitle ||
       "Partner with experienced professionals to build scalable, modern digital solutions tailored to your business goals.",
-    ctaImage: getFullImageUrl(
-      servicesSettings.ctaImage ||
-        "https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg?auto=compress&cs=tinysrgb&w=800",
-    ),
+    ctaImage: servicesSettings.ctaImage
+      ? getFullImageUrl(servicesSettings.ctaImage)
+      : "https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg?auto=compress&cs=tinysrgb&w=800",
   };
 
   // Default services if none are configured

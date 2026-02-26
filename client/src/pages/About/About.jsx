@@ -340,20 +340,18 @@ function About() {
     storyParagraph2:
       aboutSettings.storyParagraph2 ||
       "We specialize in creating scalable, modern applications that help businesses grow and succeed in the digital landscape.",
-    storyImage: getFullImageUrl(
-      aboutSettings.storyImage ||
-        "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1200",
-    ),
+    storyImage: aboutSettings.storyImage
+      ? getFullImageUrl(aboutSettings.storyImage)
+      : "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1200",
     qualityBadgeTitle: aboutSettings.qualityBadgeTitle || "Quality First",
     qualityBadgeText:
       aboutSettings.qualityBadgeText ||
       "Excellence in every project we deliver",
     coreValuesTitle:
       aboutSettings.coreValuesTitle || "Principles That Guide Us",
-    coreValuesImage: getFullImageUrl(
-      aboutSettings.coreValuesImage ||
-        "https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=1200",
-    ),
+    coreValuesImage: aboutSettings.coreValuesImage
+      ? getFullImageUrl(aboutSettings.coreValuesImage)
+      : "https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=1200",
     statsTitle: aboutSettings.statsTitle || "Numbers That Speak for Themselves",
     statsProjectsValue: aboutSettings.statsProjectsValue || "50+",
     statsProjectsLabel:
