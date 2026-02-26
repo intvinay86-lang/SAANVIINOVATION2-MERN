@@ -11,6 +11,7 @@ import {
   FiRefreshCw,
   FiUpload,
   FiImage,
+  FiBriefcase,
 } from "react-icons/fi";
 import {
   getMainSiteData,
@@ -238,6 +239,23 @@ function PortfolioManagement() {
 
   return (
     <div className="space-y-6">
+      {/* Stats Card */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 w-fit">
+        <div className="flex items-center justify-between gap-8">
+          <div>
+            <p className="text-sm font-medium text-gray-500 mb-1">
+              Total Projects
+            </p>
+            <p className="text-3xl font-bold text-gray-900">
+              {projects.length}
+            </p>
+          </div>
+          <div className="bg-blue-100 p-4 rounded-lg">
+            <FiBriefcase className="w-8 h-8 text-blue-600" />
+          </div>
+        </div>
+      </div>
+
       {/* Header */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <div className="flex justify-between items-center">
@@ -579,9 +597,10 @@ function PortfolioManagement() {
                     Live URL
                   </label>
                   <input
-                    type="url"
+                    type="text"
                     name="liveUrl"
                     value={formData.liveUrl}
+                    defaultValue="#"
                     onChange={handleInputChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
                     placeholder="https://example.com"
