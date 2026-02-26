@@ -14,6 +14,7 @@ import WhyChooseSection from "../../components/sections/WhyChooseSection";
 import CTASection from "../../components/sections/CTASection";
 import { getMainSiteData } from "../../features/siteData/siteDataSlice";
 import { selectSiteData } from "../../features/siteData/siteDataSelectors";
+import { getFullImageUrl } from "../../utils/imageUtils";
 
 // Hero Section Component
 function ServiceHero({ settings }) {
@@ -157,9 +158,10 @@ function Services() {
     heroDescription:
       servicesSettings.heroDescription ||
       "We deliver scalable and modern digital solutions tailored to your business goals. Partner with experienced professionals committed to long-term growth and measurable success.",
-    heroImage:
+    heroImage: getFullImageUrl(
       servicesSettings.heroImage ||
-      "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80",
+        "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    ),
     servicesGridTitle: servicesSettings.servicesGridTitle || "Our Services",
     servicesGridSubtitle:
       servicesSettings.servicesGridSubtitle ||
@@ -183,16 +185,18 @@ function Services() {
       servicesSettings.whyChooseFeature4 || "Client-Centric Approach",
     whyChooseFeature5:
       servicesSettings.whyChooseFeature5 || "Seamless Project Management",
-    whyChooseImage:
+    whyChooseImage: getFullImageUrl(
       servicesSettings.whyChooseImage ||
-      "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=1200&q=80",
+        "https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    ),
     ctaTitle: servicesSettings.ctaTitle || "Ready to Elevate Your Business?",
     ctaSubtitle:
       servicesSettings.ctaSubtitle ||
       "Partner with experienced professionals to build scalable, modern digital solutions tailored to your business goals.",
-    ctaImage:
+    ctaImage: getFullImageUrl(
       servicesSettings.ctaImage ||
-      "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=800&q=80",
+        "https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg?auto=compress&cs=tinysrgb&w=800",
+    ),
   };
 
   // Default services if none are configured

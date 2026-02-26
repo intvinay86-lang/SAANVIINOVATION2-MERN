@@ -10,6 +10,8 @@ import {
   FiEdit2,
   FiTrash2,
   FiX,
+  FiUpload,
+  FiImage,
 } from "react-icons/fi";
 import {
   getMainSiteData,
@@ -19,6 +21,8 @@ import {
   selectSiteData,
   selectSiteDataLoading,
 } from "../../features/siteData/siteDataSelectors";
+import { getFullImageUrl } from "../../utils/imageUtils";
+import { useImageUpload } from "../../hooks/useImageUpload";
 
 function ServicesSettings() {
   const dispatch = useDispatch();
@@ -34,20 +38,23 @@ function ServicesSettings() {
     icon: "FiGlobe",
     gradient: "from-orange-500 to-orange-600",
   });
+  const [heroImagePreview, setHeroImagePreview] = useState("");
+  const [whyChooseImagePreview, setWhyChooseImagePreview] = useState("");
+  const [ctaImagePreview, setCtaImagePreview] = useState("");
 
   const {
     register,
     handleSubmit,
     reset,
     watch,
+    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {
       heroTitle: "Dedicated to Your Digital Success",
       heroDescription:
         "We deliver scalable and modern digital solutions tailored to your business goals. Partner with experienced professionals committed to long-term growth and measurable success.",
-      heroImage:
-        "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80",
+      heroImage: "",
       servicesGridTitle: "Our Services",
       servicesGridSubtitle:
         "Comprehensive digital solutions tailored to your business needs.",
@@ -61,13 +68,11 @@ function ServicesSettings() {
       whyChooseFeature3: "Advanced Technology Stack",
       whyChooseFeature4: "Client-Centric Approach",
       whyChooseFeature5: "Seamless Project Management",
-      whyChooseImage:
-        "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=1200&q=80",
+      whyChooseImage: "",
       ctaTitle: "Ready to Elevate Your Business?",
       ctaSubtitle:
         "Partner with experienced professionals to build scalable, modern digital solutions tailored to your business goals.",
-      ctaImage:
-        "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=800&q=80",
+      ctaImage: "",
     },
   });
 
@@ -76,9 +81,80 @@ function ServicesSettings() {
   const whyChooseImage = watch("whyChooseImage");
   const ctaImage = watch("ctaImage");
 
+  // Image upload hooks
+  const heroImageUpload = useImageUpload({
+    onUploadSuccess: (url) => {
+      setValue("heroImage", url);
+    },
+    onDeleteSuccess: () => {
+      setValue("heroImage", "");
+      setHeroImagePreview("");
+    },
+    onSaveForm: async () => {
+      const formData = watch();
+      await saveFormData(formData, true);
+    },
+    saveSuccessMessage: "Hero image updated successfully",
+  });
+
+  const whyChooseImageUpload = useImageUpload({
+    onUploadSuccess: (url) => {
+      setValue("whyChooseImage", url);
+    },
+    onDeleteSuccess: () => {
+      setValue("whyChooseImage", "");
+      setWhyChooseImagePreview("");
+    },
+    onSaveForm: async () => {
+      const formData = watch();
+      await saveFormData(formData, true);
+    },
+    saveSuccessMessage: "Why choose image updated successfully",
+  });
+
+  const ctaImageUpload = useImageUpload({
+    onUploadSuccess: (url) => {
+      setValue("ctaImage", url);
+    },
+    onDeleteSuccess: () => {
+      setValue("ctaImage", "");
+      setCtaImagePreview("");
+    },
+    onSaveForm: async () => {
+      const formData = watch();
+      await saveFormData(formData, true);
+    },
+    saveSuccessMessage: "CTA image updated successfully",
+  });
+
   useEffect(() => {
     loadServicesSettings();
   }, []);
+
+  // Update image previews when URLs change
+  useEffect(() => {
+    if (heroImage && heroImage.trim()) {
+      setHeroImagePreview(getFullImageUrl(heroImage));
+    } else {
+      setHeroImagePreview("");
+    }
+  }, [heroImage]);
+
+  useEffect(() => {
+    if (whyChooseImage && whyChooseImage.trim()) {
+      setWhyChooseImagePreview(getFullImageUrl(whyChooseImage));
+    } else {
+      setWhyChooseImagePreview("");
+    }
+  }, [whyChooseImage]);
+
+  useEffect(() => {
+    if (ctaImage && ctaImage.trim()) {
+      setCtaImagePreview(getFullImageUrl(ctaImage));
+    } else {
+      setCtaImagePreview("");
+    }
+  }, [ctaImage]);
 
   useEffect(() => {
     if (siteData !== null) {
@@ -89,8 +165,7 @@ function ServicesSettings() {
         heroTitle: "Dedicated to Your Digital Success",
         heroDescription:
           "We deliver scalable and modern digital solutions tailored to your business goals. Partner with experienced professionals committed to long-term growth and measurable success.",
-        heroImage:
-          "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80",
+        heroImage: "",
         servicesGridTitle: "Our Services",
         servicesGridSubtitle:
           "Comprehensive digital solutions tailored to your business needs.",
@@ -104,13 +179,11 @@ function ServicesSettings() {
         whyChooseFeature3: "Advanced Technology Stack",
         whyChooseFeature4: "Client-Centric Approach",
         whyChooseFeature5: "Seamless Project Management",
-        whyChooseImage:
-          "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=1200&q=80",
+        whyChooseImage: "",
         ctaTitle: "Ready to Elevate Your Business?",
         ctaSubtitle:
           "Partner with experienced professionals to build scalable, modern digital solutions tailored to your business goals.",
-        ctaImage:
-          "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=800&q=80",
+        ctaImage: "",
       };
 
       const mergedData = {
@@ -263,7 +336,8 @@ function ServicesSettings() {
     }
   };
 
-  const onSubmit = async (data) => {
+  // Generic function to save form data
+  const saveFormData = async (data, skipToast = false) => {
     try {
       await dispatch(
         updateSiteDataSection({
@@ -272,11 +346,48 @@ function ServicesSettings() {
         }),
       ).unwrap();
 
-      toast.success("Services settings updated successfully!");
+      if (!skipToast) {
+        toast.success("Services settings updated successfully!");
+      }
     } catch (error) {
       toast.error("Failed to update services settings");
       console.error("Update error:", error);
+      throw error;
     }
+  };
+
+  const handleRemoveHeroImage = async () => {
+    const currentImageUrl = heroImage;
+    if (currentImageUrl && currentImageUrl.trim()) {
+      await heroImageUpload.handleDeleteImage(currentImageUrl);
+    } else {
+      setValue("heroImage", "");
+      setHeroImagePreview("");
+    }
+  };
+
+  const handleRemoveWhyChooseImage = async () => {
+    const currentImageUrl = whyChooseImage;
+    if (currentImageUrl && currentImageUrl.trim()) {
+      await whyChooseImageUpload.handleDeleteImage(currentImageUrl);
+    } else {
+      setValue("whyChooseImage", "");
+      setWhyChooseImagePreview("");
+    }
+  };
+
+  const handleRemoveCtaImage = async () => {
+    const currentImageUrl = ctaImage;
+    if (currentImageUrl && currentImageUrl.trim()) {
+      await ctaImageUpload.handleDeleteImage(currentImageUrl);
+    } else {
+      setValue("ctaImage", "");
+      setCtaImagePreview("");
+    }
+  };
+
+  const onSubmit = async (data) => {
+    await saveFormData(data);
   };
 
   if (isFetching) {
@@ -346,45 +457,76 @@ function ServicesSettings() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Hero Image URL
+                <FiImage className="inline mr-1" />
+                Hero Image
               </label>
-              <input
-                type="url"
-                {...register("heroImage", {
-                  required: "Hero image URL is required",
-                })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
-                placeholder="https://images.unsplash.com/..."
-              />
-              {errors.heroImage && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.heroImage.message}
-                </p>
-              )}
-              {heroImage && (
-                <div className="mt-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Preview
-                  </label>
-                  <div className="border border-gray-300 rounded-md p-4 bg-gray-50 flex items-center justify-center h-48">
+
+              {/* Hidden input to store image URL */}
+              <input type="hidden" {...register("heroImage")} />
+
+              {/* Image Preview */}
+              {heroImagePreview && (
+                <div className="mb-3">
+                  <div className="relative inline-block">
                     <img
-                      src={heroImage}
+                      src={heroImagePreview}
                       alt="Hero Image Preview"
-                      className="max-w-full max-h-full object-contain"
+                      className="h-48 w-auto max-w-full border-2 border-gray-300 rounded-lg object-cover bg-white shadow-sm"
                       onError={(e) => {
                         e.target.style.display = "none";
-                        e.target.nextSibling.style.display = "block";
+                        toast.error("Failed to load image preview");
                       }}
                     />
-                    <p
-                      className="text-sm text-red-500 hidden"
-                      style={{ display: "none" }}
+                    <button
+                      type="button"
+                      onClick={handleRemoveHeroImage}
+                      disabled={heroImageUpload.isDeleting}
+                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1.5 hover:bg-red-600 transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                      title="Remove image"
                     >
-                      Failed to load image
-                    </p>
+                      {heroImageUpload.isDeleting ? (
+                        <div className="w-[18px] h-[18px] border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      ) : (
+                        <FiX size={18} />
+                      )}
+                    </button>
                   </div>
                 </div>
               )}
+
+              {/* Upload Button */}
+              <div>
+                <input
+                  type="file"
+                  ref={heroImageUpload.fileInputRef}
+                  onChange={heroImageUpload.handleFileSelect}
+                  accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,image/svg+xml"
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={heroImageUpload.triggerFileInput}
+                  disabled={heroImageUpload.isUploading}
+                  className="flex items-center space-x-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                >
+                  {heroImageUpload.isUploading ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      <span>Uploading...</span>
+                    </>
+                  ) : (
+                    <>
+                      <FiUpload size={16} />
+                      <span>
+                        {heroImagePreview ? "Change Image" : "Upload Image"}
+                      </span>
+                    </>
+                  )}
+                </button>
+                <p className="text-sm text-gray-500 mt-2">
+                  Supported formats: JPEG, PNG, GIF, WEBP, SVG (Max 5MB)
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -532,45 +674,78 @@ function ServicesSettings() {
 
             <div className="border-t pt-4">
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Why Choose Image URL
+                <FiImage className="inline mr-1" />
+                Why Choose Image
               </label>
-              <input
-                type="url"
-                {...register("whyChooseImage", {
-                  required: "Why choose image URL is required",
-                })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
-                placeholder="https://images.unsplash.com/..."
-              />
-              {errors.whyChooseImage && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.whyChooseImage.message}
-                </p>
-              )}
-              {whyChooseImage && (
-                <div className="mt-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Preview
-                  </label>
-                  <div className="border border-gray-300 rounded-md p-4 bg-gray-50 flex items-center justify-center h-48">
+
+              {/* Hidden input to store image URL */}
+              <input type="hidden" {...register("whyChooseImage")} />
+
+              {/* Image Preview */}
+              {whyChooseImagePreview && (
+                <div className="mb-3">
+                  <div className="relative inline-block">
                     <img
-                      src={whyChooseImage}
+                      src={whyChooseImagePreview}
                       alt="Why Choose Image Preview"
-                      className="max-w-full max-h-full object-contain"
+                      className="h-48 w-auto max-w-full border-2 border-gray-300 rounded-lg object-cover bg-white shadow-sm"
                       onError={(e) => {
                         e.target.style.display = "none";
-                        e.target.nextSibling.style.display = "block";
+                        toast.error("Failed to load image preview");
                       }}
                     />
-                    <p
-                      className="text-sm text-red-500 hidden"
-                      style={{ display: "none" }}
+                    <button
+                      type="button"
+                      onClick={handleRemoveWhyChooseImage}
+                      disabled={whyChooseImageUpload.isDeleting}
+                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1.5 hover:bg-red-600 transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                      title="Remove image"
                     >
-                      Failed to load image
-                    </p>
+                      {whyChooseImageUpload.isDeleting ? (
+                        <div className="w-[18px] h-[18px] border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      ) : (
+                        <FiX size={18} />
+                      )}
+                    </button>
                   </div>
                 </div>
               )}
+
+              {/* Upload Button */}
+              <div>
+                <input
+                  type="file"
+                  ref={whyChooseImageUpload.fileInputRef}
+                  onChange={whyChooseImageUpload.handleFileSelect}
+                  accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,image/svg+xml"
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={whyChooseImageUpload.triggerFileInput}
+                  disabled={whyChooseImageUpload.isUploading}
+                  className="flex items-center space-x-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                >
+                  {whyChooseImageUpload.isUploading ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      <span>Uploading...</span>
+                    </>
+                  ) : (
+                    <>
+                      <FiUpload size={16} />
+                      <span>
+                        {whyChooseImagePreview
+                          ? "Change Image"
+                          : "Upload Image"}
+                      </span>
+                    </>
+                  )}
+                </button>
+                <p className="text-sm text-gray-500 mt-2">
+                  Supported formats: JPEG, PNG, GIF, WEBP, SVG (Max 5MB)
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -622,45 +797,76 @@ function ServicesSettings() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                CTA Image URL
+                <FiImage className="inline mr-1" />
+                CTA Image
               </label>
-              <input
-                type="url"
-                {...register("ctaImage", {
-                  required: "CTA image URL is required",
-                })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
-                placeholder="https://images.unsplash.com/..."
-              />
-              {errors.ctaImage && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.ctaImage.message}
-                </p>
-              )}
-              {ctaImage && (
-                <div className="mt-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Preview
-                  </label>
-                  <div className="border border-gray-300 rounded-md p-4 bg-gray-50 flex items-center justify-center h-48">
+
+              {/* Hidden input to store image URL */}
+              <input type="hidden" {...register("ctaImage")} />
+
+              {/* Image Preview */}
+              {ctaImagePreview && (
+                <div className="mb-3">
+                  <div className="relative inline-block">
                     <img
-                      src={ctaImage}
+                      src={ctaImagePreview}
                       alt="CTA Image Preview"
-                      className="max-w-full max-h-full object-contain"
+                      className="h-48 w-auto max-w-full border-2 border-gray-300 rounded-lg object-cover bg-white shadow-sm"
                       onError={(e) => {
                         e.target.style.display = "none";
-                        e.target.nextSibling.style.display = "block";
+                        toast.error("Failed to load image preview");
                       }}
                     />
-                    <p
-                      className="text-sm text-red-500 hidden"
-                      style={{ display: "none" }}
+                    <button
+                      type="button"
+                      onClick={handleRemoveCtaImage}
+                      disabled={ctaImageUpload.isDeleting}
+                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1.5 hover:bg-red-600 transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                      title="Remove image"
                     >
-                      Failed to load image
-                    </p>
+                      {ctaImageUpload.isDeleting ? (
+                        <div className="w-[18px] h-[18px] border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      ) : (
+                        <FiX size={18} />
+                      )}
+                    </button>
                   </div>
                 </div>
               )}
+
+              {/* Upload Button */}
+              <div>
+                <input
+                  type="file"
+                  ref={ctaImageUpload.fileInputRef}
+                  onChange={ctaImageUpload.handleFileSelect}
+                  accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,image/svg+xml"
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={ctaImageUpload.triggerFileInput}
+                  disabled={ctaImageUpload.isUploading}
+                  className="flex items-center space-x-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                >
+                  {ctaImageUpload.isUploading ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      <span>Uploading...</span>
+                    </>
+                  ) : (
+                    <>
+                      <FiUpload size={16} />
+                      <span>
+                        {ctaImagePreview ? "Change Image" : "Upload Image"}
+                      </span>
+                    </>
+                  )}
+                </button>
+                <p className="text-sm text-gray-500 mt-2">
+                  Supported formats: JPEG, PNG, GIF, WEBP, SVG (Max 5MB)
+                </p>
+              </div>
             </div>
           </div>
         </div>
