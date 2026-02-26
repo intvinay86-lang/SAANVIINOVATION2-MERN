@@ -1,4 +1,3 @@
-// import ModernHero from "./Components/ModernHero";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import TechHero from "./Components/TechHero";

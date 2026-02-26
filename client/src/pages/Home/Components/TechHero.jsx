@@ -1,7 +1,6 @@
-import { useEffect, useRef, lazy, Suspense } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import gsap from "gsap";
 import GlobeLoader from "@/components/GlobeLoader";
 import { getMainSiteData } from "../../../features/siteData/siteDataSlice";
 import { selectSiteData } from "../../../features/siteData/siteDataSelectors";
@@ -18,56 +17,12 @@ const FLOATING_KEYWORDS = [
 function TechHero() {
   const dispatch = useDispatch();
   const siteData = useSelector(selectSiteData);
-  const heroRef = useRef(null);
-  const titleRef = useRef(null);
-  const statsRef = useRef([]);
-  const descRef = useRef(null);
 
   useEffect(() => {
     if (!siteData) {
       dispatch(getMainSiteData());
     }
   }, [dispatch, siteData]);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-
-      tl.from(titleRef.current.children, {
-        y: 100,
-        opacity: 0,
-        duration: 1,
-        stagger: 0.2,
-      })
-        .from(
-          statsRef.current,
-          {
-            scale: 0,
-            opacity: 0,
-            duration: 0.6,
-            stagger: 0.15,
-          },
-          "-=0.5",
-        )
-        .from(
-          descRef.current,
-          {
-            y: 30,
-            opacity: 0,
-            duration: 0.8,
-          },
-          "-=0.3",
-        );
-    }, heroRef);
-
-    return () => ctx.revert();
-  }, []);
-
-  const addToRefs = (el) => {
-    if (el && !statsRef.current.includes(el)) {
-      statsRef.current.push(el);
-    }
-  };
 
   // Get home settings from Redux
   const homeSettings = siteData?.homeSettings || {};
@@ -141,16 +96,16 @@ function TechHero() {
   );
 
   const renderTitle = () => (
-    <div ref={titleRef} className="space-y-2 md:space-y-4 lg:space-y-4">
+    <div className="space-y-2 md:space-y-4 lg:space-y-4 animate-fade-in">
       <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold leading-tight">
         <div
-          className="text-white font-mono tracking-wider"
+          className="text-white font-mono tracking-wider animate-slide-up"
           style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
         >
           {heroTitle1}
         </div>
         <div
-          className="text-orange-500 font-mono tracking-wider"
+          className="text-orange-500 font-mono tracking-wider animate-slide-up animation-delay-200"
           style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
         >
           {heroTitle2}
@@ -160,22 +115,52 @@ function TechHero() {
   );
 
   const renderStats = () => (
-    <div className="grid grid-cols-3 gap-3 sm:gap-4 lg:gap-6 xl:gap-8">
-      {STATS_DATA.map(({ value, label, speed }) => (
+    <div
+      className="grid grid-cols-3 gap-3 sm:gap-4 lg:gap-6 xl:gap-8"
+      style={{
+        perspective: "1000px",
+      }}
+    >
+      {STATS_DATA.map(({ value, label }, index) => (
         <div
           key={label}
-          ref={addToRefs}
-          className="space-y-1 md:space-y-2 border border-orange-500/30 p-2 sm:p-3 lg:p-4 rounded-lg bg-orange-500/5 backdrop-blur-sm"
-          data-scroll
-          data-scroll-speed={speed}
+          className="space-y-1 md:space-y-2 border border-orange-500/30 p-2 sm:p-3 lg:p-4 rounded-lg bg-orange-500/5 backdrop-blur-sm hover:border-orange-500/50 hover:bg-orange-500/10 transition-all duration-300"
+          style={{
+            boxShadow:
+              "0 0 20px rgba(249, 115, 22, 0.1), inset 0 0 20px rgba(249, 115, 22, 0.05)",
+            transform: "translateZ(0)",
+            transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            animationDelay: `${index * 0.1}s`,
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-4px) scale(1.02)";
+            e.currentTarget.style.boxShadow =
+              "0 8px 30px rgba(249, 115, 22, 0.3), inset 0 0 30px rgba(249, 115, 22, 0.1)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "translateZ(0)";
+            e.currentTarget.style.boxShadow =
+              "0 0 20px rgba(249, 115, 22, 0.1), inset 0 0 20px rgba(249, 115, 22, 0.05)";
+          }}
         >
           <div
             className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-orange-500 font-mono"
-            style={{ fontFamily: "'Orbitron', monospace" }}
+            style={{
+              fontFamily: "'Orbitron', monospace",
+              textShadow:
+                "0 0 10px rgba(249, 115, 22, 0.5), 0 0 20px rgba(249, 115, 22, 0.3)",
+              letterSpacing: "0.05em",
+            }}
           >
             {value}
           </div>
-          <div className="text-[10px] sm:text-xs lg:text-xs xl:text-sm text-gray-400 uppercase tracking-wider font-mono">
+          <div
+            className="text-[10px] sm:text-xs lg:text-xs xl:text-sm text-gray-400 uppercase tracking-wider font-mono"
+            style={{
+              textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+              letterSpacing: "0.1em",
+            }}
+          >
             {label}
           </div>
         </div>
@@ -184,7 +169,7 @@ function TechHero() {
   );
 
   const renderDescription = () => (
-    <div ref={descRef} className="space-y-4 lg:space-y-6">
+    <div className="space-y-4 lg:space-y-6 animate-fade-in animation-delay-600">
       <p className="text-gray-300 text-xs sm:text-sm lg:text-sm xl:text-base leading-relaxed font-mono lg:max-w-xl">
         {heroDescription}
       </p>
@@ -210,7 +195,6 @@ function TechHero() {
 
   return (
     <div
-      ref={heroRef}
       className="relative min-h-screen bg-black overflow-hidden"
       data-scroll-section
     >
