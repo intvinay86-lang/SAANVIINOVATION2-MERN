@@ -7,7 +7,6 @@ import {
   FiHeart,
   FiTrendingUp,
 } from "react-icons/fi";
-import WhyChooseSection from "../../components/sections/WhyChooseSection";
 import { getMainSiteData } from "../../features/siteData/siteDataSlice";
 import { selectSiteData } from "../../features/siteData/siteDataSelectors";
 import { getFullImageUrl } from "../../utils/imageUtils";
@@ -91,48 +90,6 @@ function OurStory({ settings }) {
         </div>
       </div>
     </div>
-  );
-}
-
-// Why Choose Us Component
-function WhyChooseUs() {
-  const whyChooseUs = [
-    {
-      title: "Expert Development Team",
-      description: "Skilled professionals with years of industry experience",
-      icon: <FiUsers size={28} />,
-    },
-    {
-      title: "Modern Technology Stack",
-      description: "Using cutting-edge tools and frameworks",
-      icon: <FiTrendingUp size={28} />,
-    },
-    {
-      title: "Scalable Solutions",
-      description: "Built to grow with your business needs",
-      icon: <FiAward size={28} />,
-    },
-    {
-      title: "24/7 Support",
-      description: "Always available to assist you",
-      icon: <FiHeart size={28} />,
-    },
-  ];
-
-  return (
-    <WhyChooseSection
-      variant="cards"
-      title={
-        <>
-          We Combine Expertise, Innovation,{" "}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-orange-600">
-            and Dedication
-          </span>
-        </>
-      }
-      subtitle="To deliver exceptional results for your business"
-      features={whyChooseUs}
-    />
   );
 }
 
@@ -414,7 +371,6 @@ function About() {
         {/* Content */}
         <div className="container mx-auto px-4 md:px-8">
           <OurStory settings={settings} />
-          <WhyChooseUs />
           <CoreValues settings={settings} />
           <StatsSection settings={settings} />
         </div>
