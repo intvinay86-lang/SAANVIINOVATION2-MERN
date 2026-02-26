@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { FiArrowLeft, FiExternalLink } from "react-icons/fi";
 import { getMainSiteData } from "../../features/siteData/siteDataSlice";
 import { selectSiteData } from "../../features/siteData/siteDataSelectors";
+import { getFullImageUrl } from "../../utils/imageUtils";
 
 function PortfolioDetails() {
   const { id } = useParams();
@@ -35,6 +36,12 @@ function PortfolioDetails() {
     return <Navigate to="/portfolio" replace />;
   }
 
+  // Use getFullImageUrl with Pexels fallback
+  const projectImage = getFullImageUrl(
+    project.image ||
+      "https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  );
+
   return (
     <>
       <title>Portfolio Details | {project.title}</title>
@@ -50,7 +57,7 @@ function PortfolioDetails() {
       />
       <meta property="og:title" content={`${project.title}`} />
       <meta property="og:description" content={project.description} />
-      <meta property="og:image" content={project.image} />
+      <meta property="og:image" content={projectImage} />
 
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-orange-50/30 py-16 px-4">
         <div className="max-w-6xl mx-auto">
@@ -71,7 +78,7 @@ function PortfolioDetails() {
                 <div className="w-full">
                   <div className="relative rounded-2xl overflow-hidden shadow-lg border-2 border-gray-200 hover:shadow-2xl hover:border-orange-200 transition-all duration-300">
                     <img
-                      src={project.image}
+                      src={projectImage}
                       alt={project.title}
                       className="w-full h-auto object-cover aspect-[4/3]"
                     />

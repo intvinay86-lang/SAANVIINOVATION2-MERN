@@ -9,6 +9,8 @@ import {
   FiSave,
   FiExternalLink,
   FiRefreshCw,
+  FiUpload,
+  FiImage,
 } from "react-icons/fi";
 import {
   getMainSiteData,
@@ -18,6 +20,8 @@ import {
   selectSiteData,
   selectSiteDataLoading,
 } from "../../features/siteData/siteDataSelectors";
+import { getFullImageUrl } from "../../utils/imageUtils";
+import { useImageUpload } from "../../hooks/useImageUpload";
 
 function PortfolioManagement() {
   const dispatch = useDispatch();
@@ -27,6 +31,7 @@ function PortfolioManagement() {
   const [projects, setProjects] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
+  const [imagePreview, setImagePreview] = useState("");
   const [formData, setFormData] = useState({
     title: "",
     category: "",
@@ -36,14 +41,32 @@ function PortfolioManagement() {
     technologies: "",
     features: "",
     liveUrl: "",
-    client: "",
-    duration: "",
-    year: "",
+  });
+
+  // Image upload hook
+  const projectImageUpload = useImageUpload({
+    onUploadSuccess: (url) => {
+      setFormData((prev) => ({ ...prev, image: url }));
+    },
+    onDeleteSuccess: () => {
+      setFormData((prev) => ({ ...prev, image: "" }));
+      setImagePreview("");
+    },
+    saveSuccessMessage: "Project image uploaded successfully",
   });
 
   useEffect(() => {
     loadPortfolioProjects();
   }, []);
+
+  // Update image preview when formData.image changes
+  useEffect(() => {
+    if (formData.image && formData.image.trim()) {
+      setImagePreview(getFullImageUrl(formData.image));
+    } else {
+      setImagePreview("");
+    }
+  }, [formData.image]);
 
   useEffect(() => {
     if (siteData !== null) {
@@ -81,9 +104,6 @@ function PortfolioManagement() {
           ? project.features.join("\n")
           : "",
         liveUrl: project.liveUrl || "",
-        client: project.client || "",
-        duration: project.duration || "",
-        year: project.year || "",
       });
     } else {
       setEditingProject(null);
@@ -96,9 +116,6 @@ function PortfolioManagement() {
         technologies: "",
         features: "",
         liveUrl: "",
-        client: "",
-        duration: "",
-        year: "",
       });
     }
     setIsModalOpen(true);
@@ -120,6 +137,12 @@ function PortfolioManagement() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validate that image is uploaded
+    if (!formData.image || !formData.image.trim()) {
+      toast.error("Please upload a project image");
+      return;
+    }
+
     const newProject = {
       id: editingProject ? editingProject.id : Date.now(),
       title: formData.title,
@@ -136,9 +159,6 @@ function PortfolioManagement() {
         .map((feature) => feature.trim())
         .filter((feature) => feature),
       liveUrl: formData.liveUrl,
-      client: formData.client,
-      duration: formData.duration,
-      year: formData.year,
     };
 
     let updatedProjects;
@@ -168,6 +188,16 @@ function PortfolioManagement() {
     } catch (error) {
       toast.error("Failed to save project");
       console.error("Save error:", error);
+    }
+  };
+
+  const handleRemoveProjectImage = async () => {
+    const currentImageUrl = formData.image;
+    if (currentImageUrl && currentImageUrl.trim()) {
+      await projectImageUpload.handleDeleteImage(currentImageUrl);
+    } else {
+      setFormData((prev) => ({ ...prev, image: "" }));
+      setImagePreview("");
     }
   };
 
@@ -257,9 +287,6 @@ function PortfolioManagement() {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Technologies
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Year
-                </th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Actions
                 </th>
@@ -269,7 +296,7 @@ function PortfolioManagement() {
               {projects.length === 0 ? (
                 <tr>
                   <td
-                    colSpan="6"
+                    colSpan="5"
                     className="px-6 py-8 text-center text-gray-500"
                   >
                     No projects found. Click "Add Project" to create one.
@@ -280,7 +307,7 @@ function PortfolioManagement() {
                   <tr key={project.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <img
-                        src={project.image}
+                        src={getFullImageUrl(project.image)}
                         alt={project.title}
                         className="w-16 h-16 object-cover rounded-lg"
                       />
@@ -303,9 +330,6 @@ function PortfolioManagement() {
                         {project.technologies?.slice(0, 3).join(", ")}
                         {project.technologies?.length > 3 && "..."}
                       </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {project.year}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex justify-end gap-2">
@@ -431,17 +455,73 @@ function PortfolioManagement() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Image URL <span className="text-red-500">*</span>
+                    <FiImage className="inline mr-1" />
+                    Project Image <span className="text-red-500">*</span>
                   </label>
-                  <input
-                    type="url"
-                    name="image"
-                    value={formData.image}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
-                    placeholder="https://images.unsplash.com/..."
-                  />
+
+                  {/* Image Preview */}
+                  {imagePreview && (
+                    <div className="mb-3">
+                      <div className="relative inline-block">
+                        <img
+                          src={imagePreview}
+                          alt="Project Image Preview"
+                          className="h-48 w-auto max-w-full border-2 border-gray-300 rounded-lg object-cover bg-white shadow-sm"
+                          onError={(e) => {
+                            e.target.style.display = "none";
+                            toast.error("Failed to load image preview");
+                          }}
+                        />
+                        <button
+                          type="button"
+                          onClick={handleRemoveProjectImage}
+                          disabled={projectImageUpload.isDeleting}
+                          className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1.5 hover:bg-red-600 transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                          title="Remove image"
+                        >
+                          {projectImageUpload.isDeleting ? (
+                            <div className="w-[18px] h-[18px] border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                          ) : (
+                            <FiX size={18} />
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Upload Button */}
+                  <div>
+                    <input
+                      type="file"
+                      ref={projectImageUpload.fileInputRef}
+                      onChange={projectImageUpload.handleFileSelect}
+                      accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,image/svg+xml"
+                      className="hidden"
+                    />
+                    <button
+                      type="button"
+                      onClick={projectImageUpload.triggerFileInput}
+                      disabled={projectImageUpload.isUploading}
+                      className="flex items-center space-x-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                    >
+                      {projectImageUpload.isUploading ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                          <span>Uploading...</span>
+                        </>
+                      ) : (
+                        <>
+                          <FiUpload size={16} />
+                          <span>
+                            {imagePreview ? "Change Image" : "Upload Image"}
+                          </span>
+                        </>
+                      )}
+                    </button>
+                    <p className="text-sm text-gray-500 mt-2">
+                      Supported formats: JPEG, PNG, GIF, WEBP, SVG (Max 5MB)
+                    </p>
+                  </div>
                 </div>
               </div>
 
@@ -488,10 +568,10 @@ function PortfolioManagement() {
                 </div>
               </div>
 
-              {/* Project Links & Info */}
+              {/* Project Links */}
               <div className="space-y-4 border-t pt-6">
                 <h3 className="text-lg font-semibold text-gray-900">
-                  Project Links & Information
+                  Project Links
                 </h3>
 
                 <div>
@@ -506,50 +586,6 @@ function PortfolioManagement() {
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
                     placeholder="https://example.com"
                   />
-                </div>
-
-                <div className="grid md:grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Client
-                    </label>
-                    <input
-                      type="text"
-                      name="client"
-                      value={formData.client}
-                      onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
-                      placeholder="Company Name"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Duration
-                    </label>
-                    <input
-                      type="text"
-                      name="duration"
-                      value={formData.duration}
-                      onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
-                      placeholder="3 months"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Year
-                    </label>
-                    <input
-                      type="text"
-                      name="year"
-                      value={formData.year}
-                      onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
-                      placeholder="2024"
-                    />
-                  </div>
                 </div>
               </div>
 

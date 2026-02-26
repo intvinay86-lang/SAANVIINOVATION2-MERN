@@ -1,7 +1,14 @@
 import { Link } from "react-router-dom";
 import { FiArrowRight, FiExternalLink } from "react-icons/fi";
+import { getFullImageUrl } from "../../utils/imageUtils";
 
 function ProjectCard({ project }) {
+  // Use getFullImageUrl with Pexels fallback
+  const projectImage = getFullImageUrl(
+    project.image ||
+      "https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=800",
+  );
+
   return (
     <Link
       to={`/portfolio/${project.id}`}
@@ -10,7 +17,7 @@ function ProjectCard({ project }) {
       {/* Image Container with Gradient Overlay */}
       <div className="relative h-64 sm:h-72 md:h-80 overflow-hidden">
         <img
-          src={project.image}
+          src={projectImage}
           alt={project.title}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
         />

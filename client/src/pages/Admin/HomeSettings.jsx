@@ -1131,41 +1131,61 @@ function HomeSettings() {
                 </div>
               ) : (
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                  {clients.map((client) => (
-                    <div
-                      key={client.id}
-                      className="relative group bg-gray-50 rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow"
-                    >
-                      <div className="aspect-square flex items-center justify-center mb-2">
-                        <img
-                          src={getFullImageUrl(client.logo)}
-                          alt={client.name}
-                          className="max-w-full max-h-full object-contain"
-                        />
+                  {clients.map((client) => {
+                    const clientLogo = getFullImageUrl(client.logo || "");
+
+                    return (
+                      <div
+                        key={client.id}
+                        className="relative group bg-gray-50 rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow"
+                      >
+                        <div className="aspect-square flex items-center justify-center mb-2 bg-white rounded">
+                          {clientLogo ? (
+                            <img
+                              src={clientLogo}
+                              alt={client.name}
+                              className="max-w-full max-h-full object-contain"
+                              onError={(e) => {
+                                e.target.style.display = "none";
+                                e.target.nextElementSibling.style.display =
+                                  "flex";
+                              }}
+                            />
+                          ) : null}
+                          <div
+                            className="flex flex-col items-center justify-center h-full w-full bg-gray-100 rounded border-2 border-dashed border-gray-300"
+                            style={{ display: clientLogo ? "none" : "flex" }}
+                          >
+                            <FiImage className="w-8 h-8 text-gray-400 mb-1" />
+                            <span className="text-xs text-gray-400 font-medium">
+                              No Image
+                            </span>
+                          </div>
+                        </div>
+                        <p className="text-xs text-gray-600 text-center truncate">
+                          {client.name}
+                        </p>
+                        <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+                          <button
+                            type="button"
+                            onClick={() => handleOpenClientModal(client)}
+                            className="bg-white p-1.5 rounded-md shadow-md hover:bg-orange-50 text-orange-600"
+                            title="Edit"
+                          >
+                            <FiEdit2 className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteClient(client.id)}
+                            className="bg-white p-1.5 rounded-md shadow-md hover:bg-red-50 text-red-600"
+                            title="Delete"
+                          >
+                            <FiTrash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       </div>
-                      <p className="text-xs text-gray-600 text-center truncate">
-                        {client.name}
-                      </p>
-                      <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
-                        <button
-                          type="button"
-                          onClick={() => handleOpenClientModal(client)}
-                          className="bg-white p-1.5 rounded-md shadow-md hover:bg-orange-50 text-orange-600"
-                          title="Edit"
-                        >
-                          <FiEdit2 className="w-3.5 h-3.5" />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleDeleteClient(client.id)}
-                          className="bg-white p-1.5 rounded-md shadow-md hover:bg-red-50 text-red-600"
-                          title="Delete"
-                        >
-                          <FiTrash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </div>

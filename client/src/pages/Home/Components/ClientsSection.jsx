@@ -70,20 +70,24 @@ function ClientsSection() {
 
         {/* Simple Image Grid Layout */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8 md:gap-12">
-          {clients.map((client, index) => (
-            <div
-              key={client.id || index}
-              className="group flex items-center justify-center opacity-0 animate-[fadeIn_0.8s_ease-out_forwards]"
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
-              <img
-                src={getFullImageUrl(client.logo)}
-                alt={client.name}
-                loading="lazy"
-                className="max-w-full h-12 md:h-16 object-contain transition-all duration-500 group-hover:scale-110 group-hover:brightness-110"
-              />
-            </div>
-          ))}
+          {clients.map((client, index) => {
+            const clientLogo = getFullImageUrl(client.logo || "");
+
+            return (
+              <div
+                key={client.id || index}
+                className="group flex items-center justify-center opacity-0 animate-[fadeIn_0.8s_ease-out_forwards]"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <img
+                  src={clientLogo}
+                  alt={client.name}
+                  loading="lazy"
+                  className="max-w-full h-12 md:h-16 object-contain transition-all duration-500 group-hover:scale-110 group-hover:brightness-110"
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
