@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useParams, Navigate, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { FiArrowLeft, FiExternalLink } from "react-icons/fi";
 import { getMainSiteData } from "../../features/siteData/siteDataSlice";
@@ -10,6 +10,7 @@ function PortfolioDetails() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const siteData = useSelector(selectSiteData);
+  const navigate = useNavigate();
 
   // Get portfolio settings with fallbacks
   const portfolioSettings = siteData?.portfolioSettings || {};
@@ -26,14 +27,27 @@ function PortfolioDetails() {
   const keyFeaturesTitle =
     portfolioSettings.detailsKeyFeaturesTitle || "Key Features";
 
-  const project = portfolioProjects.find((p) => p.id === parseInt(id));
+  const project = portfolioProjects.find((p) => String(p.id) == String(id));
 
   useEffect(() => {
     dispatch(getMainSiteData());
   }, [dispatch]);
 
+  useEffect(() => {
+    // Only check after data is loaded
+    if (portfolioProjects.length > 0 && !project) {
+      navigate("/not-found", { replace: true });
+    }
+  }, [project, portfolioProjects, navigate]);
+
+  // Show loading state while data is being fetched
+  if (portfolioProjects.length === 0) {
+    return null;
+  }
+
+  // If data is loaded but project not found, don't render
   if (!project) {
-    return <Navigate to="/portfolio" replace />;
+    return null;
   }
 
   // Use getFullImageUrl with Pexels fallback
@@ -59,7 +73,7 @@ function PortfolioDetails() {
       <meta property="og:description" content={project.description} />
       <meta property="og:image" content={projectImage} />
 
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-orange-50/30 py-16 px-4">
+      <div className="min-h-screen bg-gray-100 py-16 px-4">
         <div className="max-w-6xl mx-auto">
           {/* Back Button */}
           <Link
