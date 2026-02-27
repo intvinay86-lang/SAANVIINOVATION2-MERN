@@ -1,6 +1,4 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getMainSiteData } from "../../../features/siteData/siteDataSlice";
+import { useSelector } from "react-redux";
 import {
   selectSiteData,
   selectSiteDataLoading,
@@ -8,15 +6,8 @@ import {
 import { getFullImageUrl } from "../../../utils/imageUtils";
 
 function ClientsSection() {
-  const dispatch = useDispatch();
   const siteData = useSelector(selectSiteData);
   const isLoading = useSelector(selectSiteDataLoading);
-
-  useEffect(() => {
-    if (!siteData) {
-      dispatch(getMainSiteData());
-    }
-  }, [dispatch, siteData]);
 
   const homeSettings = siteData?.homeSettings || {};
 

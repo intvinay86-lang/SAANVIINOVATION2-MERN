@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { FiMenu, FiX } from "react-icons/fi";
-import { getMainSiteData } from "../../features/siteData/siteDataSlice";
 import { selectSiteData } from "../../features/siteData/siteDataSelectors";
 import { getFullImageUrl } from "../../utils/imageUtils";
 
@@ -16,7 +15,6 @@ const navItems = [
 ];
 
 function Header() {
-  const dispatch = useDispatch();
   const siteData = useSelector(selectSiteData);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -28,10 +26,6 @@ function Header() {
   const companyName = siteInfo.siteName || "SAANVI INNOVATION";
   const useLogo = siteInfo.useLogo || false;
   const logoUrl = siteInfo.logoUrl || "";
-
-  useEffect(() => {
-    dispatch(getMainSiteData());
-  }, [dispatch]);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);

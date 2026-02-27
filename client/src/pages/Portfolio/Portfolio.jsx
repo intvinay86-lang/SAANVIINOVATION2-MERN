@@ -1,11 +1,8 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import ProjectCard from "../../components/cards/ProjectCard";
-import { getMainSiteData } from "../../features/siteData/siteDataSlice";
 import { selectSiteData } from "../../features/siteData/siteDataSelectors";
 
 function Portfolio() {
-  const dispatch = useDispatch();
   const siteData = useSelector(selectSiteData);
 
   // Get portfolio settings with fallbacks
@@ -16,10 +13,6 @@ function Portfolio() {
   const heroSubtitle =
     portfolioSettings.heroSubtitle ||
     "EXPLORE OUR RECENT PROJECTS AND SEE HOW WE'VE HELPED BUSINESSES ACHIEVE THEIR DIGITAL TRANSFORMATION GOALS";
-
-  useEffect(() => {
-    dispatch(getMainSiteData());
-  }, [dispatch]);
 
   return (
     <>

@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   FiAward,
   FiCheck,
@@ -7,7 +6,6 @@ import {
   FiHeart,
   FiTrendingUp,
 } from "react-icons/fi";
-import { getMainSiteData } from "../../features/siteData/siteDataSlice";
 import { selectSiteData } from "../../features/siteData/siteDataSelectors";
 import { getFullImageUrl } from "../../utils/imageUtils";
 
@@ -277,7 +275,6 @@ function StatsSection({ settings }) {
 }
 
 function About() {
-  const dispatch = useDispatch();
   const siteData = useSelector(selectSiteData);
 
   // Get about settings with fallbacks
@@ -321,10 +318,6 @@ function About() {
     statsTeamValue: aboutSettings.statsTeamValue || "15+",
     statsTeamLabel: aboutSettings.statsTeamLabel || "Team Members",
   };
-
-  useEffect(() => {
-    dispatch(getMainSiteData());
-  }, [dispatch]);
 
   return (
     <>

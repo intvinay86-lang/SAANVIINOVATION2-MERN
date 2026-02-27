@@ -1,8 +1,7 @@
-import { useEffect, lazy, Suspense } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { lazy, Suspense } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import GlobeLoader from "@/components/GlobeLoader";
-import { getMainSiteData } from "../../../features/siteData/siteDataSlice";
 import { selectSiteData } from "../../../features/siteData/siteDataSelectors";
 
 const Globe3D = lazy(() => import("@/components/Globe3D"));
@@ -15,14 +14,7 @@ const FLOATING_KEYWORDS = [
 ];
 
 function TechHero() {
-  const dispatch = useDispatch();
   const siteData = useSelector(selectSiteData);
-
-  useEffect(() => {
-    if (!siteData) {
-      dispatch(getMainSiteData());
-    }
-  }, [dispatch, siteData]);
 
   // Get home settings from Redux
   const homeSettings = siteData?.homeSettings || {};

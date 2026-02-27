@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   FiCode,
   FiSmartphone,
@@ -12,7 +11,6 @@ import {
 import ServiceCard from "../../components/cards/ServiceCard";
 import WhyChooseSection from "../../components/sections/WhyChooseSection";
 import CTASection from "../../components/sections/CTASection";
-import { getMainSiteData } from "../../features/siteData/siteDataSlice";
 import { selectSiteData } from "../../features/siteData/siteDataSelectors";
 import { getFullImageUrl } from "../../utils/imageUtils";
 
@@ -145,7 +143,6 @@ function ServicesWhyChoose({ settings }) {
 
 // Main Services Component
 function Services() {
-  const dispatch = useDispatch();
   const siteData = useSelector(selectSiteData);
 
   // Get services settings with fallbacks
@@ -249,10 +246,6 @@ function Services() {
   ];
 
   const services = servicesData.length > 0 ? servicesData : defaultServices;
-
-  useEffect(() => {
-    dispatch(getMainSiteData());
-  }, [dispatch]);
 
   return (
     <>

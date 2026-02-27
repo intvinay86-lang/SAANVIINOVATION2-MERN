@@ -1,20 +1,13 @@
-import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import TechHero from "./Components/TechHero";
 import AboutImageGrid from "./Components/AboutImageGrid";
 import ServicesSection from "./Components/ServicesSection";
 import RecentWorksSection from "./Components/RecentWorksSection";
 import ClientsSection from "./Components/ClientsSection";
-import { getMainSiteData } from "../../features/siteData/siteDataSlice";
 import { selectSiteData } from "../../features/siteData/siteDataSelectors";
 
 function Home() {
-  const dispatch = useDispatch();
   const siteData = useSelector(selectSiteData);
-
-  useEffect(() => {
-    dispatch(getMainSiteData());
-  }, [dispatch]);
 
   const seoSettings = siteData?.homeSettings?.seo || {
     title: "SAANVI INNOVATION | Home",

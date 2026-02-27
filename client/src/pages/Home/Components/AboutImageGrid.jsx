@@ -1,18 +1,9 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getMainSiteData } from "../../../features/siteData/siteDataSlice";
+import { useSelector } from "react-redux";
 import { selectSiteData } from "../../../features/siteData/siteDataSelectors";
 import { getFullImageUrl } from "../../../utils/imageUtils";
 
 function AboutImageGrid() {
-  const dispatch = useDispatch();
   const siteData = useSelector(selectSiteData);
-
-  useEffect(() => {
-    if (!siteData) {
-      dispatch(getMainSiteData());
-    }
-  }, [dispatch, siteData]);
 
   // Get home settings from Redux
   const homeSettings = siteData?.homeSettings || {};

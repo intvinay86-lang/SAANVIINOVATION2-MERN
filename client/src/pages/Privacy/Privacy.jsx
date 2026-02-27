@@ -1,10 +1,7 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getMainSiteData } from "../../features/siteData/siteDataSlice";
+import { useSelector } from "react-redux";
 import { selectSiteData } from "../../features/siteData/siteDataSelectors";
 
 function Privacy() {
-  const dispatch = useDispatch();
   const siteData = useSelector(selectSiteData);
 
   // Get privacy settings with fallbacks
@@ -15,10 +12,6 @@ function Privacy() {
     "YOUR PRIVACY IS IMPORTANT TO US. LEARN HOW WE PROTECT YOUR DATA.";
   const lastUpdated = privacySettings.lastUpdated || "February 2026";
   const content = privacySettings.content || "";
-
-  useEffect(() => {
-    dispatch(getMainSiteData());
-  }, [dispatch]);
 
   return (
     <>

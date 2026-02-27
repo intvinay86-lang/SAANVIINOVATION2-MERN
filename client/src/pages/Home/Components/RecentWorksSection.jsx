@@ -1,13 +1,10 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { FiArrowRight } from "react-icons/fi";
 import ProjectCard from "../../../components/cards/ProjectCard";
-import { getMainSiteData } from "../../../features/siteData/siteDataSlice";
 import { selectSiteData } from "../../../features/siteData/siteDataSelectors";
 
 function RecentWorksSection() {
-  const dispatch = useDispatch();
   const siteData = useSelector(selectSiteData);
 
   // Get portfolio projects from Redux store
@@ -15,13 +12,6 @@ function RecentWorksSection() {
 
   // Get only the first 3 projects for recent works
   const recentWorks = portfolioProjects.slice(0, 3);
-
-  useEffect(() => {
-    // Fetch site data if not already loaded
-    if (!siteData) {
-      dispatch(getMainSiteData());
-    }
-  }, [dispatch, siteData]);
 
   // Don't render section if no projects
   if (recentWorks.length === 0) {

@@ -1,10 +1,7 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getMainSiteData } from "../../features/siteData/siteDataSlice";
+import { useSelector } from "react-redux";
 import { selectSiteData } from "../../features/siteData/siteDataSelectors";
 
 function Terms() {
-  const dispatch = useDispatch();
   const siteData = useSelector(selectSiteData);
 
   // Get terms settings with fallbacks
@@ -16,10 +13,6 @@ function Terms() {
     "PLEASE READ THESE TERMS CAREFULLY BEFORE USING OUR SERVICES";
   const lastUpdated = termsSettings.lastUpdated || "February 2026";
   const content = termsSettings.content || "";
-
-  useEffect(() => {
-    dispatch(getMainSiteData());
-  }, [dispatch]);
 
   return (
     <>

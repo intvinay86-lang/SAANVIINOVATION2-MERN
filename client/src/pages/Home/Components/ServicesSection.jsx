@@ -1,18 +1,9 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import ServiceCard from "../../../components/cards/ServiceCard";
-import { getMainSiteData } from "../../../features/siteData/siteDataSlice";
 import { selectSiteData } from "../../../features/siteData/siteDataSelectors";
 
 function ServicesSection() {
-  const dispatch = useDispatch();
   const siteData = useSelector(selectSiteData);
-
-  useEffect(() => {
-    if (!siteData) {
-      dispatch(getMainSiteData());
-    }
-  }, [dispatch, siteData]);
 
   const servicesData = siteData?.services || [];
 

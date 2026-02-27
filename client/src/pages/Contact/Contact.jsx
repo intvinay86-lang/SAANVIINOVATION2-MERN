@@ -1,13 +1,10 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { FiMail, FiPhone, FiMapPin } from "react-icons/fi";
 import ContactForm from "./Components/ContactForm";
 import LocationMap from "./Components/LocationMap";
-import { getMainSiteData } from "../../features/siteData/siteDataSlice";
 import { selectSiteData } from "../../features/siteData/siteDataSelectors";
 
 function Contact() {
-  const dispatch = useDispatch();
   const siteData = useSelector(selectSiteData);
 
   // Get contact settings with fallbacks
@@ -30,10 +27,6 @@ function Contact() {
   const address =
     siteInfo.address ||
     "21, Near Garg Clinic,\nNehru Colony, Mayur Nagar,\nThatipur, Gwalior,\nMadhya Pradesh – 474011";
-
-  useEffect(() => {
-    dispatch(getMainSiteData());
-  }, [dispatch]);
 
   return (
     <>

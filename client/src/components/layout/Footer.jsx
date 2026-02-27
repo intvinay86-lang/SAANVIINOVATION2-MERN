@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { NavLink, Link } from "react-router-dom";
 import {
   FiMapPin,
@@ -12,7 +11,6 @@ import {
   FiYoutube,
 } from "react-icons/fi";
 import { FaWhatsapp } from "react-icons/fa";
-import { getMainSiteData } from "../../features/siteData/siteDataSlice";
 import {
   selectSiteData,
   selectFooterData,
@@ -47,7 +45,6 @@ const socialIconMap = {
 };
 
 function Footer() {
-  const dispatch = useDispatch();
   const siteData = useSelector(selectSiteData);
   const footerData = useSelector(selectFooterData);
 
@@ -70,10 +67,6 @@ function Footer() {
   const socialLinks = siteInfo.socialLinks || [];
 
   const currentYear = new Date().getFullYear();
-
-  useEffect(() => {
-    dispatch(getMainSiteData());
-  }, [dispatch]);
 
   // Render logo or text
   const renderLogo = () => {

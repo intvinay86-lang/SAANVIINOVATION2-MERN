@@ -1,17 +1,37 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { siteDataService } from "./siteDataService";
 
+// Cache configuration
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes in milliseconds
+
 const initialState = {
   mainData: null,
   loading: false,
   error: null,
+  lastFetched: null,
 };
 
-// Async thunk to get main site data
+// Async thunk to get main site data with Redux caching
 export const getMainSiteData = createAsyncThunk(
   "siteData/getMain",
-  async (_, { rejectWithValue }) => {
+  async (forceRefresh = false, { rejectWithValue, getState }) => {
     try {
+      const state = getState();
+      const { mainData, lastFetched } = state.siteData;
+
+      // If not forcing refresh and data exists in Redux store
+      if (!forceRefresh && mainData && lastFetched) {
+        const timeSinceLastFetch = Date.now() - lastFetched;
+
+        // Return cached data if still valid
+        if (timeSinceLastFetch < CACHE_DURATION) {
+          console.log("Using cached site data from Redux store");
+          return mainData;
+        }
+      }
+
+      // Fetch fresh data from API
+      console.log("Fetching fresh site data from API");
       const response = await siteDataService.getMainSiteData();
       if (response.success) {
         return response.data.data;
@@ -56,6 +76,10 @@ const siteDataSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
+    clearSiteDataCache: (state) => {
+      state.mainData = null;
+      state.lastFetched = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -67,6 +91,7 @@ const siteDataSlice = createSlice({
       .addCase(getMainSiteData.fulfilled, (state, action) => {
         state.loading = false;
         state.mainData = action.payload;
+        state.lastFetched = Date.now();
         state.error = null;
       })
       .addCase(getMainSiteData.rejected, (state, action) => {
@@ -85,6 +110,7 @@ const siteDataSlice = createSlice({
         } else {
           state.mainData = { [action.payload.section]: action.payload.data };
         }
+        state.lastFetched = Date.now();
         state.error = null;
       })
       .addCase(updateSiteDataSection.rejected, (state, action) => {
@@ -94,6 +120,6 @@ const siteDataSlice = createSlice({
   },
 });
 
-export const { clearError } = siteDataSlice.actions;
+export const { clearError, clearSiteDataCache } = siteDataSlice.actions;
 
 export default siteDataSlice.reducer;
