@@ -19,6 +19,7 @@ import {
   selectSiteDataLoading,
 } from "../../features/siteData/siteDataSelectors";
 import PhoneInput from "../../components/PhoneInput";
+import { isValidPhoneNumber } from "react-phone-number-input";
 
 function ContactSettings() {
   const dispatch = useDispatch();
@@ -120,6 +121,26 @@ function ContactSettings() {
 
   const onSubmit = async (data) => {
     try {
+      // Validate all contact numbers
+      const invalidNumbers = data.contactNumbers?.filter(
+        (contact) => contact.number && !isValidPhoneNumber(contact.number),
+      );
+
+      if (invalidNumbers && invalidNumbers.length > 0) {
+        toast.error("Please enter valid phone numbers for all contact entries");
+        return;
+      }
+
+      // Check for empty phone numbers
+      const emptyNumbers = data.contactNumbers?.filter(
+        (contact) => !contact.number || !contact.number.trim(),
+      );
+
+      if (emptyNumbers && emptyNumbers.length > 0) {
+        toast.error("All contact numbers are required");
+        return;
+      }
+
       await dispatch(
         updateSiteDataSection({
           section: "contactSettings",

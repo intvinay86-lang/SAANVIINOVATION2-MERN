@@ -24,6 +24,7 @@ import {
 import { getFullImageUrl } from "../../utils/imageUtils";
 import { useImageUpload } from "../../hooks/useImageUpload";
 import PhoneInput from "../../components/PhoneInput";
+import { isValidPhoneNumber } from "react-phone-number-input";
 
 function SiteInfo() {
   const dispatch = useDispatch();
@@ -202,6 +203,12 @@ function SiteInfo() {
         email: "CEO@SAANVIINNOVATION.COM",
         address: "21, NEHRU COLONY, THATIPUR\nGWALIOR (M.P)",
       };
+
+      // Validate phone number
+      if (data.phone && data.phone.trim() && !isValidPhoneNumber(data.phone)) {
+        toast.error("Please enter a valid phone number");
+        return;
+      }
 
       // Validate social links
       const invalidLinks = data.socialLinks?.filter(

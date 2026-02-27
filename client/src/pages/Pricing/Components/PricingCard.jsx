@@ -1,6 +1,13 @@
 import { FiCheck, FiStar } from "react-icons/fi";
 
 function PricingCard({ plan }) {
+  // Ensure features is always an array
+  const features = Array.isArray(plan.features)
+    ? plan.features
+    : typeof plan.features === "string"
+      ? plan.features.split("\n").filter((f) => f.trim())
+      : [];
+
   return (
     <div
       className={`relative rounded-2xl overflow-hidden transition-all duration-500 h-full flex flex-col ${
@@ -84,7 +91,7 @@ function PricingCard({ plan }) {
 
         {/* Features */}
         <ul className="space-y-3 sm:space-y-4">
-          {plan.features.map((feature, index) => (
+          {features.map((feature, index) => (
             <li key={index} className="flex items-start">
               <div className="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-orange-100 flex items-center justify-center mr-2 sm:mr-3 mt-0.5">
                 <FiCheck className="text-orange-600" size={12} />

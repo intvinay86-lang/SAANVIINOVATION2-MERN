@@ -183,6 +183,16 @@ function PricingSettings() {
         ],
       };
 
+      // Convert features array to newline-separated string for form display
+      const processedPricingPlans = (
+        pricingSettings.pricingPlans || defaultData.pricingPlans
+      ).map((plan) => ({
+        ...plan,
+        features: Array.isArray(plan.features)
+          ? plan.features.join("\n")
+          : plan.features,
+      }));
+
       const mergedData = {
         heroTitle: pricingSettings.heroTitle || defaultData.heroTitle,
         heroSubtitle: pricingSettings.heroSubtitle || defaultData.heroSubtitle,
@@ -197,7 +207,7 @@ function PricingSettings() {
           pricingSettings.ctaDescription || defaultData.ctaDescription,
         ctaButtonText:
           pricingSettings.ctaButtonText || defaultData.ctaButtonText,
-        pricingPlans: pricingSettings.pricingPlans || defaultData.pricingPlans,
+        pricingPlans: processedPricingPlans,
       };
 
       reset(mergedData);
