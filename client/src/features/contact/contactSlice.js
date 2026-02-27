@@ -20,16 +20,16 @@ export const createContact = createAsyncThunk(
   "contact/create",
   async (contactData, { rejectWithValue }) => {
     try {
-      console.log("Creating contact with data:", contactData);
+      // console.log("Creating contact with data:", contactData);
       const response = await contactService.createContact(contactData);
-      console.log("Contact creation response:", response);
+      // console.log("Contact creation response:", response);
       if (response.success) {
         return response.data;
       }
       return rejectWithValue(response.message || "Failed to send message");
     } catch (error) {
-      console.error("Contact creation error:", error);
-      console.error("Error response:", error.response?.data);
+      // console.error("Contact creation error:", error);
+      // console.error("Error response:", error.response?.data);
 
       // Handle validation errors (422)
       if (error.response?.status === 422 && error.response?.data?.errors) {

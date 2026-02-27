@@ -25,13 +25,13 @@ export const getMainSiteData = createAsyncThunk(
 
         // Return cached data if still valid
         if (timeSinceLastFetch < CACHE_DURATION) {
-          console.log("Using cached site data from Redux store");
+          // console.log("Using cached site data from Redux store");
           return mainData;
         }
       }
 
       // Fetch fresh data from API
-      console.log("Fetching fresh site data from API");
+      // console.log("Fetching fresh site data from API");
       const response = await siteDataService.getMainSiteData();
       if (response.success) {
         return response.data.data;

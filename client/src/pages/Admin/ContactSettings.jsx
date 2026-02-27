@@ -18,6 +18,7 @@ import {
   selectSiteData,
   selectSiteDataLoading,
 } from "../../features/siteData/siteDataSelectors";
+import PhoneInput from "../../components/PhoneInput";
 
 function ContactSettings() {
   const dispatch = useDispatch();
@@ -31,6 +32,7 @@ function ContactSettings() {
     reset,
     control,
     watch,
+    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -39,8 +41,8 @@ function ContactSettings() {
         "HAVE A PROJECT IN MIND? WE'D LOVE TO HEAR FROM YOU. SEND US A MESSAGE AND WE'LL RESPOND AS SOON AS POSSIBLE.",
       businessHours: "Mon-Fri: 9AM-6PM, Sat: 10AM-4PM",
       contactNumbers: [
-        { label: "Primary", number: "+91 8305233223" },
-        { label: "Support", number: "+91 9876543210" },
+        { label: "Primary", number: "+918305233223" },
+        { label: "Support", number: "+919876543210" },
       ],
       mapEmbedUrl:
         "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3578.0234567890123!2d78.203263!3d26.216247!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjbCsDEyJzU4LjUiTiA3OMKwMTInMTEuNyJF!5e0!3m2!1sen!2sin!4v1234567890123!5m2!1sen!2sin",
@@ -73,8 +75,8 @@ function ContactSettings() {
           "HAVE A PROJECT IN MIND? WE'D LOVE TO HEAR FROM YOU. SEND US A MESSAGE AND WE'LL RESPOND AS SOON AS POSSIBLE.",
         businessHours: "Mon-Fri: 9AM-6PM, Sat: 10AM-4PM",
         contactNumbers: [
-          { label: "Primary", number: "+91 8305233223" },
-          { label: "Support", number: "+91 9876543210" },
+          { label: "Primary", number: "+918305233223" },
+          { label: "Support", number: "+919876543210" },
         ],
         mapEmbedUrl:
           "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3578.0234567890123!2d78.203263!3d26.216247!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjbCsDEyJzU4LjUiTiA3OMKwMTInMTEuNyJF!5e0!3m2!1sen!2sin!4v1234567890123!5m2!1sen!2sin",
@@ -241,22 +243,18 @@ function ContactSettings() {
                     )}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Phone Number
-                    </label>
-                    <input
-                      type="text"
-                      {...register(`contactNumbers.${index}.number`, {
-                        required: "Phone number is required",
-                      })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
-                      placeholder="+91 1234567890"
+                    <PhoneInput
+                      id={`contactNumbers.${index}.number`}
+                      label="Phone Number"
+                      value={watch(`contactNumbers.${index}.number`)}
+                      onChange={(fullNumber) =>
+                        setValue(`contactNumbers.${index}.number`, fullNumber)
+                      }
+                      error={errors.contactNumbers?.[index]?.number?.message}
+                      touched={true}
+                      required={true}
+                      className=""
                     />
-                    {errors.contactNumbers?.[index]?.number && (
-                      <p className="mt-1 text-sm text-red-600">
-                        {errors.contactNumbers[index].number.message}
-                      </p>
-                    )}
                   </div>
                 </div>
                 {fields.length > 1 && (

@@ -23,6 +23,7 @@ import {
 } from "../../features/siteData/siteDataSelectors";
 import { getFullImageUrl } from "../../utils/imageUtils";
 import { useImageUpload } from "../../hooks/useImageUpload";
+import PhoneInput from "../../components/PhoneInput";
 
 function SiteInfo() {
   const dispatch = useDispatch();
@@ -47,7 +48,7 @@ function SiteInfo() {
       tagline: "DELIVERING INNOVATIVE DIGITAL SOLUTIONS FOR MODERN BUSINESSES",
       useLogo: false,
       logoUrl: "",
-      phone: "+91 7999840475",
+      phone: "+917999840475",
       email: "CEO@SAANVIINNOVATION.COM",
       address: "21, NEHRU COLONY, THATIPUR\nGWALIOR (M.P)",
       socialLinks: [
@@ -121,7 +122,7 @@ function SiteInfo() {
           "DELIVERING INNOVATIVE DIGITAL SOLUTIONS FOR MODERN BUSINESSES",
         useLogo: false,
         logoUrl: "",
-        phone: "+91 7999840475",
+        phone: "+917999840475",
         email: "CEO@SAANVIINNOVATION.COM",
         address: "21, NEHRU COLONY, THATIPUR\nGWALIOR (M.P)",
         socialLinks: [
@@ -197,7 +198,7 @@ function SiteInfo() {
         siteName: "SAANVI INNOVATION",
         tagline:
           "DELIVERING INNOVATIVE DIGITAL SOLUTIONS FOR MODERN BUSINESSES",
-        phone: "+91 7999840475",
+        phone: "+917999840475",
         email: "CEO@SAANVIINNOVATION.COM",
         address: "21, NEHRU COLONY, THATIPUR\nGWALIOR (M.P)",
       };
@@ -427,15 +428,17 @@ function SiteInfo() {
           <div className="space-y-4">
             {/* Phone */}
             <div>
-              <label className="block text-gray-700 font-medium mb-2">
-                <FiPhone className="inline mr-2" />
-                Phone
-              </label>
-              <input
-                type="text"
-                {...register("phone")}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none"
-                placeholder="Enter phone number"
+              <PhoneInput
+                id="phone"
+                label={
+                  <>
+                    <FiPhone className="inline mr-2" />
+                    Phone
+                  </>
+                }
+                value={watch("phone")}
+                onChange={(fullNumber) => setValue("phone", fullNumber)}
+                required={false}
               />
             </div>
 

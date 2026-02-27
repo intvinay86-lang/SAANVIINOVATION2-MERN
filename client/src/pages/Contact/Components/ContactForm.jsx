@@ -13,6 +13,7 @@ import {
   selectSubmitSuccess,
 } from "../../../features/contact/contactSelectors";
 import Toast from "../../../components/Toast";
+import PhoneInput from "../../../components/PhoneInput";
 
 function ContactForm() {
   const dispatch = useDispatch();
@@ -143,11 +144,8 @@ function ContactForm() {
       case "phone":
         if (!trimmedValue) {
           error = "Phone number is required";
-        } else if (trimmedValue.length < 10) {
-          error = "Phone number must be at least 10 characters";
-        } else if (trimmedValue.length > 20) {
-          error = "Phone number cannot exceed 20 characters";
         }
+        // Additional validation is handled by PhoneInput component
         break;
 
       case "subject":
@@ -481,35 +479,30 @@ function ContactForm() {
           </div>
 
           {/* Phone */}
-          <div>
-            <label
-              htmlFor="phone"
-              className="block text-sm font-semibold text-gray-700 mb-2"
-              style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-            >
-              Phone <span className="text-orange-500">*</span>
-            </label>
-            <input
-              type="tel"
-              id="phone"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              required
-              minLength={10}
-              maxLength={20}
-              placeholder="+1 234 567 8900"
-              className={getFieldClassName("phone")}
-              style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-            />
-            {touched.phone && fieldErrors.phone && (
-              <div className="flex items-center gap-1 mt-2 text-red-600 text-sm">
-                <FiAlertCircle className="w-4 h-4" />
-                <span>{fieldErrors.phone}</span>
-              </div>
-            )}
-          </div>
+          <PhoneInput
+            id="phone"
+            label="Phone"
+            value={formData.phone}
+            onChange={(fullNumber) => {
+              setFormData({
+                ...formData,
+                phone: fullNumber,
+              });
+              // Clear field error when user starts typing
+              if (fieldErrors.phone) {
+                setFieldErrors({
+                  ...fieldErrors,
+                  phone: "",
+                });
+              }
+            }}
+            onBlur={() =>
+              handleBlur({ target: { name: "phone", value: formData.phone } })
+            }
+            error={fieldErrors.phone}
+            touched={touched.phone}
+            required={true}
+          />
 
           {/* Subject */}
           <div>
