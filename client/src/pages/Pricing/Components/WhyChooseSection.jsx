@@ -1,8 +1,13 @@
+import { useSelector } from "react-redux";
 import { FiAward, FiZap, FiHeadphones } from "react-icons/fi";
 import WhyChooseSection from "../../../components/sections/WhyChooseSection";
+import { selectSiteData } from "../../../features/siteData/siteDataSelectors";
 
 export default function PricingWhyChoose() {
-  const features = [
+  const siteData = useSelector(selectSiteData);
+  const pricingSettings = siteData?.pricingSettings || {};
+
+  const defaultFeatures = [
     {
       icon: FiAward,
       title: "Quality Assured",
@@ -21,11 +26,27 @@ export default function PricingWhyChoose() {
     },
   ];
 
+  const iconMap = {
+    "Quality Assured": FiAward,
+    "Fast Delivery": FiZap,
+    "24/7 Support": FiHeadphones,
+  };
+
+  const whyChooseFeatures =
+    pricingSettings.whyChooseFeatures || defaultFeatures;
+
+  const features = whyChooseFeatures.map((feature) => ({
+    icon: iconMap[feature.title] || FiAward,
+    title: feature.title,
+    description: feature.description,
+  }));
+
+  const title = pricingSettings.whyChooseTitle || "Why Choose Us?";
+  const subtitle =
+    pricingSettings.whyChooseSubtitle ||
+    "All plans include these amazing features";
+
   return (
-    <WhyChooseSection
-      title="Why Choose Us?"
-      subtitle="All plans include these amazing features"
-      features={features}
-    />
+    <WhyChooseSection title={title} subtitle={subtitle} features={features} />
   );
 }
