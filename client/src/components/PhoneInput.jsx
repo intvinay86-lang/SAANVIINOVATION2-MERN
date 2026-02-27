@@ -27,6 +27,9 @@ const PhoneInput = ({
           }}
         >
           {label}
+          {required && (
+            <span className="ms-1 text-lg font-bold text-orange-500">*</span>
+          )}
         </label>
       )}
 
