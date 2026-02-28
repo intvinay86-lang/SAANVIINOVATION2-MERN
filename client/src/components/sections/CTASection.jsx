@@ -30,24 +30,17 @@ function CTASection({
             <Icon className="text-white" size={28} />
           </div>
 
-          <h3
-            className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4 sm:mb-6 px-2"
-            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-          >
+          <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4 sm:mb-6 px-2">
             {title}
           </h3>
 
-          <p
-            className="text-gray-600 mb-8 sm:mb-10 text-base sm:text-lg max-w-2xl mx-auto px-2"
-            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-          >
+          <p className="text-gray-600 mb-8 sm:mb-10 text-base sm:text-lg max-w-2xl mx-auto px-2">
             {subtitle}
           </p>
 
           <a
             href={buttonLink}
             className="group inline-flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-xl font-semibold text-sm sm:text-base hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
-            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
           >
             <span className="whitespace-nowrap sm:whitespace-normal">
               {buttonText}
@@ -78,17 +71,11 @@ function CTASection({
 
             {/* Right - Content */}
             <div className="p-10 md:p-12 flex flex-col justify-center">
-              <h2
-                className="text-3xl md:text-4xl font-semibold text-gray-900 mb-4 uppercase tracking-wide"
-                style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-              >
+              <h2 className="text-3xl md:text-4xl font-semibold text-gray-900 mb-4 uppercase tracking-wide">
                 {title}
               </h2>
 
-              <p
-                className="text-gray-600 mb-8 leading-relaxed max-w-lg"
-                style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-              >
+              <p className="text-gray-600 mb-8 leading-relaxed max-w-lg">
                 {subtitle}
               </p>
 
@@ -96,7 +83,6 @@ function CTASection({
                 <a
                   href={buttonLink}
                   className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-3 rounded-lg font-medium hover:from-orange-600 hover:to-orange-700 transition shadow-lg hover:shadow-xl"
-                  style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
                 >
                   {buttonText}
                   <FiArrowRight size={18} />

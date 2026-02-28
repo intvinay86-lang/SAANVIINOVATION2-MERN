@@ -38,7 +38,6 @@ const PhoneInput = ({
         <label
           htmlFor={id}
           className="block text-sm font-semibold text-gray-700 mb-2"
-          style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
         >
           {label}
           {required && <span className="text-orange-500"> *</span>}
@@ -76,7 +75,6 @@ const PhoneInput = ({
           background: white !important;
           font-size: 14px !important;
           outline: none !important;
-          font-family: 'Orbitron', 'Courier New', monospace !important;
         }
 
         .PhoneInputInput {
@@ -86,7 +84,6 @@ const PhoneInput = ({
           border-radius: 0.5rem !important;
           background: white !important;
           outline: none !important;
-          font-family: 'Orbitron', 'Courier New', monospace !important;
           color: #111827 !important;
         }
 

@@ -47,7 +47,7 @@ function AdminLayout() {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 font-sans">
       {/* Top Navbar */}
       <AdminNavbar
         user={user}

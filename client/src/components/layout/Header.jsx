@@ -63,21 +63,8 @@ function Header() {
 
         {/* Logo Text */}
         <div className="ml-3">
-          <div
-            className="text-xl md:text-2xl font-bold text-orange-500 tracking-wider"
-            style={{
-              fontFamily: "'Orbitron', 'Courier New', monospace",
-            }}
-          >
+          <div className="text-xl md:text-2xl font-bold text-orange-500 tracking-wider">
             {siteName}
-          </div>
-          <div
-            className="text-[10px] text-gray-400 tracking-widest -mt-1"
-            style={{
-              fontFamily: "'Orbitron', 'Courier New', monospace",
-            }}
-          >
-            INNOVATION
           </div>
         </div>
       </div>
@@ -87,7 +74,7 @@ function Header() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-md border-b border-orange-500/20">
       {/* Binary code background */}
-      <div className="absolute inset-0 opacity-5 font-mono text-xs text-orange-500 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 opacity-5  text-base text-orange-500 overflow-hidden pointer-events-none">
         <div className="whitespace-nowrap">
           {Array.from({ length: 3 }, (_, i) => (
             <span key={i}>
@@ -120,7 +107,6 @@ function Header() {
                         : "text-gray-300 hover:text-orange-500"
                     } group`
                   }
-                  style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
                 >
                   {({ isActive }) => (
                     <>
@@ -172,7 +158,6 @@ function Header() {
                         : "text-gray-300 border-transparent hover:text-orange-500 hover:border-orange-500 hover:bg-orange-500/5"
                     }`
                   }
-                  style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
                 >
                   {item.name}
                 </NavLink>

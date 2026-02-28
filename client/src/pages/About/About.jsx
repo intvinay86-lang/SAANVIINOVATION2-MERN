@@ -16,42 +16,20 @@ function OurStory({ settings }) {
       {/* Left - Content with bolder typography */}
       <div className="space-y-8">
         <div>
-          <span
-            className="text-orange-500 font-semibold text-xs uppercase tracking-[0.2em] inline-block mb-6"
-            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-          >
+          <span className="text-orange-500 font-semibold text-xs uppercase tracking-[0.2em] inline-block mb-6">
             Our Story
           </span>
 
-          <h2
-            className="text-4xl md:text-5xl font-bold text-gray-900 mb-8 leading-tight"
-            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-          >
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8 leading-tight">
             {settings.storyTitle}
           </h2>
         </div>
 
         {/* Bolder, more readable paragraphs */}
-        <div className="space-y-6">
-          <p
-            className="text-gray-900 text-lg md:text-xl leading-relaxed font-medium"
-            style={{
-              fontFamily: "'Roboto', 'Arial', sans-serif",
-              lineHeight: "1.7",
-            }}
-          >
-            {settings.storyParagraph1}
-          </p>
+        <div className="space-y-6 text-gray-900 text-lg md:text-xl text-justify leading-relaxed font-normal">
+          <p>{settings.storyParagraph1}</p>
 
-          <p
-            className="text-gray-800 text-base md:text-lg leading-relaxed font-normal"
-            style={{
-              fontFamily: "'Roboto', 'Arial', sans-serif",
-              lineHeight: "1.7",
-            }}
-          >
-            {settings.storyParagraph2}
-          </p>
+          <p>{settings.storyParagraph2}</p>
         </div>
 
         {/* Quality Badge */}
@@ -60,10 +38,7 @@ function OurStory({ settings }) {
             <FiAward className="text-white" size={28} />
           </div>
           <div>
-            <p
-              className="font-bold text-gray-900 text-lg mb-1"
-              style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-            >
+            <p className="font-bold text-gray-900 text-lg mb-1">
               {settings.qualityBadgeTitle}
             </p>
             <p
@@ -129,17 +104,11 @@ function CoreValues({ settings }) {
       {/* Right - Content with bolder typography */}
       <div className="order-1 md:order-2 space-y-8">
         <div>
-          <span
-            className="text-orange-500 font-semibold text-xs uppercase tracking-[0.2em] inline-block mb-6"
-            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-          >
+          <span className="text-orange-500 font-semibold text-xs uppercase tracking-[0.2em] inline-block mb-6">
             Core Values
           </span>
 
-          <h3
-            className="text-4xl md:text-5xl font-bold text-gray-900 mb-8 leading-tight"
-            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-          >
+          <h3 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8 leading-tight">
             {settings.coreValuesTitle}
           </h3>
         </div>
@@ -152,10 +121,7 @@ function CoreValues({ settings }) {
                 <FiCheck className="text-white" size={16} />
               </div>
               <div>
-                <strong
-                  className="text-gray-900 text-xl block mb-2"
-                  style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-                >
+                <strong className="text-gray-900 text-xl block mb-2">
                   {value.title}
                 </strong>
                 <p
@@ -217,17 +183,11 @@ function StatsSection({ settings }) {
 
       <div className="relative z-10">
         <div className="text-center mb-12">
-          <span
-            className="text-orange-500 font-semibold text-sm uppercase tracking-widest bg-orange-50 px-4 py-2 rounded-full inline-block mb-6"
-            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-          >
+          <span className="text-orange-500 font-semibold text-sm uppercase tracking-widest bg-orange-50 px-4 py-2 rounded-full inline-block mb-6">
             Our Achievements
           </span>
 
-          <h2
-            className="text-3xl md:text-4xl font-bold text-gray-900 mb-4"
-            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-          >
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             {settings.statsTitle.split("Themselves")[0]}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-orange-600">
               Themselves
@@ -249,18 +209,12 @@ function StatsSection({ settings }) {
               </div>
 
               {/* Value */}
-              <div
-                className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-orange-600 mb-2"
-                style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-              >
+              <div className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-orange-600 mb-2">
                 {stat.value}
               </div>
 
               {/* Label */}
-              <div
-                className="text-gray-600 text-sm font-medium"
-                style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-              >
+              <div className="text-gray-600 text-sm font-medium">
                 {stat.label}
               </div>
 
@@ -336,10 +290,7 @@ function About() {
         <div className="bg-gradient-to-br from-orange-50 to-white border-b border-orange-100">
           <div className="container mx-auto px-4 md:px-8 py-16 md:py-20">
             <div className="text-center max-w-3xl mx-auto">
-              <h1
-                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 tracking-wide"
-                style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-              >
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 tracking-wide">
                 {heroTitle.split(" ").map((word, index) => (
                   <span key={index}>
                     {word === "US" ? (
@@ -351,10 +302,7 @@ function About() {
                   </span>
                 ))}
               </h1>
-              <p
-                className="text-gray-600 text-sm md:text-base tracking-wide"
-                style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-              >
+              <p className="text-gray-600 text-sm md:text-base tracking-wide">
                 {heroSubtitle}
               </p>
             </div>

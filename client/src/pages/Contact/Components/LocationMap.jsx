@@ -12,18 +12,8 @@ function LocationMap() {
   return (
     <div className="bg-white rounded-2xl border-2 border-gray-200 overflow-hidden shadow-lg hover:shadow-xl hover:border-orange-300 transition-all duration-300">
       <div className="p-4 bg-gradient-to-r from-orange-50 to-white border-b border-gray-200">
-        <h3
-          className="text-lg font-bold text-gray-900"
-          style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-        >
-          Our Location
-        </h3>
-        <p
-          className="text-sm text-gray-600"
-          style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-        >
-          Visit us at our office
-        </p>
+        <h3 className="text-lg font-bold text-gray-900">Our Location</h3>
+        <p className="text-sm text-gray-600">Visit us at our office</p>
       </div>
 
       {/* Google Map Embed */}

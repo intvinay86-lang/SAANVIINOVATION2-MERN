@@ -44,7 +44,7 @@ function TechHero() {
   ];
 
   const renderBinaryBackground = () => (
-    <div className="absolute inset-0 opacity-5 font-mono text-xs text-orange-500 overflow-hidden">
+    <div className="absolute inset-0 opacity-5  text-xs text-orange-500 overflow-hidden">
       <div className="whitespace-pre leading-tight">
         {Array.from({ length: 50 }, (_, i) => (
           <div key={i}>
@@ -78,7 +78,7 @@ function TechHero() {
         {FLOATING_KEYWORDS.map(({ text, position }) => (
           <div
             key={text}
-            className={`absolute ${position} text-orange-500 font-mono text-[10px] sm:text-xs lg:text-xs opacity-50`}
+            className={`absolute ${position} text-orange-500  text-[10px] sm:text-xs lg:text-xs opacity-50`}
           >
             {text}
           </div>
@@ -89,17 +89,11 @@ function TechHero() {
 
   const renderTitle = () => (
     <div className="space-y-2 md:space-y-4 lg:space-y-4 animate-fade-in">
-      <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold leading-tight">
-        <div
-          className="text-white font-mono tracking-wider animate-slide-up"
-          style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-        >
+      <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-medium leading-tight">
+        <div className="text-white  tracking-wider animate-slide-up">
           {heroTitle1}
         </div>
-        <div
-          className="text-orange-500 font-mono tracking-wider animate-slide-up animation-delay-200"
-          style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-        >
+        <div className="text-orange-500  tracking-wider animate-slide-up animation-delay-200">
           {heroTitle2}
         </div>
       </h1>
@@ -136,9 +130,8 @@ function TechHero() {
           }}
         >
           <div
-            className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-orange-500 font-mono"
+            className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-orange-500 "
             style={{
-              fontFamily: "'Orbitron', monospace",
               textShadow:
                 "0 0 10px rgba(249, 115, 22, 0.5), 0 0 20px rgba(249, 115, 22, 0.3)",
               letterSpacing: "0.05em",
@@ -147,7 +140,7 @@ function TechHero() {
             {value}
           </div>
           <div
-            className="text-[10px] sm:text-xs lg:text-xs xl:text-sm text-gray-400 uppercase tracking-wider font-mono"
+            className="text-[10px] sm:text-xs lg:text-xs xl:text-sm text-gray-400 uppercase tracking-wider "
             style={{
               textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
               letterSpacing: "0.1em",
@@ -162,14 +155,14 @@ function TechHero() {
 
   const renderDescription = () => (
     <div className="space-y-4 lg:space-y-6 animate-fade-in animation-delay-600">
-      <p className="text-gray-300 text-xs sm:text-sm lg:text-sm xl:text-base leading-relaxed font-mono lg:max-w-xl">
+      <p className="text-gray-300 text-sm xl:text-base leading-relaxed  lg:max-w-xl">
         {heroDescription}
       </p>
 
       <div className="flex flex-wrap justify-center lg:justify-start gap-3 lg:gap-4">
         <Link
           to="/contact"
-          className="group relative px-6 lg:px-8 py-3 lg:py-4 bg-orange-500 text-black font-bold font-mono text-xs lg:text-sm uppercase tracking-wider hover:bg-orange-400 transition-all duration-300 overflow-hidden"
+          className="group relative px-6 lg:px-8 py-3 lg:py-4 bg-orange-500 text-black font-bold  text-xs lg:text-sm uppercase tracking-wider hover:bg-orange-400 transition-all duration-300 overflow-hidden"
         >
           <span className="relative z-10">Get Started</span>
           <div className="absolute inset-0 bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
@@ -177,7 +170,7 @@ function TechHero() {
 
         <Link
           to="/about"
-          className="px-6 lg:px-8 py-3 lg:py-4 border-2 border-orange-500 text-orange-500 font-bold font-mono text-xs lg:text-sm uppercase tracking-wider hover:bg-orange-500 hover:text-black transition-all duration-300"
+          className="px-6 lg:px-8 py-3 lg:py-4 border-2 border-orange-500 text-orange-500 font-bold  text-xs lg:text-sm uppercase tracking-wider hover:bg-orange-500 hover:text-black transition-all duration-300"
         >
           Learn More
         </Link>

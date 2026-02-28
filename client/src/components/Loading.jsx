@@ -22,10 +22,7 @@ export default function Loading({ text = "Loading...", fullScreen = true }) {
         </div>
 
         {/* Loading text */}
-        <p
-          className="mt-4 text-orange-500 font-mono text-sm uppercase tracking-widest animate-pulse"
-          style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-        >
+        <p className="mt-4 text-orange-500 font-mono text-sm uppercase tracking-widest animate-pulse">
           {text}
         </p>
       </div>

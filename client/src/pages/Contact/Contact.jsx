@@ -50,10 +50,7 @@ function Contact() {
         <div className="bg-gradient-to-br from-orange-50 to-white border-b border-orange-100">
           <div className="container mx-auto px-4 md:px-8 py-16 md:py-20">
             <div className="text-center max-w-3xl mx-auto">
-              <h1
-                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 tracking-wide"
-                style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-              >
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 tracking-wide">
                 {heroTitle.split(" ").map((word, index) => (
                   <span key={index}>
                     {word === "TOUCH" ? (
@@ -65,10 +62,7 @@ function Contact() {
                   </span>
                 ))}
               </h1>
-              <p
-                className="text-gray-600 text-sm md:text-base tracking-wide"
-                style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-              >
+              <p className="text-gray-600 text-sm md:text-base tracking-wide">
                 {heroSubtitle}
               </p>
             </div>
@@ -89,12 +83,7 @@ function Contact() {
                 <div className="space-y-8">
                   {/* Contact Information */}
                   <div className="bg-gradient-to-br from-white to-orange-50/50 rounded-2xl shadow-[0_20px_60px_-15px_rgba(249,115,22,0.3)] p-8 border-2 border-orange-200 hover:shadow-[0_25px_70px_-15px_rgba(249,115,22,0.4)] transition-shadow duration-300">
-                    <h2
-                      className="text-2xl font-bold text-gray-800 mb-6 tracking-wide"
-                      style={{
-                        fontFamily: "'Orbitron', 'Courier New', monospace",
-                      }}
-                    >
+                    <h2 className="text-2xl font-bold text-gray-800 mb-6 tracking-wide">
                       Contact Information
                     </h2>
 
@@ -108,22 +97,12 @@ function Contact() {
                           />
                         </div>
                         <div>
-                          <h3
-                            className="text-sm font-semibold text-gray-500 mb-1 tracking-wide"
-                            style={{
-                              fontFamily:
-                                "'Orbitron', 'Courier New', monospace",
-                            }}
-                          >
+                          <h3 className="text-sm font-semibold text-gray-500 mb-1 tracking-wide">
                             Email
                           </h3>
                           <a
                             href={`mailto:${email}`}
                             className="text-gray-800 font-medium hover:text-orange-600 transition-colors tracking-wide"
-                            style={{
-                              fontFamily:
-                                "'Orbitron', 'Courier New', monospace",
-                            }}
                           >
                             {email}
                           </a>
@@ -143,33 +122,17 @@ function Contact() {
                             />
                           </div>
                           <div>
-                            <h3
-                              className="text-sm font-semibold text-gray-500 mb-1 tracking-wide"
-                              style={{
-                                fontFamily:
-                                  "'Orbitron', 'Courier New', monospace",
-                              }}
-                            >
+                            <h3 className="text-sm font-semibold text-gray-500 mb-1 tracking-wide">
                               {contact.label}
                             </h3>
                             <a
                               href={`tel:${contact.number.replace(/\s/g, "")}`}
                               className="text-gray-800 font-medium hover:text-orange-600 transition-colors tracking-wide"
-                              style={{
-                                fontFamily:
-                                  "'Orbitron', 'Courier New', monospace",
-                              }}
                             >
                               {contact.number}
                             </a>
                             {index === 0 && (
-                              <p
-                                className="text-sm text-gray-500 mt-1 tracking-wide"
-                                style={{
-                                  fontFamily:
-                                    "'Orbitron', 'Courier New', monospace",
-                                }}
-                              >
+                              <p className="text-sm text-gray-500 mt-1 tracking-wide">
                                 {businessHours}
                               </p>
                             )}
@@ -186,22 +149,10 @@ function Contact() {
                           />
                         </div>
                         <div>
-                          <h3
-                            className="text-sm font-semibold text-gray-500 mb-1 tracking-wide"
-                            style={{
-                              fontFamily:
-                                "'Orbitron', 'Courier New', monospace",
-                            }}
-                          >
+                          <h3 className="text-sm font-semibold text-gray-500 mb-1 tracking-wide">
                             Address
                           </h3>
-                          <p
-                            className="text-gray-800 font-medium leading-relaxed tracking-wide"
-                            style={{
-                              fontFamily:
-                                "'Orbitron', 'Courier New', monospace",
-                            }}
-                          >
+                          <p className="text-gray-800 font-medium leading-relaxed tracking-wide">
                             {address.split("\n").map((line, index) => (
                               <span key={index}>
                                 {line}

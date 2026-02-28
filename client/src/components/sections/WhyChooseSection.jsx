@@ -32,17 +32,11 @@ function WhyChooseSection({
             {/* Right - Content with bolder typography */}
             <div className="space-y-8">
               <div>
-                <span
-                  className="text-orange-500 font-semibold text-xs uppercase tracking-[0.2em] inline-block mb-6"
-                  style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-                >
+                <span className="text-orange-500 font-semibold text-xs uppercase tracking-[0.2em] inline-block mb-6">
                   Why Choose Us
                 </span>
 
-                <h2
-                  className="text-4xl md:text-5xl font-bold text-gray-900 mb-8 leading-tight"
-                  style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-                >
+                <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8 leading-tight">
                   {title}
                 </h2>
 
@@ -102,25 +96,16 @@ function WhyChooseSection({
     return (
       <div className="mb-20">
         <div className="text-center mb-12">
-          <span
-            className="text-orange-500 font-semibold text-sm uppercase tracking-widest bg-orange-50 px-4 py-2 rounded-full inline-block mb-6"
-            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-          >
+          <span className="text-orange-500 font-semibold text-sm uppercase tracking-widest bg-orange-50 px-4 py-2 rounded-full inline-block mb-6">
             Why Choose Us
           </span>
 
-          <h2
-            className="text-3xl md:text-4xl font-bold text-gray-900 mb-4"
-            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-          >
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             {title}
           </h2>
 
           {subtitle && (
-            <p
-              className="text-gray-600 max-w-2xl mx-auto text-lg"
-              style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-            >
+            <p className="text-gray-600 max-w-2xl mx-auto text-lg">
               {subtitle}
             </p>
           )}
@@ -141,19 +126,11 @@ function WhyChooseSection({
                   <div className="text-orange-600">{item.icon}</div>
                 </div>
 
-                <h3
-                  className="text-lg font-bold text-gray-900 mb-3"
-                  style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-                >
+                <h3 className="text-lg font-bold text-gray-900 mb-3">
                   {item.title}
                 </h3>
 
-                <p
-                  className="text-sm text-gray-600"
-                  style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-                >
-                  {item.description}
-                </p>
+                <p className="text-sm text-gray-600">{item.description}</p>
 
                 {/* Bottom Line Accent */}
                 <div className="mt-6 w-12 h-1 bg-orange-500 rounded-full group-hover:w-full transition-all duration-500"></div>
@@ -169,20 +146,10 @@ function WhyChooseSection({
   return (
     <div className="max-w-4xl mx-auto mb-16">
       <div className="text-center mb-8">
-        <h2
-          className="text-3xl font-bold text-gray-800 mb-3 uppercase tracking-wide"
-          style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-        >
+        <h2 className="text-3xl font-bold text-gray-800 mb-3 uppercase tracking-wide">
           {title}
         </h2>
-        {subtitle && (
-          <p
-            className="text-gray-600"
-            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-          >
-            {subtitle}
-          </p>
-        )}
+        {subtitle && <p className="text-gray-600">{subtitle}</p>}
       </div>
       <div className="grid md:grid-cols-3 gap-6">
         {features.map((feature, index) => (

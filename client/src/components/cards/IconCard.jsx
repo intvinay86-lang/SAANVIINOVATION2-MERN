@@ -75,18 +75,8 @@ function IconCard({
       >
         {typeof icon === "function" ? icon({ size: 24 }) : icon}
       </div>
-      <h3
-        className="text-lg font-bold text-gray-800 mb-2"
-        style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-      >
-        {title}
-      </h3>
-      <p
-        className="text-sm text-gray-600"
-        style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-      >
-        {description}
-      </p>
+      <h3 className="text-lg font-bold text-gray-800 mb-2">{title}</h3>
+      <p className="text-sm text-gray-600">{description}</p>
     </div>
   );
 }

@@ -27,42 +27,23 @@ function PricingCard({ plan }) {
       {/* Card Content */}
       <div className="p-6 sm:p-8 flex flex-col flex-grow">
         {/* Title */}
-        <h3
-          className="text-xl sm:text-2xl font-bold text-gray-900 mb-2"
-          style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-        >
+        <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
           {plan.title}
         </h3>
 
-        <p
-          className="text-xs sm:text-sm text-gray-600 mb-6 sm:mb-8"
-          style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-        >
+        <p className="text-xs sm:text-sm text-gray-600 mb-6 sm:mb-8">
           {plan.description}
         </p>
 
         {/* Price */}
         <div className="mb-6 sm:mb-8">
           <div className="flex items-baseline mb-2">
-            <span
-              className="text-base sm:text-lg text-gray-600"
-              style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-            >
-              ₹
-            </span>
-            <span
-              className="text-4xl sm:text-5xl font-bold text-gray-900 ml-1"
-              style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-            >
+            <span className="text-base sm:text-lg text-gray-600">₹</span>
+            <span className="text-4xl sm:text-5xl font-bold text-gray-900 ml-1">
               {plan.price}
             </span>
           </div>
-          <p
-            className="text-xs sm:text-sm text-gray-500"
-            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-          >
-            {plan.period}
-          </p>
+          <p className="text-xs sm:text-sm text-gray-500">{plan.period}</p>
         </div>
 
         {/* CTA Button */}
@@ -73,7 +54,6 @@ function PricingCard({ plan }) {
               ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
               : "bg-gray-100 text-gray-900 hover:bg-orange-500 hover:text-white"
           }`}
-          style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
         >
           Get Started
         </a>
@@ -82,10 +62,7 @@ function PricingCard({ plan }) {
         <div className="h-px bg-gray-200 mb-6 sm:mb-8"></div>
 
         {/* Subtitle */}
-        <p
-          className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4 sm:mb-6"
-          style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-        >
+        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4 sm:mb-6">
           {plan.subtitle}
         </p>
 
@@ -96,10 +73,7 @@ function PricingCard({ plan }) {
               <div className="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-orange-100 flex items-center justify-center mr-2 sm:mr-3 mt-0.5">
                 <FiCheck className="text-orange-600" size={12} />
               </div>
-              <span
-                className="text-xs sm:text-sm text-gray-700 leading-relaxed"
-                style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-              >
+              <span className="text-xs sm:text-sm text-gray-700 leading-relaxed">
                 {feature}
               </span>
             </li>

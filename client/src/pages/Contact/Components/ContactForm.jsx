@@ -291,17 +291,11 @@ function ContactForm() {
 
       <div className="bg-gradient-to-br from-white to-orange-50 rounded-2xl shadow-[0_20px_60px_-15px_rgba(249,115,22,0.3)] border-2 border-orange-200 p-4 sm:p-6 md:p-8 lg:p-10 hover:shadow-[0_25px_70px_-15px_rgba(249,115,22,0.4)] transition-shadow duration-300">
         <div className="mb-6 md:mb-8">
-          <span
-            className="text-orange-500 font-semibold text-xs sm:text-sm uppercase tracking-widest bg-orange-100 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full inline-block mb-3 sm:mb-4"
-            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-          >
+          <span className="text-orange-500 font-semibold text-xs sm:text-sm uppercase tracking-widest bg-orange-100 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full inline-block mb-3 sm:mb-4">
             Get In Touch
           </span>
 
-          <h3
-            className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-2 sm:mb-3"
-            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-          >
+          <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-2 sm:mb-3">
             {formTitle.split(" ").map((word, index) => (
               <span key={index}>
                 {word === "Message" ? (
@@ -316,12 +310,7 @@ function ContactForm() {
             ))}
           </h3>
 
-          <p
-            className="text-sm sm:text-base text-gray-600"
-            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-          >
-            {formSubtitle}
-          </p>
+          <p className="text-sm sm:text-base text-gray-600">{formSubtitle}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
@@ -392,7 +381,6 @@ function ContactForm() {
               <label
                 htmlFor="firstName"
                 className="block text-sm font-semibold text-gray-700 mb-2"
-                style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
               >
                 First Name <span className="text-orange-500">*</span>
               </label>
@@ -408,7 +396,6 @@ function ContactForm() {
                 maxLength={50}
                 placeholder="John"
                 className={getFieldClassName("firstName")}
-                style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
               />
               {touched.firstName && fieldErrors.firstName && (
                 <div className="flex items-center gap-1 mt-2 text-red-600 text-sm">
@@ -422,7 +409,6 @@ function ContactForm() {
               <label
                 htmlFor="lastName"
                 className="block text-sm font-semibold text-gray-700 mb-2"
-                style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
               >
                 Last Name <span className="text-orange-500">*</span>
               </label>
@@ -438,7 +424,6 @@ function ContactForm() {
                 maxLength={50}
                 placeholder="Doe"
                 className={getFieldClassName("lastName")}
-                style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
               />
               {touched.lastName && fieldErrors.lastName && (
                 <div className="flex items-center gap-1 mt-2 text-red-600 text-sm">
@@ -454,7 +439,6 @@ function ContactForm() {
             <label
               htmlFor="email"
               className="block text-sm font-semibold text-gray-700 mb-2"
-              style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
             >
               Email <span className="text-orange-500">*</span>
             </label>
@@ -468,7 +452,6 @@ function ContactForm() {
               required
               placeholder="john.doe@example.com"
               className={getFieldClassName("email")}
-              style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
             />
             {touched.email && fieldErrors.email && (
               <div className="flex items-center gap-1 mt-2 text-red-600 text-sm">
@@ -509,7 +492,6 @@ function ContactForm() {
             <label
               htmlFor="subject"
               className="block text-sm font-semibold text-gray-700 mb-2"
-              style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
             >
               Subject <span className="text-orange-500">*</span>
             </label>
@@ -525,7 +507,6 @@ function ContactForm() {
               maxLength={200}
               placeholder="How can we help?"
               className={getFieldClassName("subject")}
-              style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
             />
             {touched.subject && fieldErrors.subject && (
               <div className="flex items-center gap-1 mt-2 text-red-600 text-sm">
@@ -540,7 +521,6 @@ function ContactForm() {
             <label
               htmlFor="message"
               className="block text-sm font-semibold text-gray-700 mb-2"
-              style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
             >
               Message <span className="text-orange-500">*</span>
             </label>
@@ -556,7 +536,6 @@ function ContactForm() {
               rows="6"
               placeholder="Tell us more about your project..."
               className={`${getFieldClassName("message")} resize-none`}
-              style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
             ></textarea>
             {touched.message && fieldErrors.message && (
               <div className="flex items-center gap-1 mt-2 text-red-600 text-sm">
@@ -574,7 +553,6 @@ function ContactForm() {
             type="submit"
             disabled={loading}
             className="group w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-sm sm:text-base hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center justify-center gap-2 sm:gap-3 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
           >
             <span>{loading ? "Sending..." : "Send Message"}</span>
             {!loading && (

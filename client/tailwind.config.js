@@ -10,6 +10,10 @@ export default {
           700: "#c2410c",
         },
       },
+      fontFamily: {
+        primary: ["'Neue Machina'", "sans-serif"],
+        secondary: ["'Manrope'", "sans-serif"],
+      },
     },
   },
   plugins: [],

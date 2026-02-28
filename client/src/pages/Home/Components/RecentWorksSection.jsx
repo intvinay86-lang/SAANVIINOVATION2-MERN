@@ -24,23 +24,14 @@ function RecentWorksSection() {
         {/* Section Header */}
         <div className="text-center mb-12 md:mb-16">
           <div className="inline-block mb-4">
-            <span
-              className="text-orange-500 font-semibold text-lg uppercase tracking-wider bg-orange-50 px-4 py-2 rounded-full"
-              style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-            >
+            <span className="text-orange-500 font-semibold text-lg uppercase tracking-wider bg-orange-50 px-4 py-2 rounded-full">
               Portfolio
             </span>
           </div>
-          <h2
-            className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 uppercase tracking-wide"
-            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-          >
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 uppercase tracking-wide">
             Recent Works
           </h2>
-          <p
-            className="text-gray-600 max-w-2xl mx-auto text-lg md:text-xl"
-            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-          >
+          <p className="text-gray-600 max-w-2xl mx-auto text-lg md:text-xl">
             Explore our latest projects and see how we've helped businesses
             achieve their digital transformation goals.
           </p>
@@ -59,7 +50,6 @@ function RecentWorksSection() {
             <Link
               to="/portfolio"
               className="inline-flex items-center gap-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-8 py-4 rounded-full font-semibold hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
-              style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
             >
               <span>View All Projects</span>
               <FiArrowRight className="w-5 h-5" />

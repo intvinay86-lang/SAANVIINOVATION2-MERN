@@ -22,42 +22,42 @@ function ClientsSection() {
     {
       id: 1,
       name: "Tech Corp",
-      logo: "https://via.placeholder.com/150x60?text=Tech+Corp",
+      logo: "https://placehold.co/150x60?text=Tech+Corp",
     },
     {
       id: 2,
       name: "Digital Solutions",
-      logo: "https://via.placeholder.com/150x60?text=Digital+Solutions",
+      logo: "https://placehold.co/150x60?text=Digital+Solutions",
     },
     {
       id: 3,
       name: "Innovation Labs",
-      logo: "https://via.placeholder.com/150x60?text=Innovation+Labs",
+      logo: "https://placehold.co/150x60?text=Innovation+Labs",
     },
     {
       id: 4,
       name: "Global Systems",
-      logo: "https://via.placeholder.com/150x60?text=Global+Systems",
+      logo: "https://placehold.co/150x60?text=Global+Systems",
     },
     {
       id: 5,
       name: "Smart Tech",
-      logo: "https://via.placeholder.com/150x60?text=Smart+Tech",
+      logo: "https://placehold.co/150x60?text=Smart+Tech",
     },
     {
       id: 6,
       name: "Future Works",
-      logo: "https://via.placeholder.com/150x60?text=Future+Works",
+      logo: "https://placehold.co/150x60?text=Future+Works",
     },
     {
       id: 7,
       name: "Cloud Services",
-      logo: "https://via.placeholder.com/150x60?text=Cloud+Services",
+      logo: "https://placehold.co/150x60?text=Cloud+Services",
     },
     {
       id: 8,
       name: "Data Systems",
-      logo: "https://via.placeholder.com/150x60?text=Data+Systems",
+      logo: "https://placehold.co/150x60?text=Data+Systems",
     },
   ];
 
@@ -82,23 +82,14 @@ function ClientsSection() {
         {/* Section Header */}
         <div className="text-center mb-12 md:mb-16">
           <div className="inline-block mb-4">
-            <span
-              className="text-orange-500 font-semibold text-lg uppercase tracking-wider bg-orange-50 px-4 py-2 rounded-full"
-              style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-            >
+            <span className="text-orange-500 font-semibold text-lg uppercase tracking-wider bg-orange-50 px-4 py-2 rounded-full">
               {badge}
             </span>
           </div>
-          <h2
-            className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 uppercase tracking-wide"
-            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-          >
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 uppercase tracking-wide">
             {title}
           </h2>
-          <p
-            className="text-gray-600 max-w-2xl mx-auto text-lg md:text-xl"
-            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-          >
+          <p className="text-gray-600 max-w-2xl mx-auto text-lg md:text-xl">
             {description}
           </p>
         </div>

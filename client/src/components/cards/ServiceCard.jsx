@@ -72,18 +72,12 @@ function ServiceCard({ service, index = 0 }) {
         </div>
 
         {/* Title */}
-        <h3
-          className="text-xl font-bold text-gray-900 mb-4 group-hover:text-orange-600 transition-colors duration-300"
-          style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-        >
+        <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-orange-600 transition-colors duration-300">
           {service.title}
         </h3>
 
         {/* Description */}
-        <p
-          className="text-gray-600 leading-relaxed text-sm"
-          style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-        >
+        <p className="text-gray-600 leading-relaxed text-base">
           {service.description}
         </p>
 

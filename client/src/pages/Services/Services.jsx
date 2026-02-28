@@ -23,17 +23,11 @@ function ServiceHero({ settings }) {
           {/* Left Content - Bolder Typography */}
           <div className="space-y-8">
             <div>
-              <span
-                className="text-orange-500 font-semibold text-xs uppercase tracking-[0.2em] inline-block mb-6"
-                style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-              >
+              <span className="text-orange-500 font-semibold text-xs uppercase tracking-[0.2em] inline-block mb-6">
                 Our Services
               </span>
 
-              <h1
-                className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-8"
-                style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-              >
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-8">
                 {settings.heroTitle}
               </h1>
             </div>
@@ -53,7 +47,6 @@ function ServiceHero({ settings }) {
               <a
                 href="/contact"
                 className="group inline-flex items-center gap-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-8 py-4 rounded-lg font-semibold hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
-                style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
               >
                 Get Started
                 <FiArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -61,7 +54,6 @@ function ServiceHero({ settings }) {
               <a
                 href="/portfolio"
                 className="inline-flex items-center gap-3 bg-white text-gray-900 px-8 py-4 rounded-lg font-semibold border-2 border-gray-200 hover:border-orange-500 transition-all duration-300"
-                style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
               >
                 View Portfolio
               </a>
@@ -91,19 +83,13 @@ function ServicesGrid({ services = [], settings }) {
       <div className="max-w-6xl mx-auto px-4 md:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <h2
-            className="text-3xl md:text-4xl font-semibold text-gray-900 mb-4 uppercase tracking-wide"
-            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-          >
+          <h2 className="text-3xl md:text-4xl font-semibold text-gray-900 mb-4 uppercase tracking-wide">
             {settings.servicesGridTitle}
           </h2>
 
           <div className="w-20 h-1 bg-orange-500 mx-auto mb-6 rounded"></div>
 
-          <p
-            className="text-gray-600 max-w-2xl mx-auto"
-            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-          >
+          <p className="text-gray-600 max-w-2xl mx-auto">
             {settings.servicesGridSubtitle}
           </p>
         </div>

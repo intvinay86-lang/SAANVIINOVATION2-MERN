@@ -41,50 +41,26 @@ function AboutImageGrid() {
           {/* Left: Content - Bolder, More Readable Typography */}
           <div className="order-2 lg:order-1 space-y-8">
             <div>
-              <span
-                className="text-orange-500 font-semibold text-xs uppercase tracking-[0.2em] inline-block mb-6"
-                style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-              >
+              <span className="text-orange-500 font-semibold text-sm uppercase tracking-[0.2em] inline-block mb-6">
                 About Us
               </span>
 
-              <h2
-                className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-8 leading-tight"
-                style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-              >
+              <h2 className="text-4xl md:text-5xl lg:text-5xl font-bold text-gray-900 mb-8 leading-tight">
                 {aboutTitle}
               </h2>
             </div>
 
             {/* Bolder, more readable paragraphs */}
-            <div className="space-y-6">
-              <p
-                className="text-gray-900 text-lg md:text-xl leading-relaxed font-medium"
-                style={{
-                  fontFamily: "'Roboto', 'Arial', sans-serif",
-                  lineHeight: "1.7",
-                }}
-              >
+            <div className="space-y-6 text-lg md:text-xl text-justify">
+              <p className="text-gray-900 leading-relaxed font-normal">
                 {aboutParagraph1}
               </p>
 
-              <p
-                className="text-gray-800 text-base md:text-lg leading-relaxed font-normal"
-                style={{
-                  fontFamily: "'Roboto', 'Arial', sans-serif",
-                  lineHeight: "1.7",
-                }}
-              >
+              <p className="text-gray-800 leading-relaxed font-normal">
                 {aboutParagraph2}
               </p>
 
-              <p
-                className="text-gray-800 text-base md:text-lg leading-relaxed font-normal"
-                style={{
-                  fontFamily: "'Roboto', 'Arial', sans-serif",
-                  lineHeight: "1.7",
-                }}
-              >
+              <p className="text-gray-800 leading-relaxed font-normal">
                 {aboutParagraph3}
               </p>
             </div>

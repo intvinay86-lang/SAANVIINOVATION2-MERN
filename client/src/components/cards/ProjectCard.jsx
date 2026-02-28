@@ -40,16 +40,10 @@ function ProjectCard({ project }) {
 
         {/* Content on Image */}
         <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 text-white z-10">
-          <h3
-            className="text-xl sm:text-2xl font-bold mb-2 group-hover:text-orange-400 transition-colors duration-300"
-            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-          >
+          <h3 className="text-xl sm:text-2xl font-bold mb-2 group-hover:text-orange-400 transition-colors duration-300">
             {project.title}
           </h3>
-          <p
-            className="text-sm sm:text-base text-gray-200 mb-4 line-clamp-2 opacity-90"
-            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-          >
+          <p className="text-sm sm:text-base text-gray-200 mb-4 line-clamp-2 opacity-90">
             {project.description}
           </p>
 
@@ -59,26 +53,19 @@ function ProjectCard({ project }) {
               <span
                 key={techIndex}
                 className="text-xs bg-white/10 backdrop-blur-sm text-white px-3 py-1 rounded-full border border-white/20"
-                style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
               >
                 {tech}
               </span>
             ))}
             {project.technologies.length > 3 && (
-              <span
-                className="text-xs text-orange-400 font-semibold px-2 py-1"
-                style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-              >
+              <span className="text-xs text-orange-400 font-semibold px-2 py-1">
                 +{project.technologies.length - 3}
               </span>
             )}
           </div>
 
           {/* View Details Link */}
-          <div
-            className="flex items-center gap-2 text-orange-400 font-semibold text-sm group-hover:gap-3 transition-all duration-300"
-            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-          >
+          <div className="flex items-center gap-2 text-orange-400 font-semibold text-sm group-hover:gap-3 transition-all duration-300">
             <span>View Details</span>
             <FiArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
           </div>

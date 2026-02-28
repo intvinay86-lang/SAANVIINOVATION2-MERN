@@ -60,27 +60,18 @@ function ServicesSection() {
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <span
-            className="text-orange-500 font-semibold text-sm uppercase tracking-widest bg-orange-50 px-4 py-2 rounded-full inline-block mb-6"
-            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-          >
+          <span className="text-orange-500 font-semibold text-sm uppercase tracking-widest bg-orange-50 px-4 py-2 rounded-full inline-block mb-6">
             What We Offer
           </span>
 
-          <h2
-            className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6"
-            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-          >
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
             Our{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-orange-600">
               Services
             </span>
           </h2>
 
-          <p
-            className="text-gray-600 max-w-2xl mx-auto text-lg"
-            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-          >
+          <p className="text-gray-600 max-w-2xl mx-auto text-lg">
             Comprehensive digital solutions to help your business thrive
           </p>
         </div>

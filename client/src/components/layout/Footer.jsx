@@ -97,17 +97,8 @@ function Footer() {
           <div className="absolute inset-0 w-8 h-8 border-2 border-orange-500/50 transform rotate-45 scale-110"></div>
         </div>
         <div>
-          <div
-            className="text-lg font-bold text-orange-500 tracking-wider"
-            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-          >
+          <div className="text-lg font-bold text-orange-500 tracking-wider">
             {siteName}
-          </div>
-          <div
-            className="text-[8px] text-gray-400 tracking-widest -mt-1"
-            style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-          >
-            INNOVATION
           </div>
         </div>
       </div>
@@ -117,7 +108,7 @@ function Footer() {
   return (
     <footer className="relative bg-black border-t border-orange-500/20">
       {/* Binary code background */}
-      <div className="absolute inset-0 opacity-5 font-mono text-xs text-orange-500 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 opacity-5 font-mono text-sm text-orange-500 overflow-hidden pointer-events-none">
         <div className="whitespace-nowrap">
           {Array.from({ length: 20 }, (_, i) => (
             <span key={i}>
@@ -140,21 +131,13 @@ function Footer() {
             {/* Logo */}
             {renderLogo()}
 
-            <p
-              className="text-gray-400 text-xs leading-relaxed"
-              style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-            >
-              {tagline}
-            </p>
+            <p className="text-gray-400 text-sm leading-relaxed">{tagline}</p>
 
             {/* Contact Info */}
             <div className="space-y-3">
               <div className="flex items-start gap-3">
                 <FiMapPin className="text-orange-500 w-4 h-4 flex-shrink-0 mt-1" />
-                <div
-                  className="text-xs text-gray-400 leading-relaxed"
-                  style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-                >
+                <div className="text-sm text-gray-400 leading-relaxed">
                   {address.split("\n").map((line, index) => (
                     <span key={index}>
                       {line}
@@ -168,8 +151,7 @@ function Footer() {
                 <FiPhone className="text-orange-500 w-4 h-4 flex-shrink-0" />
                 <a
                   href={`tel:${phone.replace(/\s/g, "")}`}
-                  className="text-xs text-gray-400 hover:text-orange-500 transition-colors duration-300"
-                  style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
+                  className="text-sm text-gray-400 hover:text-orange-500 transition-colors duration-300"
                 >
                   {phone}
                 </a>
@@ -179,8 +161,7 @@ function Footer() {
                 <FiMail className="text-orange-500 w-4 h-4 flex-shrink-0" />
                 <a
                   href={`mailto:${email}`}
-                  className="text-xs text-gray-400 hover:text-orange-500 transition-colors duration-300"
-                  style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
+                  className="text-sm text-gray-400 hover:text-orange-500 transition-colors duration-300"
                 >
                   {email}
                 </a>
@@ -190,10 +171,7 @@ function Footer() {
 
           {/* Column 2: Quick Links */}
           <div>
-            <h3
-              className="text-sm font-bold text-orange-500 mb-6 tracking-wider"
-              style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-            >
+            <h3 className="text-sm font-bold text-orange-500 mb-6 tracking-wider">
               QUICK LINKS
             </h3>
             <ul className="space-y-3">
@@ -202,15 +180,12 @@ function Footer() {
                   <NavLink
                     to={link.path}
                     className={({ isActive }) =>
-                      `text-xs tracking-wider transition-all duration-300 inline-block ${
+                      `text-sm tracking-wider transition-all duration-300 inline-block ${
                         isActive
                           ? "text-orange-500"
                           : "text-gray-400 hover:text-orange-500 hover:translate-x-1"
                       }`
                     }
-                    style={{
-                      fontFamily: "'Orbitron', 'Courier New', monospace",
-                    }}
                   >
                     {link.name}
                   </NavLink>
@@ -221,10 +196,7 @@ function Footer() {
 
           {/* Column 3: Services */}
           <div>
-            <h3
-              className="text-sm font-bold text-orange-500 mb-6 tracking-wider"
-              style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-            >
+            <h3 className="text-sm font-bold text-orange-500 mb-6 tracking-wider">
               SERVICES
             </h3>
             <ul className="space-y-3">
@@ -232,10 +204,7 @@ function Footer() {
                 <li key={index}>
                   <Link
                     to={service.path}
-                    className="text-xs text-gray-400 hover:text-orange-500 hover:translate-x-1 inline-block transition-all duration-300 tracking-wider"
-                    style={{
-                      fontFamily: "'Orbitron', 'Courier New', monospace",
-                    }}
+                    className="text-sm text-gray-400 hover:text-orange-500 hover:translate-x-1 inline-block transition-all duration-300 tracking-wider"
                   >
                     {service.name}
                   </Link>
@@ -246,18 +215,14 @@ function Footer() {
 
           {/* Column 4: Connect */}
           <div>
-            <h3
-              className="text-sm font-bold text-orange-500 mb-6 tracking-wider"
-              style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-            >
+            <h3 className="text-sm font-bold text-orange-500 mb-6 tracking-wider">
               CONNECT
             </h3>
 
             {/* CTA Button */}
             <Link
               to="/contact"
-              className="inline-block mb-6 px-6 py-3 bg-orange-500 text-black font-bold text-xs tracking-wider hover:bg-orange-400 transition-all duration-300 relative overflow-hidden group"
-              style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
+              className="inline-block mb-6 px-6 py-3 bg-orange-500 text-black font-bold text-sm tracking-wider hover:bg-orange-400 transition-all duration-300 relative overflow-hidden group"
             >
               <span className="relative z-10">GET IN TOUCH</span>
               <span className="absolute inset-0 bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
@@ -266,10 +231,7 @@ function Footer() {
             {/* Social Media Icons */}
             {socialLinks.length > 0 && (
               <div>
-                <h4
-                  className="text-xs font-bold text-gray-400 mb-3 tracking-wider"
-                  style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-                >
+                <h4 className="text-sm font-bold text-gray-400 mb-3 tracking-wider">
                   FOLLOW US
                 </h4>
                 <div className="flex flex-wrap gap-2">
@@ -296,26 +258,21 @@ function Footer() {
       <div className="relative z-10 border-t border-orange-500/20">
         <div className="container mx-auto px-4 md:px-8 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p
-              className="text-center text-xs text-gray-400 tracking-wider"
-              style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
-            >
+            <p className="text-center text-sm text-gray-400 tracking-wider">
               © {currentYear} {companyName.toUpperCase()}. ALL RIGHTS RESERVED.
             </p>
 
             <div className="flex items-center gap-4">
               <Link
                 to="/terms"
-                className="text-xs text-gray-400 hover:text-orange-500 transition-colors duration-300 tracking-wider"
-                style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
+                className="text-sm text-gray-400 hover:text-orange-500 transition-colors duration-300 tracking-wider"
               >
                 TERMS & CONDITIONS
               </Link>
               <span className="text-gray-600">|</span>
               <Link
                 to="/privacy"
-                className="text-xs text-gray-400 hover:text-orange-500 transition-colors duration-300 tracking-wider"
-                style={{ fontFamily: "'Orbitron', 'Courier New', monospace" }}
+                className="text-sm text-gray-400 hover:text-orange-500 transition-colors duration-300 tracking-wider"
               >
                 PRIVACY POLICY
               </Link>
