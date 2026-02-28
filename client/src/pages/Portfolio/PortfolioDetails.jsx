@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { FiArrowLeft, FiExternalLink } from "react-icons/fi";
-import { getMainSiteData } from "../../features/siteData/siteDataSlice";
 import { selectSiteData } from "../../features/siteData/siteDataSelectors";
+import { getMainSiteData } from "../../features/siteData/siteDataSlice";
 import { getFullImageUrl } from "../../utils/imageUtils";
 
 function PortfolioDetails() {
@@ -11,6 +11,11 @@ function PortfolioDetails() {
   const dispatch = useDispatch();
   const siteData = useSelector(selectSiteData);
   const navigate = useNavigate();
+
+  // Fetch fresh data when component mounts
+  useEffect(() => {
+    dispatch(getMainSiteData());
+  }, [dispatch, id]);
 
   // Get portfolio settings with fallbacks
   const portfolioSettings = siteData?.portfolioSettings || {};
@@ -28,10 +33,6 @@ function PortfolioDetails() {
     portfolioSettings.detailsKeyFeaturesTitle || "Key Features";
 
   const project = portfolioProjects.find((p) => String(p.id) == String(id));
-
-  useEffect(() => {
-    dispatch(getMainSiteData());
-  }, [dispatch]);
 
   useEffect(() => {
     // Only check after data is loaded
@@ -179,7 +180,7 @@ function PortfolioDetails() {
                   {keyFeaturesTitle}
                 </h2>
                 <ul className="space-y-3">
-                  {project.features.slice(0, 6).map((feature, index) => (
+                  {project.features.map((feature, index) => (
                     <li
                       key={index}
                       className="flex items-start text-base text-gray-700"

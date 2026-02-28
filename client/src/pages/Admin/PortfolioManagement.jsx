@@ -12,6 +12,8 @@ import {
   FiUpload,
   FiImage,
   FiBriefcase,
+  FiChevronLeft,
+  FiChevronRight,
 } from "react-icons/fi";
 import {
   getMainSiteData,
@@ -33,6 +35,8 @@ function PortfolioManagement() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const projectsPerPage = 10;
   const [formData, setFormData] = useState({
     title: "",
     category: "",
@@ -80,11 +84,13 @@ function PortfolioManagement() {
   const loadPortfolioProjects = async () => {
     setIsFetching(true);
     try {
-      await dispatch(getMainSiteData()).unwrap();
+      // Force refresh to bypass cache
+      await dispatch(getMainSiteData(true)).unwrap();
     } catch (error) {
       if (error !== "Failed to fetch data") {
         toast.error("Failed to load data");
       }
+    } finally {
       setIsFetching(false);
     }
   };
@@ -229,6 +235,67 @@ function PortfolioManagement() {
     loadPortfolioProjects();
   };
 
+  // Pagination calculations
+  const totalPages = Math.ceil(projects.length / projectsPerPage);
+  const indexOfLastProject = currentPage * projectsPerPage;
+  const indexOfFirstProject = indexOfLastProject - projectsPerPage;
+  const currentProjects = projects.slice(
+    indexOfFirstProject,
+    indexOfLastProject,
+  );
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handlePrevious = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  // Generate page numbers to display
+  const getPageNumbers = () => {
+    const pages = [];
+    const maxPagesToShow = 5;
+
+    if (totalPages <= maxPagesToShow) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      if (currentPage <= 3) {
+        for (let i = 1; i <= 4; i++) {
+          pages.push(i);
+        }
+        pages.push("...");
+        pages.push(totalPages);
+      } else if (currentPage >= totalPages - 2) {
+        pages.push(1);
+        pages.push("...");
+        for (let i = totalPages - 3; i <= totalPages; i++) {
+          pages.push(i);
+        }
+      } else {
+        pages.push(1);
+        pages.push("...");
+        pages.push(currentPage - 1);
+        pages.push(currentPage);
+        pages.push(currentPage + 1);
+        pages.push("...");
+        pages.push(totalPages);
+      }
+    }
+
+    return pages;
+  };
+
   if (isFetching) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -270,11 +337,12 @@ function PortfolioManagement() {
           <div className="flex gap-3">
             <button
               onClick={handleRefresh}
-              className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-semibold hover:bg-gray-200 transition-colors duration-200 flex items-center gap-2"
+              disabled={isFetching}
+              className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-semibold hover:bg-gray-200 transition-colors duration-200 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               title="Refresh data"
             >
-              <FiRefreshCw />
-              Refresh
+              <FiRefreshCw className={isFetching ? "animate-spin" : ""} />
+              {isFetching ? "Refreshing..." : "Refresh"}
             </button>
             <button
               onClick={() => handleOpenModal()}
@@ -321,7 +389,7 @@ function PortfolioManagement() {
                   </td>
                 </tr>
               ) : (
-                projects.map((project) => (
+                currentProjects.map((project) => (
                   <tr key={project.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <img
@@ -384,6 +452,73 @@ function PortfolioManagement() {
             </tbody>
           </table>
         </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="px-6 py-4 border-t border-gray-200 bg-gray-50">
+            <div className="flex justify-between items-center">
+              {/* Results Info */}
+              <div className="text-sm text-gray-600">
+                Showing {indexOfFirstProject + 1} to{" "}
+                {Math.min(indexOfLastProject, projects.length)} of{" "}
+                {projects.length} projects
+              </div>
+
+              {/* Pagination Controls */}
+              <div className="flex items-center gap-2">
+                {/* Previous Button */}
+                <button
+                  onClick={handlePrevious}
+                  disabled={currentPage === 1}
+                  className={`flex items-center gap-1 px-3 py-1.5 rounded-lg font-semibold text-sm transition-all duration-200 ${
+                    currentPage === 1
+                      ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                      : "bg-white text-gray-700 hover:bg-orange-500 hover:text-white border border-gray-300"
+                  }`}
+                >
+                  <FiChevronLeft className="w-4 h-4" />
+                  <span>Previous</span>
+                </button>
+
+                {/* Page Numbers */}
+                <div className="flex gap-1">
+                  {getPageNumbers().map((page, index) => (
+                    <button
+                      key={index}
+                      onClick={() =>
+                        typeof page === "number" && handlePageChange(page)
+                      }
+                      disabled={page === "..."}
+                      className={`w-9 h-9 rounded-lg font-semibold text-sm transition-all duration-200 ${
+                        page === currentPage
+                          ? "bg-orange-500 text-white shadow-md"
+                          : page === "..."
+                            ? "bg-transparent text-gray-400 cursor-default"
+                            : "bg-white text-gray-700 hover:bg-orange-100 border border-gray-300"
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Next Button */}
+                <button
+                  onClick={handleNext}
+                  disabled={currentPage === totalPages}
+                  className={`flex items-center gap-1 px-3 py-1.5 rounded-lg font-semibold text-sm transition-all duration-200 ${
+                    currentPage === totalPages
+                      ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                      : "bg-white text-gray-700 hover:bg-orange-500 hover:text-white border border-gray-300"
+                  }`}
+                >
+                  <span>Next</span>
+                  <FiChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Modal */}
@@ -600,7 +735,6 @@ function PortfolioManagement() {
                     type="text"
                     name="liveUrl"
                     value={formData.liveUrl}
-                    defaultValue="#"
                     onChange={handleInputChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
                     placeholder="https://example.com"

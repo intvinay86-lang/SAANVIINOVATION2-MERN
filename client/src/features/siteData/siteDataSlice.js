@@ -51,12 +51,23 @@ export const getMainSiteData = createAsyncThunk(
 // Async thunk to update a specific section
 export const updateSiteDataSection = createAsyncThunk(
   "siteData/updateSection",
-  async ({ section, data }, { rejectWithValue }) => {
+  async ({ section, data }, { rejectWithValue, getState }) => {
     try {
-      const response = await siteDataService.updateSiteDataSection(
-        section,
-        data,
+      const state = getState();
+      const currentData = state.siteData.mainData || {};
+
+      // Update the specific section using cached data
+      const updatedData = {
+        ...currentData,
+        [section]: data,
+      };
+
+      // Save to API
+      const response = await siteDataService.createOrUpdateSiteData(
+        "main",
+        updatedData,
       );
+
       if (response.success) {
         return { section, data };
       }
