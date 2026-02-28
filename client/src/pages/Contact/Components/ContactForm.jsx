@@ -1,6 +1,8 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useForm, Controller } from "react-hook-form";
 import { FiSend, FiAlertCircle } from "react-icons/fi";
+import { isValidPhoneNumber } from "react-phone-number-input";
 import { selectSiteData } from "../../../features/siteData/siteDataSelectors";
 import {
   createContact,
@@ -21,6 +23,7 @@ function ContactForm() {
   const loading = useSelector(selectContactLoading);
   const error = useSelector(selectContactError);
   const submitSuccess = useSelector(selectSubmitSuccess);
+  const [formKey, setFormKey] = useState(0);
 
   const contactSettings = siteData?.contactSettings || {};
 
@@ -29,62 +32,45 @@ function ContactForm() {
     contactSettings.formSubtitle ||
     "Fill out the form below and we'll get back to you shortly";
 
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    subject: "",
-    message: "",
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors, touchedFields },
+    setError: setFormError,
+  } = useForm({
+    mode: "onTouched",
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      subject: "",
+      message: "",
+    },
   });
-
-  const [fieldErrors, setFieldErrors] = useState({});
-  const [touched, setTouched] = useState({});
-  const [showSuccessToast, setShowSuccessToast] = useState(false);
-  const [showErrorToast, setShowErrorToast] = useState(false);
 
   useEffect(() => {
     if (submitSuccess) {
-      // Show success toast
-      setShowSuccessToast(true);
-
-      // Reset form on success
-      setFormData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        phone: "",
-        subject: "",
-        message: "",
-      });
-
-      // Clear errors and touched state
-      setFieldErrors({});
-      setTouched({});
-
-      // Clear success state after showing toast
+      reset();
+      setFormKey((prev) => prev + 1); // Force PhoneInput to remount
+      // Clear success state after toast duration (6 seconds)
       const timer = setTimeout(() => {
         dispatch(clearSubmitSuccess());
-      }, 100);
-
+      }, 6000);
       return () => clearTimeout(timer);
     }
-  }, [submitSuccess, dispatch]);
+  }, [submitSuccess, dispatch, reset]);
 
   useEffect(() => {
     if (error) {
-      // Show error toast
-      setShowErrorToast(true);
-
       // Parse field-level errors from backend
-      // Error format: "FirstName: error message; LastName: error message"
       if (typeof error === "string" && error.includes(":")) {
-        const errors = {};
         const errorParts = error.split(";").map((e) => e.trim());
         errorParts.forEach((part) => {
           const [field, message] = part.split(":").map((s) => s.trim());
           if (field && message) {
-            // Convert "First name" to "firstName"
             const fieldKey = field
               .split(" ")
               .map((word, idx) =>
@@ -93,173 +79,36 @@ function ContactForm() {
                   : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
               )
               .join("");
-            errors[fieldKey] = message;
+            setFormError(fieldKey, { type: "server", message });
           }
         });
-        setFieldErrors(errors);
       }
 
-      // Clear error state after showing toast
+      // Clear error state after toast duration (6 seconds)
       const timer = setTimeout(() => {
         dispatch(clearError());
-      }, 100);
-
+      }, 6000);
       return () => clearTimeout(timer);
     }
-  }, [error, dispatch]);
+  }, [error, dispatch, setFormError]);
 
-  const validateField = (name, value) => {
-    const trimmedValue = value.trim();
-    let error = "";
-
-    switch (name) {
-      case "firstName":
-        if (!trimmedValue) {
-          error = "First name is required";
-        } else if (trimmedValue.length < 2) {
-          error = "First name must be at least 2 characters";
-        } else if (trimmedValue.length > 50) {
-          error = "First name cannot exceed 50 characters";
-        }
-        break;
-
-      case "lastName":
-        if (!trimmedValue) {
-          error = "Last name is required";
-        } else if (trimmedValue.length < 2) {
-          error = "Last name must be at least 2 characters";
-        } else if (trimmedValue.length > 50) {
-          error = "Last name cannot exceed 50 characters";
-        }
-        break;
-
-      case "email":
-        if (!trimmedValue) {
-          error = "Email is required";
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedValue)) {
-          error = "Please provide a valid email address";
-        }
-        break;
-
-      case "phone":
-        if (!trimmedValue) {
-          error = "Phone number is required";
-        }
-        // Additional validation is handled by PhoneInput component
-        break;
-
-      case "subject":
-        if (!trimmedValue) {
-          error = "Subject is required";
-        } else if (trimmedValue.length < 3) {
-          error = "Subject must be at least 3 characters";
-        } else if (trimmedValue.length > 200) {
-          error = "Subject cannot exceed 200 characters";
-        }
-        break;
-
-      case "message":
-        if (!trimmedValue) {
-          error = "Message is required";
-        } else if (trimmedValue.length < 10) {
-          error = "Message must be at least 10 characters";
-        } else if (trimmedValue.length > 2000) {
-          error = "Message cannot exceed 2000 characters";
-        }
-        break;
-
-      default:
-        break;
-    }
-
-    return error;
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-
-    // Clear field error when user starts typing
-    if (fieldErrors[name]) {
-      setFieldErrors({
-        ...fieldErrors,
-        [name]: "",
-      });
-    }
-
-    // Validate on change if field was touched
-    if (touched[name]) {
-      const error = validateField(name, value);
-      setFieldErrors({
-        ...fieldErrors,
-        [name]: error,
-      });
-    }
-  };
-
-  const handleBlur = (e) => {
-    const { name, value } = e.target;
-    setTouched({
-      ...touched,
-      [name]: true,
-    });
-
-    // Validate on blur
-    const error = validateField(name, value);
-    setFieldErrors({
-      ...fieldErrors,
-      [name]: error,
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // Mark all fields as touched
-    const allTouched = Object.keys(formData).reduce((acc, key) => {
-      acc[key] = true;
-      return acc;
-    }, {});
-    setTouched(allTouched);
-
-    // Validate all fields
-    const errors = {};
-    Object.keys(formData).forEach((key) => {
-      const error = validateField(key, formData[key]);
-      if (error) {
-        errors[key] = error;
-      }
-    });
-
-    setFieldErrors(errors);
-
-    // If there are errors, don't submit
-    if (Object.keys(errors).some((key) => errors[key])) {
-      setShowErrorToast(true);
-      return;
-    }
-
-    // Clean the form data
+  const onSubmit = (data) => {
     const cleanedData = {
-      firstName: formData.firstName.trim(),
-      lastName: formData.lastName.trim(),
-      email: formData.email.trim(),
-      phone: formData.phone.trim(),
-      subject: formData.subject.trim(),
-      message: formData.message.trim(),
+      firstName: data.firstName.trim(),
+      lastName: data.lastName.trim(),
+      email: data.email.trim(),
+      phone: data.phone.trim(),
+      subject: data.subject.trim(),
+      message: data.message.trim(),
     };
 
-    console.log("Submitting contact form:", cleanedData);
     dispatch(createContact(cleanedData));
   };
 
   const getFieldClassName = (fieldName) => {
     const baseClass =
       "w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 rounded-lg focus:ring-2 transition-all duration-300 bg-white text-gray-900 placeholder-gray-400 text-sm sm:text-base";
-    const hasError = touched[fieldName] && fieldErrors[fieldName];
+    const hasError = touchedFields[fieldName] && errors[fieldName];
 
     if (hasError) {
       return `${baseClass} border-red-400 focus:ring-red-500 focus:border-red-500`;
@@ -270,21 +119,21 @@ function ContactForm() {
   return (
     <>
       {/* Success Toast */}
-      {showSuccessToast && (
+      {submitSuccess && (
         <Toast
           type="success"
           message="Thank you for contacting us! We'll get back to you shortly."
-          onClose={() => setShowSuccessToast(false)}
+          onClose={() => dispatch(clearSubmitSuccess())}
           duration={6000}
         />
       )}
 
       {/* Error Toast */}
-      {showErrorToast && (
+      {error && (
         <Toast
           type="error"
           message={error || "Failed to send message. Please try again."}
-          onClose={() => setShowErrorToast(false)}
+          onClose={() => dispatch(clearError())}
           duration={6000}
         />
       )}
@@ -313,68 +162,10 @@ function ContactForm() {
           <p className="text-sm sm:text-base text-gray-600">{formSubtitle}</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
-          {/* Inline Success Message (in addition to toast) */}
-          {submitSuccess && (
-            <div className="bg-gradient-to-r from-green-50 to-green-100 border-2 border-green-400 rounded-xl p-5 animate-pulse">
-              <div className="flex items-center gap-3">
-                <div className="flex-shrink-0 w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
-                  <svg
-                    className="w-6 h-6 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                </div>
-                <div className="flex-1">
-                  <h4 className="font-bold text-green-800 text-lg">
-                    Message Sent Successfully! ✓
-                  </h4>
-                  <p className="text-sm text-green-700 mt-1">
-                    Thank you for reaching out. We'll respond to your message
-                    shortly.
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Inline Error Message (in addition to toast) */}
-          {error && (
-            <div className="bg-gradient-to-r from-red-50 to-red-100 border-2 border-red-400 rounded-xl p-5">
-              <div className="flex items-center gap-3">
-                <div className="flex-shrink-0 w-10 h-10 bg-red-500 rounded-full flex items-center justify-center">
-                  <svg
-                    className="w-6 h-6 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </div>
-                <div className="flex-1">
-                  <h4 className="font-bold text-red-800 text-lg">
-                    Oops! Something went wrong
-                  </h4>
-                  <p className="text-sm text-red-700 mt-1">{error}</p>
-                </div>
-              </div>
-            </div>
-          )}
-
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-4 sm:space-y-6"
+        >
           {/* Name Fields */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             <div>
@@ -387,20 +178,26 @@ function ContactForm() {
               <input
                 type="text"
                 id="firstName"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                required
-                minLength={2}
-                maxLength={50}
                 placeholder="John"
                 className={getFieldClassName("firstName")}
+                {...register("firstName", {
+                  required: "First name is required",
+                  minLength: {
+                    value: 2,
+                    message: "First name must be at least 2 characters",
+                  },
+                  maxLength: {
+                    value: 50,
+                    message: "First name cannot exceed 50 characters",
+                  },
+                  validate: (value) =>
+                    value.trim().length >= 2 || "First name is required",
+                })}
               />
-              {touched.firstName && fieldErrors.firstName && (
+              {touchedFields.firstName && errors.firstName && (
                 <div className="flex items-center gap-1 mt-2 text-red-600 text-sm">
                   <FiAlertCircle className="w-4 h-4" />
-                  <span>{fieldErrors.firstName}</span>
+                  <span>{errors.firstName.message}</span>
                 </div>
               )}
             </div>
@@ -415,20 +212,26 @@ function ContactForm() {
               <input
                 type="text"
                 id="lastName"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                required
-                minLength={2}
-                maxLength={50}
                 placeholder="Doe"
                 className={getFieldClassName("lastName")}
+                {...register("lastName", {
+                  required: "Last name is required",
+                  minLength: {
+                    value: 2,
+                    message: "Last name must be at least 2 characters",
+                  },
+                  maxLength: {
+                    value: 50,
+                    message: "Last name cannot exceed 50 characters",
+                  },
+                  validate: (value) =>
+                    value.trim().length >= 2 || "Last name is required",
+                })}
               />
-              {touched.lastName && fieldErrors.lastName && (
+              {touchedFields.lastName && errors.lastName && (
                 <div className="flex items-center gap-1 mt-2 text-red-600 text-sm">
                   <FiAlertCircle className="w-4 h-4" />
-                  <span>{fieldErrors.lastName}</span>
+                  <span>{errors.lastName.message}</span>
                 </div>
               )}
             </div>
@@ -445,46 +248,53 @@ function ContactForm() {
             <input
               type="email"
               id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              required
               placeholder="john.doe@example.com"
               className={getFieldClassName("email")}
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: "Please provide a valid email address",
+                },
+              })}
             />
-            {touched.email && fieldErrors.email && (
+            {touchedFields.email && errors.email && (
               <div className="flex items-center gap-1 mt-2 text-red-600 text-sm">
                 <FiAlertCircle className="w-4 h-4" />
-                <span>{fieldErrors.email}</span>
+                <span>{errors.email.message}</span>
               </div>
             )}
           </div>
 
           {/* Phone */}
-          <PhoneInput
-            id="phone"
-            label="Phone"
-            value={formData.phone}
-            onChange={(fullNumber) => {
-              setFormData({
-                ...formData,
-                phone: fullNumber,
-              });
-              // Clear field error when user starts typing
-              if (fieldErrors.phone) {
-                setFieldErrors({
-                  ...fieldErrors,
-                  phone: "",
-                });
-              }
+          <Controller
+            key={`phone-${formKey}`}
+            name="phone"
+            control={control}
+            rules={{
+              required: "Phone number is required",
+              validate: (value) => {
+                if (!value || value.trim().length === 0) {
+                  return "Phone number is required";
+                }
+                if (!isValidPhoneNumber(value)) {
+                  return "Enter a valid phone number";
+                }
+                return true;
+              },
             }}
-            onBlur={() =>
-              handleBlur({ target: { name: "phone", value: formData.phone } })
-            }
-            error={fieldErrors.phone}
-            touched={touched.phone}
-            required={true}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <PhoneInput
+                id="phone"
+                label="Phone"
+                value={value}
+                onChange={onChange}
+                onBlur={onBlur}
+                error={errors.phone?.message}
+                touched={touchedFields.phone}
+                required={true}
+              />
+            )}
           />
 
           {/* Subject */}
@@ -498,55 +308,76 @@ function ContactForm() {
             <input
               type="text"
               id="subject"
-              name="subject"
-              value={formData.subject}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              required
-              minLength={3}
-              maxLength={200}
               placeholder="How can we help?"
               className={getFieldClassName("subject")}
+              {...register("subject", {
+                required: "Subject is required",
+                minLength: {
+                  value: 3,
+                  message: "Subject must be at least 3 characters",
+                },
+                maxLength: {
+                  value: 200,
+                  message: "Subject cannot exceed 200 characters",
+                },
+                validate: (value) =>
+                  value.trim().length >= 3 || "Subject is required",
+              })}
             />
-            {touched.subject && fieldErrors.subject && (
+            {touchedFields.subject && errors.subject && (
               <div className="flex items-center gap-1 mt-2 text-red-600 text-sm">
                 <FiAlertCircle className="w-4 h-4" />
-                <span>{fieldErrors.subject}</span>
+                <span>{errors.subject.message}</span>
               </div>
             )}
           </div>
 
           {/* Message */}
-          <div>
-            <label
-              htmlFor="message"
-              className="block text-sm font-semibold text-gray-700 mb-2"
-            >
-              Message <span className="text-orange-500">*</span>
-            </label>
-            <textarea
-              id="message"
-              name="message"
-              value={formData.message}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              required
-              minLength={10}
-              maxLength={2000}
-              rows="6"
-              placeholder="Tell us more about your project..."
-              className={`${getFieldClassName("message")} resize-none`}
-            ></textarea>
-            {touched.message && fieldErrors.message && (
-              <div className="flex items-center gap-1 mt-2 text-red-600 text-sm">
-                <FiAlertCircle className="w-4 h-4" />
-                <span>{fieldErrors.message}</span>
+          <Controller
+            name="message"
+            control={control}
+            rules={{
+              required: "Message is required",
+              minLength: {
+                value: 10,
+                message: "Message must be at least 10 characters",
+              },
+              maxLength: {
+                value: 2000,
+                message: "Message cannot exceed 2000 characters",
+              },
+              validate: (value) =>
+                value.trim().length >= 10 || "Message is required",
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <div>
+                <label
+                  htmlFor="message"
+                  className="block text-sm font-semibold text-gray-700 mb-2"
+                >
+                  Message <span className="text-orange-500">*</span>
+                </label>
+                <textarea
+                  id="message"
+                  rows="6"
+                  placeholder="Tell us more about your project..."
+                  className={`${getFieldClassName("message")} resize-none`}
+                  value={value}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                ></textarea>
+                {touchedFields.message && errors.message && (
+                  <div className="flex items-center gap-1 mt-2 text-red-600 text-sm">
+                    <FiAlertCircle className="w-4 h-4" />
+                    <span>{errors.message.message}</span>
+                  </div>
+                )}
+                <div className="text-right mt-1 text-xs text-gray-500">
+                  {value.length}/2000 characters
+                </div>
               </div>
             )}
-            <div className="text-right mt-1 text-xs text-gray-500">
-              {formData.message.length}/2000 characters
-            </div>
-          </div>
+          />
 
           {/* Submit Button */}
           <button
